@@ -1,6 +1,6 @@
 from manim import *
 
-class hello(Scene):
+class Hello(Scene):
     def construct(self):
         text = Text("Hello World")
         self.play(Write(text))
