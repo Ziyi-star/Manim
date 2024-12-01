@@ -2,6 +2,8 @@ from manim import *
 
 class Ableitung(Scene):
     def construct(self):
+
+        #Kooridinatensystem
         ax = Axes(
             x_range=[-4, 4,1],
             y_range=[-2, 20,2],
@@ -13,10 +15,14 @@ class Ableitung(Scene):
         labels = ax.get_axis_labels(
             Tex("x"), Tex("y")
         )
+
+        #function
         func = ax.plot(lambda x: x**2, color=BLUE)
 
+        #change the value of x
         x_change = ValueTracker(-4)
 
+        #ableitung
         slope = always_redraw (lambda:
         ax.get_secant_slope_group(
             x=x_change.get_value(),
@@ -31,6 +37,7 @@ class Ableitung(Scene):
         )
 
 
+        #show punkt in graph
         punkt = always_redraw(lambda: Dot(ax.coords_to_point(x_change.get_value(), func.underlying_function(x_change.get_value())), color=RED))
 
         self.add(ax, func,slope,labels,punkt)
