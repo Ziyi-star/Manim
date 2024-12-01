@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/parabel/1080p60/partial_movie_files/Parabel/3977891868_408351091_223132457.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/parabel/1080p60/partial_movie_files/Parabel/2852726489_3352146922_2707075189.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/parabel/1080p60/partial_movie_files/Parabel/2852726489_1704852926_1238065842.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/parabel/1080p60/partial_movie_files/Parabel/2852726489_3590936038_2406346086.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/parabel/1080p60/partial_movie_files/Parabel/2852726489_1704852926_1749538948.mp4'

@@ -30,10 +30,12 @@ class Ableitung(Scene):
             secant_line_length=3)
         )
 
-        
 
-        self.add(ax, func,slope,labels)
+        punkt = always_redraw(lambda: Dot(ax.coords_to_point(x_change.get_value(), func.underlying_function(x_change.get_value())), color=RED))
+
+        self.add(ax, func,slope,labels,punkt)
         self.wait()
         self.play(x_change.animate.set_value(4), run_time=10, rate_func=smooth)
         self.wait()
+
 
