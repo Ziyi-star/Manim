@@ -2,7 +2,7 @@ from manim import *
 
 class SineHeightSteps(Scene):
     def construct(self):
-        #Background grid
+        # Background grid without the central cross
         grid = NumberPlane(
             background_line_style={
                 "stroke_color": BLUE_D,
@@ -10,14 +10,15 @@ class SineHeightSteps(Scene):
                 "stroke_opacity": 0.6,
             },
             axis_config={
-            "stroke_color": BLUE_D,  # Same color as grid lines
-            "stroke_width": 1,       # Same width as grid lines
-            "stroke_opacity": 0.6,   # Same opacity as grid lines
-        }
+                "stroke_color": BLUE_D,  # Same color as grid lines
+                "stroke_width": 1,       # Same width as grid lines
+                "stroke_opacity": 0.6,   # Same opacity as grid lines
+            },
         )
 
-        # Create the unit circle
-        circle = Circle(radius=1, color=BLUE).to_edge(LEFT, buff=1).move_to(LEFT * 3 + UP * 2)  # Adjust position
+        # Create the unit circle with radius = 2 (matching max y-axis value)
+        circle_radius = 2  # Same as the y-axis range in axes
+        circle = Circle(radius=circle_radius, color=BLUE).to_edge(LEFT, buff=1)
         center = circle.get_center()
         dot_center = Dot(center, color=YELLOW)
         center_label = Tex("M").next_to(dot_center, DOWN)
@@ -25,12 +26,12 @@ class SineHeightSteps(Scene):
         # Axes for the sine graph
         ax = Axes(
             x_range=[0, 90, 15],  # x-axis in degrees with 15-degree intervals
-            y_range=[0, 1.0, 0.5],  # y-axis for sine values
-            x_length=4,
-            y_length=2,
+            y_range=[0, 2.0, 0.5],  # y-axis for sine values (max value = 2)
+            x_length=5,  # Adjusted for clarity
+            y_length=4,  # Matches the circle's radius
             axis_config={"color": WHITE},
             tips=True,
-        ).next_to(circle,RIGHT, buff=1).align_to(dot_center, DOWN)
+        )
 
         # Add labels to the axes
         x_label = ax.get_x_axis_label(Tex("Drehwinkel").scale(0.7))
@@ -45,32 +46,60 @@ class SineHeightSteps(Scene):
             90: Tex("90°"),
         })
 
+        # Align the axes origin with the circle's center
+        ax_y_offset = center[1] - ax.get_origin()[1]  # Calculate vertical offset
+        ax.shift(UP * ax_y_offset)  # Align the origin of the axes with the circle's center
+
+        # Move the axes slightly to the right
+        ax.shift(RIGHT * 2)  # Shift the axes to the right
+
+        # Dashed line between the circle's center and the axes' origin
+        dashed_line = DashedLine(
+            start=center,
+            end=ax.get_origin(),
+            dash_length=0.1,
+            color=WHITE
+        )
+
+        # Add all elements to the scene
+        self.add(
+            grid, circle, dot_center, center_label, ax, dashed_line,
+            degree_labels, x_label, y_label
+        )
+
+
+        # Dashed line between the circle's center and the axes' origin
+        dashed_line = DashedLine(
+            start=center,
+            end=ax.get_origin(),
+            dash_length=0.1,
+            color=WHITE
+        )
         # Add elements to the scene
-        self.add(grid, circle, dot_center, center_label, ax, degree_labels, x_label, y_label)
+        self.add(grid, circle, dot_center, center_label, ax, dashed_line, degree_labels, x_label, y_label)
 
         # Animation logic
         for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
             # Current angle in radians
             angle_rad = np.radians(angle)
 
-            # In the circle: dot, arrow, vertikel line 
+            # In the circle: dot, arrow, vertical line
             arrow = Arrow(
                 start=center,
-                end=center + 1 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+                end=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
                 buff=0,
                 color=GREEN
             )
             moving_dot = Dot(
-                center + 1 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+                center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
                 color=GREEN
             )
             # Vertical line from endpoint to the x-axis
             vertical_line_from_end = Line(
-                start=center + 1 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint on the circle
-                end=center + 1 * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
+                start=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint on the circle
+                end=center + 2 * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
                 color=GREEN
             )
-
 
             # In Graph: Dot and line
             graph_line = Line(
@@ -91,11 +120,13 @@ class SineHeightSteps(Scene):
 
             # Move radius line to graph
             self.play(Transform(vertical_line_from_end, graph_line))
-            self.play(FadeIn(graph_line,graph_dot))
+            self.play(FadeIn(graph_line, graph_dot))
             self.wait(0.5)
 
             # Remove the arrow, moving dot, and radius line
             self.remove(arrow, moving_dot, vertical_line_from_end)
 
+        # add sine graph
+        sine_graph = ax.plot(lambda x: np.sin(np.radians(x)), color=GREEN, x_range=[0, 90])
+        self.play(Create(sine_graph))
         self.wait()
-
