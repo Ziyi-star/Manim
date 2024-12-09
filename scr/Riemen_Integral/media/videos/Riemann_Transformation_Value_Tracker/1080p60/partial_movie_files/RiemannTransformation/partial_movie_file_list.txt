@@ -1,0 +1,5 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/liuzi/Desktop/manim/scr/Riemen_Integral/media/videos/Riemann_Transformation_Value_Tracker/1080p60/partial_movie_files/RiemannTransformation/3977891868_1731732973_2712704227.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/Riemen_Integral/media/videos/Riemann_Transformation_Value_Tracker/1080p60/partial_movie_files/RiemannTransformation/2852726489_1704852926_3904707667.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/Riemen_Integral/media/videos/Riemann_Transformation_Value_Tracker/1080p60/partial_movie_files/RiemannTransformation/2852726489_1879115648_4122746688.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/Riemen_Integral/media/videos/Riemann_Transformation_Value_Tracker/1080p60/partial_movie_files/RiemannTransformation/2852726489_1704852926_1552594615.mp4'

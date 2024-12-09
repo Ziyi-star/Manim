@@ -1,0 +1,7 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/3977891868_796003973_223132457.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/2852726489_2714170910_3490611083.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/2852726489_1890985145_1550368429.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/2852726489_1704852926_2032071333.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/2852726489_1079480616_10752222.mp4'
+file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/draw_name_circle_triangle/1080p60/partial_movie_files/Name_Rectangle/2852726489_1704852926_3063353769.mp4'
