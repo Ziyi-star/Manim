@@ -32,7 +32,7 @@ class Mittelwertsatz(Scene):
 
         # Define the curve
         f = lambda x: 0.1 * (x - 3)**3 + 1
-        curve = ax.plot(f, color=BLUE)
+        curve = ax.plot(f, color=BLUE, x_range=[0, 6.5])
 
         # Interval [a, b]
         a = 2
@@ -90,13 +90,14 @@ class Mittelwertsatz(Scene):
             color=YELLOW
         ).scale(0.8).move_to(ax.c2p((a + b) / 2, -1))  # Position below the filled area
 
-        # Arrow from the filled area to the rectangle label
+        # Arrow from the top of the rectangle to the rectangle label
         arrow_rectangle_label = Arrow(
-            start=ax.c2p((a + b) / 2, f((a + b) / 2) / 2),  # Start in the middle of the filled area
-            end=rectangle_label.get_center(),               # Point to the label
-            buff=0.2,
-            color=YELLOW
-        )
+                start=ax.c2p((a + b) / 2, 0.8),  # Dynamic top-center of the rectangle
+                end=rectangle_label.get_center(),                    # Point to the label
+                buff=0.2,
+                color=YELLOW
+            )
+
 
 
         # Dynamic vertical line at xi
@@ -109,7 +110,7 @@ class Mittelwertsatz(Scene):
         self.play(Create(grid))
         self.play(Create(ax))
         self.play(Write(x_label), Write(y_label))
-        self.play(Create(curve))
+        self.play(Create(curve), run_time=2)
 
         # Add 'a' and 'b' to the scene
         self.play(Write(a_label), Write(b_label))
