@@ -26,7 +26,7 @@ class FunctionOnNumberPlane(Scene):
         graph = ParametricFunction(
             lambda t: plane.c2p(t, function(t)),  # Map function to the plane
             t_range=[0, 6.5],
-            color=YELLOW
+            color=BLUE
         )
 
         # Interval [a, b]
@@ -42,7 +42,7 @@ class FunctionOnNumberPlane(Scene):
             graph, x_range=[a, b], color=GREEN, opacity=0.5
         )
 
-         # Label for the integral ∫_a^b f(x) dx
+        # Label for the integral ∫_a^b f(x) dx
         integral_label = MathTex(
             r"\int_a^b f(x) \, dx", 
             color=YELLOW
@@ -51,7 +51,7 @@ class FunctionOnNumberPlane(Scene):
         # Arrow from the filled area to the integral label
         arrow_integral_label = Arrow(
             start=plane.c2p(5.5,2),  
-            end=plane.c2p(7, 2.5),               
+            end=plane.c2p(7,2.5),               
             buff=0.2,
             color=YELLOW
         )
@@ -94,19 +94,21 @@ class FunctionOnNumberPlane(Scene):
             height=function(xi_tracker.get_value()+0.2),   
             color=BLUE,
             fill_opacity=0.5,
-        ).move_to(plane.c2p((a + b) / 2, function(xi_tracker.get_value()) / 2 -0.03)))  # Align center at (a+b)/2, f(ξ)/2
+        # Align center at (a+b)/2, f(ξ)/2 -0.03 for better visibility
+        ).move_to(plane.c2p((a + b) / 2, function(xi_tracker.get_value()) / 2 -0.03)))  
 
 
-         # Label for the rectangle: f(si)(b-a) = ∫_a^b f(x) dx
+        # Label for the rectangle: f(si)(b-a) = ∫_a^b f(x) dx
         rectangle_label = MathTex(
             r"f(\xi)(b-a) = \int_a^b f(x) \, dx", 
             color=YELLOW
-        ).scale(0.8).move_to(plane.c2p((a + b) / 2, -1))  # Position below the filled area
+        # Position below the filled area
+        ).scale(0.8).move_to(plane.c2p((a + b) / 2, -1))  
 
         # Arrow from the top of the rectangle to the rectangle label
         arrow_rectangle_label = Arrow(
-                start=plane.c2p((a + b) / 2, 1),  # Dynamic top-center of the rectangle
-                end=rectangle_label.get_center(),                    # Point to the label
+                start=plane.c2p((a + b) / 2, 1),  # Top-center of the rectangle
+                end=rectangle_label.get_center(), # Point to the label
                 buff=0.2,
                 color=YELLOW
             )

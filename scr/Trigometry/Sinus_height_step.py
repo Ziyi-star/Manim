@@ -25,9 +25,9 @@ class SineHeightSteps(Scene):
 
         # Axes for the sine graph
         ax = Axes(
-            x_range=[0, 90, 15],  # x-axis in degrees with 15-degree intervals
+            x_range=[0, 100, 15],  # x-axis in degrees with 15-degree intervals
             y_range=[0, 2.0, 0.5],  # y-axis for sine values (max value = 2)
-            x_length=5,  # Adjusted for clarity
+            x_length=7.5,  # Adjusted for clarity
             y_length=4,  # Matches the circle's radius
             axis_config={"color": WHITE},
             tips=True,
@@ -94,6 +94,13 @@ class SineHeightSteps(Scene):
                 center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
                 color=GREEN
             )
+
+            # Angle label
+            angle_label = MathTex(f"{angle}^\circ").scale(0.7).move_to(
+                center + 1.5 * np.array([np.cos(angle_rad / 2), np.sin(angle_rad / 2), 0])
+            )
+
+
             # Vertical line from endpoint to the x-axis
             vertical_line_from_end = Line(
                 start=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint on the circle
@@ -113,7 +120,7 @@ class SineHeightSteps(Scene):
             )
 
             # Add circle arrow and radius line
-            self.play(GrowArrow(arrow), FadeIn(moving_dot))
+            self.play(GrowArrow(arrow), FadeIn(moving_dot), Create(angle_label))
             self.wait(0.5)
             self.play(Create(vertical_line_from_end))
             self.wait(0.5)
@@ -124,7 +131,7 @@ class SineHeightSteps(Scene):
             self.wait(0.5)
 
             # Remove the arrow, moving dot, and radius line
-            self.remove(arrow, moving_dot, vertical_line_from_end)
+            self.remove(arrow, moving_dot, vertical_line_from_end, angle_label)
 
         # add sine graph
         sine_graph = ax.plot(lambda x: np.sin(np.radians(x)), color=GREEN, x_range=[0, 90])

@@ -1,0 +1,15 @@
+# Ignore all files
+*
+
+# Do not ignore .gitignore itself
+!.gitignore
+
+# Ignore __pycache__ folders
+__pycache__/
+
+# Only track Python files
+!*.py
+
+
+
+
