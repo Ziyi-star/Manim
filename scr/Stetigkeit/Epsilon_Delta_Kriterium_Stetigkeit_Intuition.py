@@ -54,7 +54,28 @@ class EpsilonDeltaKriteriumStetigkeitIntuition(Scene):
         x0_axis_label = MathTex("x_0").next_to(axes.coords_to_point(x0, 0), DOWN)
         fx0_axis_label = MathTex("f(x_0)").next_to(axes.coords_to_point(0, fx0), LEFT)
 
+        # Delta lines
+        delta = 0.5
 
+        x0_minus_delta = axes.coords_to_point(x0 - delta, 0)
+        x0_plus_delta = axes.coords_to_point(x0 + delta, 0)
+        delta_lines = VGroup(
+            DashedLine(x0_minus_delta, axes.coords_to_point(x0 - delta, func(x0 - delta)), color=YELLOW),
+            DashedLine(x0_plus_delta, axes.coords_to_point(x0 + delta, func(x0 + delta)), color=YELLOW)
+        )
+
+        # Highlight delta and epsilon regions
+        delta_region = axes.get_area(graph, x_range=[x0 - delta, x0 + delta], color=YELLOW, opacity=0.2)
+
+        # Interval with delta under x-axis
+        delta_interval = DoubleArrow(
+            start=axes.coords_to_point(x0 - delta, -0.5),
+            end=axes.coords_to_point(x0 + delta, -0.5),
+            color=YELLOW
+        )
+        delta_label = MathTex("\\delta").next_to(delta_interval, DOWN)
+
+    
          # Add all elements to the scene
         self.add(grid)  # Add the NumberPlane as the background
         self.play(Create(axes), Write(axes_labels))
@@ -62,5 +83,8 @@ class EpsilonDeltaKriteriumStetigkeitIntuition(Scene):
         self.play(FadeIn(x0_dot))
         self.play(Create(dashed_to_x_axis), Create(dashed_to_y_axis))
         self.play(Write(x0_axis_label), Write(fx0_axis_label))
+        self.play(Create(delta_lines))
+        self.play(FadeIn(delta_region))
+        self.play(Create(delta_interval), Write(delta_label))
         self.wait(2)
         
