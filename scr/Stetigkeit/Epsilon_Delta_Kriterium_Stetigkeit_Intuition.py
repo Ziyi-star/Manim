@@ -18,21 +18,49 @@ class EpsilonDeltaKriteriumStetigkeitIntuition(Scene):
 
         # Axes setup
         axes = Axes(
-            x_range=[-1, 3, 0.5],
-            y_range=[0, 5, 1],
+            x_range=[-1, 5, 0.5],
+            y_range=[0, 10, 1],
+            axis_config={"include_numbers": True}
         )
         axes_labels = axes.get_axis_labels(x_label="x", y_label="f(x)")
 
         # Function definition
         def func(x):
-            return 0.5 * x**2 + 1
+            return 0.5 * x**2 + 0.5
 
         # Function graph
         graph = axes.plot(func, color=GREEN)
+
+         # x0 and f(x0)
+        x0 = 3
+        fx0 = func(x0)
+
+        # Mark x0 and f(x0)
+        x0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
+
+        # Dashed lines from (x0, f(x0)) to axes
+        dashed_to_x_axis = DashedLine(
+            start=axes.coords_to_point(x0, fx0),
+            end=axes.coords_to_point(x0, 0),
+            color=BLUE
+        )
+        dashed_to_y_axis = DashedLine(
+            start=axes.coords_to_point(x0, fx0),
+            end=axes.coords_to_point(0, fx0),
+            color=BLUE
+        )
+
+        # Labels for x0 on x-axis and f(x0) on y-axis
+        x0_axis_label = MathTex("x_0").next_to(axes.coords_to_point(x0, 0), DOWN)
+        fx0_axis_label = MathTex("f(x_0)").next_to(axes.coords_to_point(0, fx0), LEFT)
+
 
          # Add all elements to the scene
         self.add(grid)  # Add the NumberPlane as the background
         self.play(Create(axes), Write(axes_labels))
         self.play(Create(graph))
+        self.play(FadeIn(x0_dot))
+        self.play(Create(dashed_to_x_axis), Create(dashed_to_y_axis))
+        self.play(Write(x0_axis_label), Write(fx0_axis_label))
         self.wait(2)
         
