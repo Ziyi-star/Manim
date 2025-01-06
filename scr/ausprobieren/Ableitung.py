@@ -4,7 +4,7 @@ class Ableitung(Scene):
     def construct(self):
 
         #Text
-        text1 = Text("Ableitung von f(x)", font_size=36, color=YELLOW)
+        text = Text("Ableitung von f(x) = x²",font_size=36, color=YELLOW)
 
         #Kooridinatensystem
         ax = Axes(
@@ -44,9 +44,17 @@ class Ableitung(Scene):
         #show punkt in graph
         punkt = always_redraw(lambda: Dot(ax.coords_to_point(x_change.get_value(), func.underlying_function(x_change.get_value())), color=RED))
 
-        self.add(ax, func,slope,labels,punkt)
-        self.wait()
-        self.play(x_change.animate.set_value(4), run_time=10, rate_func=smooth)
-        self.wait()
+        
+        ############################
+        self.play(Write(text))
+        self.wait(2)
+        self.play(FadeOut(text))
+        self.play(Create(ax), Create(labels), Create(func, run_time=2))
+        self.wait(2)
+        self.play(Create(punkt,run_time = 1))
+        self.play(Create(slope, run_time=4))
+        self.wait(2)
+        self.play(x_change.animate.set_value(4), run_time=15, rate_func=smooth)
+        self.wait(2)
 
 
