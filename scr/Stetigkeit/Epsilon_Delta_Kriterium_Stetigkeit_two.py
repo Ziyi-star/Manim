@@ -3,12 +3,17 @@ from manim import *
 class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
     def construct(self):
         #Text
-        text1 = Text("Aber was bedeutet das in Konkret:", font_size=36, color=YELLOW)
+        text1 = Text("Epsilon-Delta-Kriterium in Stetigkeit", font_size=36, color=YELLOW)
 
-        text2 = MathTex(
-             r"\forall \epsilon > 0, \exists \delta > 0: ",
-            font_size=36, color=WHITE
-        ).next_to(text1, DOWN,buff=0.5)
+        text3 = MathTex(
+             r"\forall \epsilon > 0, \exists \delta > 0, \text{ sodass, wenn }",
+            font_size=32, color=WHITE
+        ).next_to(text1, DOWN)
+        text4 = MathTex(r"\forall x \in D_f:", font_size=32).next_to(text3, DOWN)
+        math_expression = MathTex(
+            r"|x - x_0| < \delta \implies |f(x) - f(x_0)| < \epsilon",
+            font_size=36
+        ).next_to(text4, DOWN)
 
         #########################################
          # Background grid
@@ -27,26 +32,26 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
 
         # Axes setup
         axes = Axes(
-            x_range=[-1, 5, 0.5],
+            x_range=[-1, 5, 1],
             y_range=[0, 10, 1],
             axis_config={"include_numbers": False}
-        )
+        ).add_coordinates()
         axes_labels = axes.get_axis_labels(x_label="x", y_label="f(x)")
 
         # Function definition
         def func(x):
-            return 0.5 * x**2 + 0.5
+            return x**2
         
         # Reversed function (swapping x and y)
         def inverse_func(y):
-            return np.sqrt(2 * (y - 0.5))
+            return np.sqrt(y)
 
         
          # Function graph
         graph_func = axes.plot(func, color=GREEN)
 
          # x0 and f(x0)
-        x0 = 3
+        x0 = 2
         fx0 = func(x0)
 
         x0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
@@ -75,7 +80,7 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
         )
 
         # Epsilon lines under y-axis
-        epsilon = 0.05
+        epsilon = 2
         # Value relevant to (fx0 - epsilon) and (fx0 + epsilon)
         fx0_minus_epsilon =fx0 - epsilon
         fx0_plus_epsilon = fx0 + epsilon
@@ -103,31 +108,36 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
         )    
         ###########################################
         # Zoom effect around the red point and DoubleArrow
-        zoom_circle = Circle(
-            radius=1, 
-            color=YELLOW,  
-            stroke_width=1,  
-        ).move_to(x0_dot)
+        zoom_rect = SurroundingRectangle(
+            x0_dot,  # The red point
+            color=YELLOW,
+            buff=1  # Padding around the point
+        )
+        self.play(Create(zoom_rect))  # Animate the zoom rectangle
+        self.wait(1)
 
+        # Scale the view to focus on the red point and DoubleArrow
+        self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
+        self.wait(2)
 
-        # self.play(Create(zoom_circle))  # Animate the zoom rectangle
-        # self.wait(1)
-        # # Scale the view to focus on the red point and DoubleArrow
-        # self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
-        # self.wait(2)
-        ###########################################
-        #play
+        # Reset the camera to its original position
+        self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        self.wait(2)
+
 
         
         # Text
-        # # self.play(Write(text1))
+        # self.play(Write(text1))  # Animate writing the first text
         # self.wait(1)
-        # self.play(Write(text2))
+        # self.play(Write(text3))
         # self.wait(1)
-        # self.play(FadeOut(text1), FadeOut(text2))
+        # self.play(Write(text4))
         # self.wait(1)
+        # self.play(Write(math_expression))
+        # self.wait(1)
+        # self.play(FadeOut(text1), FadeOut(text3), FadeOut(text4), FadeOut(math_expression))
         
-        # Graph
+        # # Graph
         self.add(grid)  # Add the NumberPlane as the background
         self.play(Create(axes), Write(axes_labels))
         self.play(Create(graph_func))
