@@ -10,13 +10,6 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
             font_size=36, color=WHITE
         ).next_to(text1, DOWN,buff=0.5)
 
-        # self.play(Write(text1))
-        # self.wait(1)
-        # self.play(Write(text2))
-        # self.wait(1)
-        # self.play(FadeOut(text1), FadeOut(text2))
-        # self.wait(1)
-
         #########################################
          # Background grid
         grid = NumberPlane(
@@ -83,32 +76,32 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
 
         # Epsilon lines under y-axis
         epsilon = 0.05
-        # Interval with epsilon under y-axis
-        fx0_minus_epsilon = axes.coords_to_point(0, fx0 - epsilon)
-        fx0_plus_epsilon = axes.coords_to_point(0, fx0 + epsilon)
-        epsilon_lines_to_y_axis = VGroup(
-            DashedLine(fx0_minus_epsilon, axes.coords_to_point(inverse_func(fx0 - epsilon), fx0 - epsilon), color=GOLD),
-            DashedLine(fx0_plus_epsilon, axes.coords_to_point(inverse_func(fx0 + epsilon), fx0 + epsilon), color=GOLD)
+        # Value relevant to (fx0 - epsilon) and (fx0 + epsilon)
+        fx0_minus_epsilon =fx0 - epsilon
+        fx0_plus_epsilon = fx0 + epsilon
+        x0_minus_epsilon = inverse_func(fx0_minus_epsilon)
+        x0_plus_epsilon = inverse_func(fx0_plus_epsilon)
+        #Points at y-axis
+        fx0_minus_epsilon_point = axes.coords_to_point(0, fx0 - epsilon)
+        fx0_plus_epsilon_point = axes.coords_to_point(0, fx0 + epsilon)
+        #Points at x-axis
+        x0_minus_epsilon_point = axes.coords_to_point(x0_minus_epsilon, 0)
+        x0_plus_epsilon_point = axes.coords_to_point(x0_plus_epsilon, 0)
+        #Point at Graph
+        x0_fx0_minus_epsilon_point = axes.coords_to_point(x0_minus_epsilon, fx0_minus_epsilon)
+        x0_fx0_plus_epsilon_point = axes.coords_to_point(x0_plus_epsilon, fx0_plus_epsilon)  
+
+        #Draw lines
+        lines_from_y_axis_to_graph = VGroup(
+            DashedLine(fx0_minus_epsilon_point, x0_fx0_minus_epsilon_point, color=GOLD),
+            DashedLine(fx0_plus_epsilon_point, x0_fx0_plus_epsilon_point, color=GOLD)
+           
         )
-        # todo: delta range ??
-        delta_lines_to_x_axis = VGroup(
-            DashedLine(fx0_minus_epsilon, axes.coords_to_point(inverse_func(fx0 - epsilon), fx0 - epsilon), color=GOLD),
-            DashedLine(fx0_plus_epsilon, axes.coords_to_point(inverse_func(fx0 + epsilon), fx0 + epsilon), color=GOLD)
-        )
-
-        self.add(grid)  # Add the NumberPlane as the background
-        self.play(Create(axes), Write(axes_labels))
-        self.play(Create(graph_func))
-        self.play(FadeIn(x0_dot))
-        self.play(Create(dashed_to_x_axis), Create(dashed_to_y_axis))
-        self.play(Write(x0_axis_label), Write(fx0_axis_label))
-        self.wait(1)
-        self.play(Create(little_arrow_at_point, run_time=1))
-        self.wait(1)
-        self.play(Create(epsilon_lines))
-        self.wait(2)
-
-
+        lines_from_graph_to_x_axis = VGroup(
+            DashedLine(x0_fx0_minus_epsilon_point, x0_minus_epsilon_point, color=GOLD),
+            DashedLine(x0_fx0_plus_epsilon_point, x0_plus_epsilon_point, color=GOLD)
+        )    
+        ###########################################
         # Zoom effect around the red point and DoubleArrow
         zoom_circle = Circle(
             radius=1, 
@@ -125,7 +118,30 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
         ###########################################
         #play
 
-       
+        
+        # Text
+        # # self.play(Write(text1))
+        # self.wait(1)
+        # self.play(Write(text2))
+        # self.wait(1)
+        # self.play(FadeOut(text1), FadeOut(text2))
+        # self.wait(1)
+        
+        # Graph
+        self.add(grid)  # Add the NumberPlane as the background
+        self.play(Create(axes), Write(axes_labels))
+        self.play(Create(graph_func))
+        self.play(FadeIn(x0_dot))
+        self.play(Create(dashed_to_x_axis), Create(dashed_to_y_axis))
+        self.play(Write(x0_axis_label), Write(fx0_axis_label))
+        self.wait(1)
+        self.play(Create(little_arrow_at_point, run_time=1))
+        self.wait(1)
+        self.play(Create(lines_from_y_axis_to_graph,run_time=1))
+        self.wait(1)
+        self.play(Create(lines_from_graph_to_x_axis, run_time=1))
+        self.wait(2)
+
 
         # # Reset the camera to its original position
         # self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
