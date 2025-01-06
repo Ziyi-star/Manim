@@ -1,6 +1,6 @@
 from manim import *
 
-class RiemannTransformation(Scene):
+class IntegralParabelValueTracker(Scene):
     def construct(self):
          #Text
         text = Text("Integral von f(x) = x²",font_size=36, color=YELLOW)
