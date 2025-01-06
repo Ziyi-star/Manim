@@ -2,24 +2,25 @@ from manim import *
 
 class RiemannTransformation(Scene):
     def construct(self):
+         #Text
+        text = Text("Integral von f(x) = x²",font_size=36, color=YELLOW)
         # Coordinate system
         ax = Axes(
-            x_range=[-1, 5, 1],
-            y_range=[-1, 20, 2],
-            x_length=10,
-            y_length=10,
+            x_range=[-3, 5, 1],  # Further extend x_range to fully include y-axis
+            y_range=[-1, 15, 2],
+            x_length=12,         # Increase length for better visibility
+            y_length=8,          # Adjust y_length to maintain proportions
             axis_config={"tip_shape": StealthTip},
-        ).to_edge(DOWN).add_coordinates()
+        ).move_to(ORIGIN).add_coordinates()  # Center axes in the middle of the screen
+
 
         # Labels for axes
         labels = ax.get_axis_labels(
             Tex("x"), Tex("y")
         )
 
-
         # Function
-        func = ax.plot(lambda x: x**2, color=BLUE)
-        func_label = MathTex("f(x) = x^2").to_corner(UL)
+        func = ax.plot(lambda x: x**2, color=BLUE, x_range=[0, 5])
 
         # ValueTracker for dynamic dx
         dx_value = ValueTracker(0.2)
@@ -33,7 +34,7 @@ class RiemannTransformation(Scene):
             stroke_width=0.5,
             stroke_color=WHITE,
             fill_opacity=0.75,
-            color=(YELLOW, ORANGE)
+            color=(YELLOW, GOLD)
         ))
 
         # Fill the area under the curve between x=0 and x=4
@@ -45,16 +46,32 @@ class RiemannTransformation(Scene):
         )
 
         # Add elements to the scene
-        self.add(ax, func, func_label, labels, riemann_rects)
+        self.play(Write(text))
+        self.wait(2)
+        self.play(FadeOut(text))
+        self.play(Create(ax))
+        self.play(Write(labels))
+        self.play(Create(func))
+        self.wait(2)
+        self.play(Create(riemann_rects))
+        self.wait(1)
 
-        # Animate the shrinking of dx (value tracker start from 0.2, end at 0.05)
+         # Animate the shrinking of dx
+        self.play(dx_value.animate.set_value(0.1), run_time=10, rate_func=smooth)
+        self.wait(2)
+
         self.play(dx_value.animate.set_value(0.05), run_time=10, rate_func=smooth)
-        self.wait()
+        self.wait(2)
 
+        # Pause at final dx and highlight rectangles
+        self.play(Indicate(riemann_rects, color=GREEN), run_time=2)
+        self.wait(2)
 
         # Transition from Riemann rectangles to full fill
         self.play(
-            FadeOut(riemann_rects, run_time=3),  # Fade out the rectangles
-            filled_area.animate.set_opacity(0.6),  # Fade in the filled area
+            FadeOut(riemann_rects, run_time=5),  # Fade out the rectangles
+            FadeIn(filled_area, run_time=5),    # Fade in the filled area
         )
-        self.wait()
+        self.wait(3)
+
+        
