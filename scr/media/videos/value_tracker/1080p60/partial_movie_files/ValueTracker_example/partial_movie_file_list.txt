@@ -1,4 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/value_tracker/1080p60/partial_movie_files/ValueTracker_example/3977891868_2156999144_223132457.mp4'
-file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/value_tracker/1080p60/partial_movie_files/ValueTracker_example/2852726489_1704852926_1675011932.mp4'
-file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/value_tracker/1080p60/partial_movie_files/ValueTracker_example/2852726489_4241978413_3980260300.mp4'

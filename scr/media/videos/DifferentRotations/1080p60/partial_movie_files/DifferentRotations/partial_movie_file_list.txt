@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/DifferentRotations/1080p60/partial_movie_files/DifferentRotations/3977891868_3163499937_2792856867.mp4'
-file 'file:C:/Users/liuzi/Desktop/manim/scr/media/videos/DifferentRotations/1080p60/partial_movie_files/DifferentRotations/2852726489_1704852926_4231444911.mp4'

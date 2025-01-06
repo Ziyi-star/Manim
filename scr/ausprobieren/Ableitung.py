@@ -3,6 +3,9 @@ from manim import *
 class Ableitung(Scene):
     def construct(self):
 
+        #Text
+        text1 = Text("Ableitung von f(x)", font_size=36, color=YELLOW)
+
         #Kooridinatensystem
         ax = Axes(
             x_range=[-4, 4,1],
