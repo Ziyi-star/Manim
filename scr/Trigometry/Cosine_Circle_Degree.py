@@ -1,6 +1,6 @@
 from manim import *
 
-class CosineWithCircle(Scene):
+class CosineCircleDegree(Scene):
     def construct(self):
         # Create the unit circle
         circle = Circle(radius=2, color=BLUE).to_edge(LEFT, buff=1)
@@ -44,13 +44,17 @@ class CosineWithCircle(Scene):
 
 
         # # Labels for the sine graph
-        x_label = ax.get_x_axis_label(Tex("x (°)")).to_edge(RIGHT, buff=0.5)
-        degree_labels = ax.get_x_axis().add_labels({
+        x_degree_labels = ax.get_x_axis().add_labels({
             0: Tex("0°"),
             90: Tex("90°"),
             180: Tex("180°"),
             270: Tex("270°"),
             360: Tex("360°")
+        })
+
+        y_degree_labels = ax.get_y_axis().add_labels({
+            1: Tex("1"),
+            -1: Tex("-1")
         })
 
          # Cosine graph
@@ -62,7 +66,7 @@ class CosineWithCircle(Scene):
 
 
         # Add all elements to the scene
-        self.add(circle, arrow, ax, sine_graph_tracker, degree_labels, sine_graph_tracker, x_label, horizontal_line, vertical_line)
+        self.add(circle, arrow, ax, sine_graph_tracker, sine_graph_tracker, x_degree_labels, y_degree_labels,horizontal_line, vertical_line)
         
 
         # Animate the arrow and sine graph

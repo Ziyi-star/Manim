@@ -1,6 +1,6 @@
 from manim import *
 
-class CosineHeightSteps(Scene):
+class CosineHeightStepsDegree(Scene):
     def construct(self):
         text = Text("Kosinusfunktion", font="Arial", font_size=36, color=YELLOW)
 

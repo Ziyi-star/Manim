@@ -1,8 +1,8 @@
 from manim import *
 
-class SineHeightStepsDegree(Scene):
+class SineHeightStepsRadiant(Scene):
     def construct(self):
-        text = Text("Sinusfunktion", font="Arial", font_size=36, color=YELLOW)
+        text = Text("Sinusfunktion im Bogenmaß", font="Arial", font_size=36, color=YELLOW)
 
         # Background grid without the central cross
         grid = NumberPlane(
@@ -27,30 +27,29 @@ class SineHeightStepsDegree(Scene):
 
         # Axes for the sine graph
         ax = Axes(
-            x_range=[0, 100, 15],  # x-axis in degrees with 15-degree intervals
+            x_range=[0, np.pi/2, np.pi/12],  # x-axis in radians (π/12 = 15° intervals)
             y_range=[0, 2.0, 1],  # y-axis for sine values (max value = 2)
             x_length=7.5,  # Adjusted for clarity
             y_length=4,  # Matches the circle's radius
             axis_config={"color": WHITE},
             tips=True,
         )
-
-        # Add labels to the axes
-        x_degree_labels = ax.get_x_axis().add_labels({
-            0: Tex("0°"),
-            15: Tex("15°"),
-            30: Tex("30°"),
-            45: Tex("45°"),
-            60: Tex("60°"),
-            75: Tex("75°"),
-            90: Tex("90°"),
+        # Add labels to the x-axis
+        x_radian_labels = ax.get_x_axis().add_labels({
+            0: MathTex("0"),
+            (1 / 12) * np.pi: MathTex(r"\frac{\pi}{12}"),  # Simplify \frac{1\pi}{12} to \frac{\pi}{12}
+            (2 / 12) * np.pi: MathTex(r"\frac{\pi}{6}"),   # Simplify \frac{1\pi}{6} to \frac{\pi}{6}
+            (3 / 12) * np.pi: MathTex(r"\frac{\pi}{4}"),   # Simplify \frac{1\pi}{4} to \frac{\pi}{4}
+            (4 / 12) * np.pi: MathTex(r"\frac{\pi}{3}"),   # Simplify \frac{1\pi}{3} to \frac{\pi}{3}
+            (5 / 12) * np.pi: MathTex(r"\frac{5\pi}{12}"), # Keep \frac{5\pi}{12} as-is
+            (6 / 12) * np.pi: MathTex(r"\frac{\pi}{2}"),   # Simplify \frac{1\pi}{2} to \frac{\pi}{2}
         })
+
 
         y_degree_labels = ax.get_y_axis().add_labels({
             1: Tex("1"),
             2: Tex("2"),
         })
-
 
         # Align the axes origin with the circle's center
         ax_y_offset = center[1] - ax.get_origin()[1]  # Calculate vertical offset
@@ -67,21 +66,13 @@ class SineHeightStepsDegree(Scene):
             color=WHITE
         )
 
-        # Dashed line between the circle's center and the axes' origin
-        dashed_line = DashedLine(
-            start=center,
-            end=ax.get_origin(),
-            dash_length=0.1,
-            color=WHITE
-        )
-
         ##############################
         self.play(Write(text))
         self.wait(1)
         self.play(FadeOut(text))
         self.add(
             grid, circle, dot_center, center_label, ax, dashed_line,
-            x_degree_labels, y_degree_labels
+            x_radian_labels, y_degree_labels
         )
         self.wait(1)
 
@@ -102,11 +93,12 @@ class SineHeightStepsDegree(Scene):
                 color=YELLOW
             )
 
-            # Angle label
-            angle_label = MathTex(f"{angle}^\circ").scale(0.7).move_to(
-                center + 1.5 * np.array([np.cos(angle_rad / 2), np.sin(angle_rad / 2), 0])
-            )
-
+            # # Angle label in radians
+            # angle_label = MathTex(
+            #     f"{angle_rad:.2f}"
+            # ).scale(0.7).move_to(
+            #     center + 1.5 * np.array([np.cos(angle_rad / 2), np.sin(angle_rad / 2), 0])
+            # )
 
             # Vertical line from endpoint to the x-axis
             vertical_line_from_end = Line(
@@ -117,17 +109,17 @@ class SineHeightStepsDegree(Scene):
 
             # In Graph: Dot and line
             graph_line = Line(
-                start=ax.coords_to_point(angle, 0),
-                end=ax.coords_to_point(angle, np.sin(angle_rad)),
+                start=ax.coords_to_point(angle_rad, 0),
+                end=ax.coords_to_point(angle_rad, np.sin(angle_rad)),
                 color=GREEN
             )
             graph_dot = Dot(
-                ax.coords_to_point(angle, np.sin(angle_rad)),
+                ax.coords_to_point(angle_rad, np.sin(angle_rad)),
                 color=YELLOW
             )
 
             # Add circle arrow and radius line
-            self.play(GrowArrow(arrow), FadeIn(moving_dot), Create(angle_label))
+            self.play(GrowArrow(arrow), FadeIn(moving_dot))
             self.wait(0.5)
             self.play(Create(vertical_line_from_end))
             self.wait(0.5)
@@ -138,9 +130,9 @@ class SineHeightStepsDegree(Scene):
             self.wait(0.5)
 
             # Remove the arrow, moving dot, and radius line
-            self.remove(arrow, moving_dot, vertical_line_from_end, angle_label)
+            self.remove(arrow, moving_dot, vertical_line_from_end)
 
-        # add sine graph
-        sine_graph = ax.plot(lambda x: np.sin(np.radians(x)), color=GREEN, x_range=[0, 90])
+        # Add sine graph
+        sine_graph = ax.plot(lambda x: np.sin(x), color=GREEN, x_range=[0, np.pi / 2])
         self.play(Create(sine_graph), run_time=2)
         self.wait(2)
