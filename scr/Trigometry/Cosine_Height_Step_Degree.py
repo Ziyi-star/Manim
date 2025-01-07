@@ -2,6 +2,8 @@ from manim import *
 
 class CosineHeightSteps(Scene):
     def construct(self):
+        text = Text("Kosinusfunktion", font="Arial", font_size=36, color=YELLOW)
+
         # Background grid without the central cross
         grid = NumberPlane(
             background_line_style={
@@ -26,7 +28,7 @@ class CosineHeightSteps(Scene):
         # Axes for the sine graph
         ax = Axes(
             x_range=[0, 100, 15],  # x-axis in degrees with 15-degree intervals
-            y_range=[0, 2.0, 0.5],  # y-axis for sine values (max value = 2)
+            y_range=[0, 2.0, 1],  # y-axis for sine values (max value = 2)
             x_length=7.5,  # Adjusted for clarity
             y_length=4,  # Matches the circle's radius
             axis_config={"color": WHITE},
@@ -34,9 +36,7 @@ class CosineHeightSteps(Scene):
         )
 
         # Add labels to the axes
-        x_label = ax.get_x_axis_label(Tex("Drehwinkel").scale(0.7))
-        y_label = ax.get_y_axis_label(Tex("Höhe").scale(0.7))
-        degree_labels = ax.get_x_axis().add_labels({
+        x_degree_labels = ax.get_x_axis().add_labels({
             0: Tex("0°"),
             15: Tex("15°"),
             30: Tex("30°"),
@@ -44,6 +44,11 @@ class CosineHeightSteps(Scene):
             60: Tex("60°"),
             75: Tex("75°"),
             90: Tex("90°"),
+        })
+
+        y_degree_labels = ax.get_y_axis().add_labels({
+            1: Tex("1"),
+            2: Tex("2"),
         })
 
         # Align the axes origin with the circle's center
@@ -61,22 +66,16 @@ class CosineHeightSteps(Scene):
             color=WHITE
         )
 
+        ##########################################
+        self.play(Write(text))
+        self.wait(1)
+        self.play(FadeOut(text))     
         # Add all elements to the scene
         self.add(
             grid, circle, dot_center, center_label, ax, dashed_line,
-            degree_labels, x_label, y_label
+            x_degree_labels, y_degree_labels
         )
-
-
-        # Dashed line between the circle's center and the axes' origin
-        dashed_line = DashedLine(
-            start=center,
-            end=ax.get_origin(),
-            dash_length=0.1,
-            color=WHITE
-        )
-        # Add elements to the scene
-        self.add(grid, circle, dot_center, center_label, ax, dashed_line, degree_labels, x_label, y_label)
+        self.wait(1)
 
         # Animation logic
         for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
@@ -92,7 +91,7 @@ class CosineHeightSteps(Scene):
             )
             moving_dot = Dot(
                 center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
-                color=GREEN
+                color=YELLOW
             )
 
             # Angle label
