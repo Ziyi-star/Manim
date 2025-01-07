@@ -1,6 +1,6 @@
 from manim import *
 
-class SineWithCircle(Scene):
+class SinusCircle(Scene):
     def construct(self):
         # Create the unit circle
         circle = Circle(radius=2, color=BLUE).to_edge(LEFT, buff=1)
@@ -32,20 +32,26 @@ class SineWithCircle(Scene):
             x_range=[0, 360, 90],  # Corresponds to 0° to 450°
             y_range=[-1.0, 1.0, 1],  # Range for the sine graph
             x_length=7.5,
-            y_length=4,
+            y_length=5,
             axis_config={"color": WHITE},
             tips=True,
         ).next_to(circle, RIGHT, buff=1)
 
 
-        # # Labels for the sine graph
+        #Labels for the sine graph
         x_label = ax.get_x_axis_label(Tex("x (°)")).to_edge(RIGHT, buff=0.5)
-        degree_labels = ax.get_x_axis().add_labels({
+        x_degree_labels = ax.get_x_axis().add_labels({
             0: Tex("0°"),
             90: Tex("90°"),
             180: Tex("180°"),
             270: Tex("270°"),
             360: Tex("360°")
+        })
+
+        y_label = Tex("y").next_to(ax.get_y_axis().get_end(), RIGHT) 
+        y_degree_labels = ax.get_y_axis().add_labels({
+            1: Tex("1"),
+            -1: Tex("-1")
         })
 
          # Sine graph
@@ -57,8 +63,8 @@ class SineWithCircle(Scene):
 
 
         # Add all elements to the scene
-        self.add(circle, arrow, ax, sine_graph_tracker, degree_labels, sine_graph_tracker, x_label, line_at_0)
-        
+        self.add(circle, arrow, ax, sine_graph_tracker,x_label, x_degree_labels, sine_graph_tracker, line_at_0, y_label, y_degree_labels)
+        self.wait(1)
 
         # Animate the arrow and sine graph
         self.play(angle.animate.set_value(360), run_time=20, rate_func=linear)
