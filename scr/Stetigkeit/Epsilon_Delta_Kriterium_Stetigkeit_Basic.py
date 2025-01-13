@@ -1,19 +1,19 @@
 from manim import *
 
-class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
+class EpsilonDeltaKriteriumStetigkeitBasic(ZoomedScene):
     def construct(self):
         #Text
         text1 = Text("Epsilon-Delta-Kriterium in Stetigkeit", font_size=36, color=YELLOW)
 
-        text3 = MathTex(
+        text2 = MathTex(
              r"\forall \epsilon > 0, \exists \delta > 0, \text{ sodass, wenn }",
             font_size=32, color=WHITE
         ).next_to(text1, DOWN)
-        text4 = MathTex(r"\forall x \in D_f:", font_size=32).next_to(text3, DOWN)
+        text3 = MathTex(r"\forall x \in D_f:", font_size=32).next_to(text2, DOWN)
         math_expression = MathTex(
             r"|x - x_0| < \delta \implies |f(x) - f(x_0)| < \epsilon",
             font_size=36
-        ).next_to(text4, DOWN)
+        ).next_to(text3, DOWN)
 
         #########################################
          # Background grid
@@ -50,7 +50,7 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
          # Function graph
         graph_func = axes.plot(func, color=GREEN)
 
-         # x0 and f(x0)
+        # x0 and f(x0)
         x0 = 2
         fx0 = func(x0)
 
@@ -72,15 +72,15 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
         x0_axis_label = MathTex("x_0").next_to(axes.coords_to_point(x0, 0), DOWN)
         fx0_axis_label = MathTex("f(x_0)").next_to(axes.coords_to_point(0, fx0), LEFT)
 
-         # little arrow around the point (x0, f(x0))
-        little_arrow_at_point = DoubleArrow(
-            start=axes.coords_to_point(x0, fx0+1),
-            end=axes.coords_to_point(x0, fx0-1),
-            color=RED
-        )
+        #  # little arrow around the point (x0, f(x0))
+        # little_arrow_at_point = DoubleArrow(
+        #     start=axes.coords_to_point(x0, fx0+1),
+        #     end=axes.coords_to_point(x0, fx0-1),
+        #     color=RED
+        # )
 
         # Epsilon lines under y-axis
-        epsilon = 2
+        epsilon = 3
         # Value relevant to (fx0 - epsilon) and (fx0 + epsilon)
         fx0_minus_epsilon =fx0 - epsilon
         fx0_plus_epsilon = fx0 + epsilon
@@ -107,37 +107,42 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
             DashedLine(x0_fx0_plus_epsilon_point, x0_plus_epsilon_point, color=GOLD)
         )    
         ###########################################
-        # Zoom effect around the red point and DoubleArrow
-        zoom_rect = SurroundingRectangle(
-            x0_dot,  # The red point
-            color=YELLOW,
-            buff=1  # Padding around the point
-        )
-        self.play(Create(zoom_rect))  # Animate the zoom rectangle
+        # # Zoom effect around the red point and DoubleArrow
+        # zoom_rect = SurroundingRectangle(
+        #     x0_dot,  # The red point
+        #     color=YELLOW,
+        #     buff=1  # Padding around the point
+        # )
+        # self.play(Create(zoom_rect))  # Animate the zoom rectangle
+        # self.wait(1)
+
+        # # Scale the view to focus on the red point and DoubleArrow
+        # self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
+        # self.wait(2)
+
+        # # Reset the camera to its original position
+        # self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        # self.wait(2)
+
+        # # Reset the camera to its original position
+        # self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        # self.wait(2)
+        # self.play(FadeOut(zoom_circle), FadeOut(little_arrow_at_point))
+
+
+        
+        #######################################
+        self.play(Write(text1))  # Animate writing the first text
         self.wait(1)
-
-        # Scale the view to focus on the red point and DoubleArrow
-        self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
-        self.wait(2)
-
-        # Reset the camera to its original position
-        self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
-        self.wait(2)
-
-
+        self.play(Write(text2))
+        self.wait(1)
+        self.play(Write(text3))
+        self.wait(1)
+        self.play(Write(math_expression))
+        self.wait(1)
+        self.play(FadeOut(text1), FadeOut(text2), FadeOut(text3), FadeOut(math_expression))
         
-        # Text
-        # self.play(Write(text1))  # Animate writing the first text
-        # self.wait(1)
-        # self.play(Write(text3))
-        # self.wait(1)
-        # self.play(Write(text4))
-        # self.wait(1)
-        # self.play(Write(math_expression))
-        # self.wait(1)
-        # self.play(FadeOut(text1), FadeOut(text3), FadeOut(text4), FadeOut(math_expression))
-        
-        # # Graph
+        # Graph
         self.add(grid)  # Add the NumberPlane as the background
         self.play(Create(axes), Write(axes_labels))
         self.play(Create(graph_func))
@@ -145,18 +150,13 @@ class EpsilonDeltaKriteriumStetigkeitTwo(ZoomedScene):
         self.play(Create(dashed_to_x_axis), Create(dashed_to_y_axis))
         self.play(Write(x0_axis_label), Write(fx0_axis_label))
         self.wait(1)
-        self.play(Create(little_arrow_at_point, run_time=1))
-        self.wait(1)
         self.play(Create(lines_from_y_axis_to_graph,run_time=1))
         self.wait(1)
         self.play(Create(lines_from_graph_to_x_axis, run_time=1))
         self.wait(2)
 
 
-        # # Reset the camera to its original position
-        # self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
-        # self.wait(2)
-        # self.play(FadeOut(zoom_circle), FadeOut(little_arrow_at_point))
+
 
 
 
