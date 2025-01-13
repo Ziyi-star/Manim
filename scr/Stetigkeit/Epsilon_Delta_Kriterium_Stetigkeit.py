@@ -78,8 +78,8 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         fx0_plus_epsilon = fx0 + epsilon
         x0_minus_epsilon = inverse_func(fx0_minus_epsilon)
         x0_plus_epsilon = inverse_func(fx0_plus_epsilon)
+
         delta = 0.65 #x0_plus_epsilon - x0
-        print(delta)
         #Points at y-axis
         fx0_minus_epsilon_point = axes.coords_to_point(0, fx0 - epsilon)
         fx0_plus_epsilon_point = axes.coords_to_point(0, fx0 + epsilon)
