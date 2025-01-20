@@ -153,7 +153,7 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         zoom_rect = Rectangle(
             width=2.5, height=3.5, color=YELLOW
         ).move_to(axes.coords_to_point(x0, fx0))
-        #todo double arrow at Rectangles
+        # Double arrow at Rectangles
         # Double arrow for width (delta)
         delta_arrow = DoubleArrow(
             start=zoom_rect.get_left(),
