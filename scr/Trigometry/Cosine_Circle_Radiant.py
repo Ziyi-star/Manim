@@ -3,12 +3,27 @@ import numpy as np
 
 class CosineCircleRadiant(Scene):
     def construct(self):
-        # Create the unit circle
-        circle = Circle(radius=2, color=BLUE).to_edge(LEFT, buff=1)
-        center = circle.get_center()
+         # Background grid without the central cross
+        grid = NumberPlane(
+            background_line_style={
+                "stroke_color": BLUE_D,
+                "stroke_width": 1,
+                "stroke_opacity": 0.6,
+            },
+            axis_config={
+                "stroke_color": BLUE_D,  # Same color as grid lines
+                "stroke_width": 1,       # Same width as grid lines
+                "stroke_opacity": 0.6,   # Same opacity as grid lines
+            },
+        )
 
-        # Value Tracker for the angle in degrees
+        # All things in Circle
+        circle = Circle(radius=2, color=BLUE)
+        # Set the center of the circle at (-4, 0)
+        circle.move_to(grid.c2p(-5, 0))
+          # Value Tracker for the angle in degrees
         angle = ValueTracker(0)
+        center = circle.get_center()
         
         # Create an arrow for the angle
         arrow = always_redraw(lambda: Arrow(
@@ -22,7 +37,15 @@ class CosineCircleRadiant(Scene):
             color=GREEN
         ))
 
-        # Create the horizontal line for the cosine graph
+        # Arc to display the angle on the circle
+        angle_arc = always_redraw(lambda: Arc(
+            radius=2,
+            start_angle=0,
+            angle=angle.get_value(),
+            arc_center=circle.get_center(),
+            color=GOLD
+        ))
+        # Horizontal line 
         horizontal_line = always_redraw(lambda: Line(
             start=center, 
             end=center + 2 * np.array([
@@ -32,8 +55,7 @@ class CosineCircleRadiant(Scene):
             ]),
             color=YELLOW
         ))
-
-        # Create the vertical dashed line for the cosine graph
+        # Vertical dashed line
         vertical_line = always_redraw(lambda: DashedLine(
             start=center + 2 * np.array([
                 np.cos(angle.get_value()), 0, 0
@@ -45,18 +67,32 @@ class CosineCircleRadiant(Scene):
             ]),
             color=WHITE
         ))
+        #Dot at Circle
+        moving_dot_circle = always_redraw(lambda: Dot(
+            center + 2 * np.array([np.cos(angle.get_value()), np.sin(angle.get_value()), 0]),
+            color=YELLOW
+        ))
+        #Dot at X-Axis
+        moving_dot_x_axis = always_redraw(lambda: Dot(
+            center + 2 * np.array([np.cos(angle.get_value()), 0, 0]),
+            color=YELLOW
+        ))
 
-        # Create the Axes for the cosine graph
+        # All things in Axes
         ax = Axes(
             x_range=[0, TAU, TAU / 4],  # 0 to 2π with steps of π/2
             y_range=[-1.0, 1.0, 1],  # Range for the cosine graph
-            x_length=7.5,
+            x_length=10,
             y_length=4,
             axis_config={"color": WHITE},
             tips=True,
-        ).next_to(circle, RIGHT, buff=0)
+        )
 
-        # Labels for the cosine graph
+        # Set the origin of the Axes at (-2, 0)
+        ax.shift(grid.c2p(-3, 0) - ax.get_origin())
+
+
+        # Add labels to the Axes
         x_radian_labels = ax.get_x_axis().add_labels({
             0: MathTex("0"),
             PI / 2: MathTex("\\frac{\\pi}{2}"),
@@ -76,11 +112,36 @@ class CosineCircleRadiant(Scene):
             x_range=[0, angle.get_value()],  # Range from 0 to the current angle
             color=GREEN,
         ))
+        # Line at the x-axis in gold
+        x_axis_line = always_redraw(lambda: Line(
+            start=ax.get_origin(),  # Start at (0, 0) on the graph
+            end=ax.c2p(angle.get_value(), 0),  # End at the current x-value on the x-axis
+            color=GOLD
+        ))
+        cosine_line_axis = always_redraw(lambda: Line(
+            start=ax.c2p(angle.get_value(), 0),  # Start at the current x-value on the x-axis
+            end=ax.c2p(angle.get_value(), np.cos(angle.get_value())),  # End at the current x-value on the cosine graph
+            color=YELLOW
+        ))
+        #Dot at X-Axis
+        moving_dot_x_axis_graph = always_redraw(lambda: Dot(
+            ax.c2p(angle.get_value(), 0),
+            color=YELLOW
+        ))
+        #Dot at cosine Line
+        moving_dot_graph = always_redraw(lambda: Dot(
+            ax.c2p(angle.get_value(), np.cos(angle.get_value())),
+            color=YELLOW
+        ))
 
         # Add all elements to the scene
-        self.add(circle, arrow, ax, cosine_graph_tracker, x_radian_labels, y_degree_labels, horizontal_line, vertical_line)
+        self.add(grid)
+        self.add(
+            circle, arrow, ax, cosine_graph_tracker, x_radian_labels, 
+            y_degree_labels, horizontal_line, vertical_line, 
+            angle_arc, moving_dot_circle, moving_dot_x_axis,
+            x_axis_line,cosine_line_axis, moving_dot_x_axis_graph, moving_dot_graph)
         
         # Animate the arrow and cosine graph
-        #self.play(angle.animate.set_value(TAU), run_time=20, rate_func=linear)  # TAU = 2π
-        self.play(angle.animate.set_value(TAU), run_time=5, rate_func=linear)  # TAU = 2π
+        self.play(angle.animate.set_value(TAU), run_time=20, rate_func=linear)  # TAU = 2π
         self.wait()

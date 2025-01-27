@@ -20,7 +20,7 @@ class Test(Scene):
         circle = Circle(radius=2, color=BLUE)
         # Set the center of the circle at (-4, 0)
         circle.move_to(grid.c2p(-5, 0))
-          # Value Tracker for the angle in degrees
+        # Value Tracker for the angle in degrees
         angle = ValueTracker(0)
         center = circle.get_center()
         
@@ -66,12 +66,16 @@ class Test(Scene):
             ]),
             color=WHITE
         ))
-        #todo: Dots at Circle
-        
-
-        #todo: Dot at Radius
-
-
+        #Dot at Circle
+        moving_dot_circle = always_redraw(lambda: Dot(
+            center + 2 * np.array([np.cos(angle.get_value()), np.sin(angle.get_value()), 0]),
+            color=YELLOW
+        ))
+        #Dot at X-Axis
+        moving_dot_x_axis = always_redraw(lambda: Dot(
+            center + 2 * np.array([np.cos(angle.get_value()), 0, 0]),
+            color=YELLOW
+        ))
 
         # All things in Axes
         ax = Axes(
@@ -118,17 +122,28 @@ class Test(Scene):
             end=ax.c2p(angle.get_value(), np.cos(angle.get_value())),  # End at the current x-value on the cosine graph
             color=YELLOW
         ))
+        #Dot at X-Axis
+        moving_dot_x_axis_graph = always_redraw(lambda: Dot(
+            ax.c2p(angle.get_value(), 0),
+            color=YELLOW
+        ))
+        #Dot at cosine Line
+        moving_dot_graph = always_redraw(lambda: Dot(
+            ax.c2p(angle.get_value(), np.cos(angle.get_value())),
+            color=YELLOW
+        ))
 
         # Add all elements to the scene
         self.add(grid)
-        self.add(
-            circle, arrow, ax, cosine_graph_tracker, x_radian_labels, 
-            y_degree_labels, horizontal_line, vertical_line, 
-            angle_arc,x_axis_line,cosine_line_axis)
+        self.add(circle, arrow, ax)
+        # self.add(
+        #     circle, arrow, ax, cosine_graph_tracker, x_radian_labels, 
+        #     y_degree_labels, horizontal_line, vertical_line, 
+        #     angle_arc, moving_dot_circle, moving_dot_x_axis,
+        #     x_axis_line,cosine_line_axis, moving_dot_x_axis_graph, moving_dot_graph)
         
         # Animate the arrow and cosine graph
         #self.play(angle.animate.set_value(TAU), run_time=20, rate_func=linear)  # TAU = 2π
-        self.play(angle.animate.set_value(TAU), run_time=5, rate_func=linear)  # TAU = 2π
         self.wait()
 
 

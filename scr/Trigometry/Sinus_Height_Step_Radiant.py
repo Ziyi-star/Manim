@@ -16,7 +16,7 @@ class SineHeightStepsRadiant(Scene):
                 "stroke_width": 1,       # Same width as grid lines
                 "stroke_opacity": 0.6,   # Same opacity as grid lines
             },
-        )
+        ).add_coordinates()
 
         # Create the unit circle with radius = 2 (matching max y-axis value)
         circle_radius = 2  # Same as the y-axis range in axes
@@ -67,72 +67,72 @@ class SineHeightStepsRadiant(Scene):
         )
 
         ##############################
-        self.play(Write(text))
-        self.wait(1)
-        self.play(FadeOut(text))
+        #self.play(Write(text))
+        #self.wait(1)
+        #self.play(FadeOut(text))
         self.add(
             grid, circle, dot_center, center_label, ax, dashed_line,
             x_radian_labels, y_degree_labels
         )
         self.wait(1)
 
-        # Animation logic
-        for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
-            # Current angle in radians
-            angle_rad = np.radians(angle)
+        # # Animation logic
+        # for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
+        #     # Current angle in radians
+        #     angle_rad = np.radians(angle)
 
-            # In the circle: dot, arrow, vertical line
-            arrow = Arrow(
-                start=center,
-                end=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
-                buff=0,
-                color=GREEN
-            )
-            moving_dot = Dot(
-                center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
-                color=YELLOW
-            )
+        #     # In the circle: dot, arrow, vertical line
+        #     arrow = Arrow(
+        #         start=center,
+        #         end=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+        #         buff=0,
+        #         color=GREEN
+        #     )
+        #     moving_dot = Dot(
+        #         center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+        #         color=YELLOW
+        #     )
 
-            # # Angle label in radians
-            # angle_label = MathTex(
-            #     f"{angle_rad:.2f}"
-            # ).scale(0.7).move_to(
-            #     center + 1.5 * np.array([np.cos(angle_rad / 2), np.sin(angle_rad / 2), 0])
-            # )
+        #     # # Angle label in radians
+        #     # angle_label = MathTex(
+        #     #     f"{angle_rad:.2f}"
+        #     # ).scale(0.7).move_to(
+        #     #     center + 1.5 * np.array([np.cos(angle_rad / 2), np.sin(angle_rad / 2), 0])
+        #     # )
 
-            # Vertical line from endpoint to the x-axis
-            vertical_line_from_end = Line(
-                start=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint on the circle
-                end=center + 2 * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
-                color=GREEN
-            )
+        #     # Vertical line from endpoint to the x-axis
+        #     vertical_line_from_end = Line(
+        #         start=center + 2 * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint on the circle
+        #         end=center + 2 * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
+        #         color=GREEN
+        #     )
 
-            # In Graph: Dot and line
-            graph_line = Line(
-                start=ax.coords_to_point(angle_rad, 0),
-                end=ax.coords_to_point(angle_rad, np.sin(angle_rad)),
-                color=GREEN
-            )
-            graph_dot = Dot(
-                ax.coords_to_point(angle_rad, np.sin(angle_rad)),
-                color=YELLOW
-            )
+        #     # In Graph: Dot and line
+        #     graph_line = Line(
+        #         start=ax.coords_to_point(angle_rad, 0),
+        #         end=ax.coords_to_point(angle_rad, np.sin(angle_rad)),
+        #         color=GREEN
+        #     )
+        #     graph_dot = Dot(
+        #         ax.coords_to_point(angle_rad, np.sin(angle_rad)),
+        #         color=YELLOW
+        #     )
 
-            # Add circle arrow and radius line
-            self.play(GrowArrow(arrow), FadeIn(moving_dot))
-            self.wait(0.5)
-            self.play(Create(vertical_line_from_end))
-            self.wait(0.5)
+        #     # Add circle arrow and radius line
+        #     self.play(GrowArrow(arrow), FadeIn(moving_dot))
+        #     self.wait(0.5)
+        #     self.play(Create(vertical_line_from_end))
+        #     self.wait(0.5)
 
-            # Move radius line to graph
-            self.play(Transform(vertical_line_from_end, graph_line))
-            self.play(FadeIn(graph_line, graph_dot))
-            self.wait(0.5)
+        #     # Move radius line to graph
+        #     self.play(Transform(vertical_line_from_end, graph_line))
+        #     self.play(FadeIn(graph_line, graph_dot))
+        #     self.wait(0.5)
 
-            # Remove the arrow, moving dot, and radius line
-            self.remove(arrow, moving_dot, vertical_line_from_end)
+        #     # Remove the arrow, moving dot, and radius line
+        #     self.remove(arrow, moving_dot, vertical_line_from_end)
 
-        # Add sine graph
-        sine_graph = ax.plot(lambda x: np.sin(x), color=GREEN, x_range=[0, np.pi / 2])
-        self.play(Create(sine_graph), run_time=2)
-        self.wait(2)
+        # # Add sine graph
+        # sine_graph = ax.plot(lambda x: np.sin(x), color=GREEN, x_range=[0, np.pi / 2])
+        # self.play(Create(sine_graph), run_time=2)
+        # self.wait(2)
