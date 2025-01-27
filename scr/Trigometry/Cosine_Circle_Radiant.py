@@ -54,7 +54,7 @@ class CosineCircleRadiant(Scene):
             y_length=4,
             axis_config={"color": WHITE},
             tips=True,
-        ).next_to(circle, RIGHT, buff=1)
+        ).next_to(circle, RIGHT, buff=0)
 
         # Labels for the cosine graph
         x_radian_labels = ax.get_x_axis().add_labels({
@@ -81,5 +81,6 @@ class CosineCircleRadiant(Scene):
         self.add(circle, arrow, ax, cosine_graph_tracker, x_radian_labels, y_degree_labels, horizontal_line, vertical_line)
         
         # Animate the arrow and cosine graph
-        self.play(angle.animate.set_value(TAU), run_time=20, rate_func=linear)  # TAU = 2π
+        #self.play(angle.animate.set_value(TAU), run_time=20, rate_func=linear)  # TAU = 2π
+        self.play(angle.animate.set_value(TAU), run_time=5, rate_func=linear)  # TAU = 2π
         self.wait()

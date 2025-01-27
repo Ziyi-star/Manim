@@ -2,9 +2,9 @@ from manim import *
 
 class EpsilonDeltaKriteriumUnstetigkeitTwo(ZoomedScene):
     def construct(self):
-        text1 = Text("What if I make delta really small", font_size=36, color=YELLOW)
+        text1 = Text("Was passiert, wenn ich Delta wirklich klein mache? ", font_size=36, color=YELLOW)
 
-        text2 = Text("will the projection of the graph in the Schlauch?",font_size=36, color=YELLOW).next_to(text1, DOWN)
+        text2 = Text("Wird die Projektion des Graphen dann in den Schlauch fallen?",font_size=36, color=YELLOW).next_to(text1, DOWN)
 
                  # Background grid
         grid = NumberPlane(
@@ -119,25 +119,25 @@ class EpsilonDeltaKriteriumUnstetigkeitTwo(ZoomedScene):
         y0_func_above_plus_delta_point = axes.coords_to_point(0, y0_func_above_plus_delta)
         line_from_graph_to_y_axis_above = DashedLine(x0_plus_delta_graph_above, y0_func_above_plus_delta_point, color=YELLOW)
 
-        #self.play(Write(text1))
-        #self.wait(1)
-        #self.play(Write(text2))
-        #self.wait(1)
-        #self.play(FadeOut(text1), FadeOut(text2))
+        self.play(Write(text1))
+        self.wait(1)
+        self.play(Write(text2))
+        self.wait(1)
+        self.play(FadeOut(text1), FadeOut(text2))
         self.add(grid, axes, axes_labels, graph_1, graph_2, dot_below, dashed_to_x_axis, dashed_to_y_axis, x0_axis_label, fx0_axis_label, circle_above, line_from_y_axis_to_graph, epsilon_interval, epsilon_label)
-        #self.wait(1)
+        self.wait(1)
         self.play(Create(arrow_to_x0), Write(delta_label))
-        #self.wait(1)
+        self.wait(1)
         self.play(Create(line_from_x_axis_to_graph), Create(line_from_graph_to_y_axis_above))
-        #self.wait(1)
+        self.wait(1)
         
         #todo:Zoom in at (x0,f(x0)) and show the projection still out of epsilon schlauch
         zoom_rect = Rectangle(
             width=2, height=3, color=BLUE).move_to(dot_below)
         self.play(Create(zoom_rect))  # Animate the zoom rectangle
-        #self.wait(1)
+        self.wait(1)
         self.play(self.camera.frame.animate.scale(0.5).move_to(dot_below))  # Zoom in
-        #self.wait(1)
+        self.wait(1)
          # Reset the camera to its original position
         self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
         self.wait(1)

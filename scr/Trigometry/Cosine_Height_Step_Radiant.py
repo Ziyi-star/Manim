@@ -67,14 +67,14 @@ class CosineHeightStepsRadiant(Scene):
 
         ##########################################
         self.play(Write(text))
-        self.wait(1)
+        #self.wait(1)
         self.play(FadeOut(text))     
         # Add all elements to the scene
         self.add(
             grid, circle, dot_center, center_label, ax, dashed_line,
             x_radian_labels, y_labels
         )
-        self.wait(1)
+        #self.wait(1)
 
         # Animation logic
         for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
@@ -120,14 +120,14 @@ class CosineHeightStepsRadiant(Scene):
 
             # Add circle arrow and radius line
             self.play(GrowArrow(arrow), FadeIn(moving_dot))
-            self.wait(0.5)
+            #self.wait(0.5)
             self.play(Create(horizontal_line_from_end), Create(vertical_line_from_end))
-            self.wait(0.5)
+            #self.wait(0.5)
 
             # Move radius line to graph
             self.play(Transform(horizontal_line_from_end, graph_line))
             self.play(FadeIn(graph_line, graph_dot))
-            self.wait(0.5)
+            #self.wait(0.5)
 
             # Remove the arrow, moving dot, and radius line
             self.remove(arrow, moving_dot, horizontal_line_from_end, vertical_line_from_end)
