@@ -1,5 +1,8 @@
 from manim import *
 
+# Define a global variable
+GLOBAL_DELTA = 2
+
 class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
     def construct(self):
         #Text
@@ -33,8 +36,8 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
             return np.sin(x)
                 
          # Function graph
-        graph_right = axes.plot(func_right, x_range=[0, 5], color=GREEN)
-        graph_left = axes.plot(func_left, x_range=[-5, 0], color=GREEN)
+        graph_right = axes.plot(func_right, x_range=[0, 5], color=BLUE)
+        graph_left = axes.plot(func_left, x_range=[-5, 0], color=BLUE)
 
         # x0 and f(x0)
         x0 = TAU/4
@@ -106,6 +109,22 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
             )
             return VGroup(background_delta, dashed_line_left, dashed_line_right)
 
+        # Function to create the graph pieces, here left_range, middle_range variate to have changeable graphs
+        def get_graph_pieces():
+            delta = delta_tracker.get_value()
+            delta_change = GLOBAL_DELTA - delta
+            left_range = -0.4 + delta_change
+            middle_range = 0 + delta_change - 0.4
+            if (left_range < 0):
+                graph_piece1 = axes.plot(func_left, x_range=[-0.4+delta_change, 0], color=RED, stroke_width=6)
+                graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
+                graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6-delta_change], color=RED, stroke_width=6)
+            if (left_range > 0):
+                graph_piece1 = axes.plot(func_left, x_range=[0, 0], color=GREEN, stroke_width=6)
+                graph_piece2 = axes.plot(func_right, x_range=[middle_range, 0.8], color=RED, stroke_width=6)
+                graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6-delta_change], color=RED, stroke_width=6)
+            return VGroup(graph_piece1, graph_piece2, graph_piece3)
+
         #Animations
         self.play(Create(grid))
         self.play(Create(axes))
@@ -138,7 +157,9 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         #self.wait(2)
         self.remove(graph_piece1,graph_piece2,graph_piece3)
         # Animate the delta value
-        self.play(delta_tracker.animate.set_value(0.8), run_time=4, rate_func=linear)
+        graph_pieces = always_redraw(get_graph_pieces)
+        self.add(graph_pieces)
+        self.play(delta_tracker.animate.set_value(0.8), run_time=6, rate_func=linear)
         self.wait(2)
         #Zoom in, length and width here manually adjusted to look pretty
         zoom_rect = Rectangle(
