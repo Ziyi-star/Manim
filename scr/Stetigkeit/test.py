@@ -55,35 +55,35 @@ class Test(Scene):
         x0_dot = Dot(axes.coords_to_point(x0, 0), color=PURPLE_A)
         x0_dot_label = MathTex("x_0", color = PURPLE_A).next_to(x0_dot, DOWN).scale(0.6)
 
-        # # Epsilon lines under y-axis
+        # ValueTracker for epsilon
+        epsilon_tracker = ValueTracker(1)
+        # Epsilon lines under y-axis
+        #Function to create the dashed lines and background
+        def get_epsilon_group():
+            epsilon = epsilon_tracker.get_value()
+            fx0_minus_epsilon = fx0 - epsilon
+            fx0_plus_epsilon = fx0 + epsilon
 
-        
-        epsilon = 1
-        # Value relevant to (fx0 - epsilon) and (fx0 + epsilon)
-        fx0_minus_epsilon =fx0 - epsilon
-        fx0_plus_epsilon = fx0 + epsilon
-
-        # orange Schlauch with lines transparent background color
-        dashed_line_top = DashedLine(
-            start=axes.c2p(-5, fx0_plus_epsilon),
-            end=axes.c2p(5, fx0_plus_epsilon),
-            color=ORANGE
-        )
-        dashed_line_bottom = DashedLine(
-            start=axes.c2p(-5, fx0_minus_epsilon),
-            end=axes.c2p(5, fx0_minus_epsilon),
-            color=ORANGE
-        )
-        # Create the background color
-        background_epsilon = Polygon(
-            axes.c2p(-5, fx0_minus_epsilon),
-            axes.c2p(5, fx0_minus_epsilon),
-            axes.c2p(5, fx0_plus_epsilon),
-            axes.c2p(-5, fx0_plus_epsilon),
-            color=ORANGE,
-            fill_opacity=0.2,
-            stroke_width=0
-        )
+            dashed_line_top = DashedLine(
+                start=axes.c2p(-5, fx0_plus_epsilon),
+                end=axes.c2p(5, fx0_plus_epsilon),
+                color=ORANGE
+            )
+            dashed_line_bottom = DashedLine(
+                start=axes.c2p(-5, fx0_minus_epsilon),
+                end=axes.c2p(5, fx0_minus_epsilon),
+                color=ORANGE
+            )
+            background_epsilon = Polygon(
+                axes.c2p(-5, fx0_minus_epsilon),
+                axes.c2p(5, fx0_minus_epsilon),
+                axes.c2p(5, fx0_plus_epsilon),
+                axes.c2p(-5, fx0_plus_epsilon),
+                color=ORANGE,
+                fill_opacity=0.2,
+                stroke_width=0
+            )
+            return VGroup(background_epsilon, dashed_line_top, dashed_line_bottom)
 
         #todo: delta = 2 , show me the function außerhalb der Schlauch
         delta = 2
@@ -124,10 +124,25 @@ class Test(Scene):
         self.play(Write(x0_dot_label))
         self.play(Create(x0_fx0_dot))
         self.play(Write(x0_fx0_dot_label))
-        self.play(Create(dashed_line_bottom), Create(dashed_line_top))
-        self.play(Create(background_epsilon))
+        # Always redraw the epsilon group
+        epsilon_group = always_redraw(get_epsilon_group)
+        self.add(epsilon_group)
+        self.wait(1)
         self.add(background_delta, dashed_line_left, dashed_line_right)
-
-        self.wait(2)
+        self.wait(1)
+         # Animate the epsilon value
+        self.play(epsilon_tracker.animate.set_value(0.7), run_time=2, rate_func=linear)
+        # Graph pieces
+        graph_piece1 = axes.plot(func_left, x_range=[-0.4, 0], color=RED, stroke_width=6)
+        graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
+        graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6], color=RED, stroke_width=6)
+        # Play the creation of the graph pieces simultaneously with a runtime of 2 seconds
+        self.play(Create(graph_piece1))
+        #self.wait(1)
+        self.play(Create(graph_piece2))
+        #self.wait(1)
+        self.play(Create(graph_piece3))
+        #self.wait(2)
+        self.remove(graph_piece1,graph_piece2,graph_piece3)
 
 
