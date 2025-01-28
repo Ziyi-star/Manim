@@ -29,28 +29,25 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
                 "stroke_width": 1,
                 "stroke_opacity": 0.6,
             },
-        )
+        ).add_coordinates()
        
         axes = Axes(
-            x_range=[-1, 5, 1],
-            y_range=[0, 10, 1],
+            x_range=[-5, 5, 1],
+            y_range=[0, 4, 1],
             axis_config={"include_numbers": False}
         ).add_coordinates()
 
         # Function definition
-        def func(x):
-            return x**2
-        
-        # Reversed function (swapping x and y)
-        def inverse_func(y):
-            return np.sqrt(y)
-
-        
+        def func_right(x):
+            return np.cos(x)
+        def inverse_func_right(x):
+            return np.arccos(x)
+                
          # Function graph
-        graph_func = axes.plot(func, color=GREEN)
+        graph_func = axes.plot(func_right, color=GREEN)
 
         # x0 and f(x0)
-        x0 = 2
+        x0 = 0
         fx0 = func(x0)
 
         x0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
@@ -119,19 +116,19 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
 
 
         #####################################
-        self.play(Write(text1)) 
-        self.wait(1)
-        self.play(Write(text2))
-        self.wait(1)
-        self.play(Write(text3))
-        self.wait(1)
-        self.play(Write(math_expression))
-        self.wait(1)
-        self.play(FadeOut(text1), FadeOut(text2), FadeOut(text3), FadeOut(math_expression))
-        self.wait(1)
-        self.play(Write(math_expression1))
-        self.wait(1)
-        self.play(FadeOut(math_expression1))
+        # self.play(Write(text1)) 
+        # self.wait(1)
+        # self.play(Write(text2))
+        # self.wait(1)
+        # self.play(Write(text3))
+        # self.wait(1)
+        # self.play(Write(math_expression))
+        # self.wait(1)
+        # self.play(FadeOut(text1), FadeOut(text2), FadeOut(text3), FadeOut(math_expression))
+        # self.wait(1)
+        # self.play(Write(math_expression1))
+        # self.wait(1)
+        # self.play(FadeOut(math_expression1))
         # Graph
         self.add(grid)  # Add the NumberPlane as the background
         self.play(Create(axes))

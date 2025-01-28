@@ -1,68 +1,133 @@
 from manim import *
 
-class EpsilonDeltaVisualization(Scene):
+class Test(Scene):
     def construct(self):
-        # Axes setup
-        axes = Axes(
-            x_range=[-1, 3, 0.5],
-            y_range=[0, 5, 1],
-            axis_config={"include_numbers": True}
+        text1 = Text("Epsilon-Delta-Kriterium in Stetigkeit", font_size=36, color=YELLOW)
+        text2 = MathTex(
+             r"\forall \epsilon > 0, \exists \delta > 0, \text{ sodass, wenn }",
+            font_size=32, color=WHITE
+        ).next_to(text1, DOWN)
+        text3 = MathTex(r"\forall x \in D_f:", font_size=32).next_to(text2, DOWN)
+        math_expression = MathTex(
+            r"|x - x_0| < \delta \implies |f(x) - f(x_0)| < \epsilon",
+            font_size=36
+        ).next_to(text3, DOWN)
+
+        math_expression1 = MathTex(r"f(x) = x^2", font_size=48, color=WHITE)
+        # Background grid
+        grid = NumberPlane(
+            background_line_style={
+                "stroke_color": BLUE_D,
+                "stroke_width": 1,
+                "stroke_opacity": 0.6,
+            },
+            axis_config={
+                "stroke_color": BLUE_D,
+                "stroke_width": 1,
+                "stroke_opacity": 0.6,
+            },
         )
-        axes_labels = axes.get_axis_labels(x_label="x", y_label="f(x)")
+       
+        axes = Axes(
+            x_range=[-5, 5, 1],
+            y_range=[-2, 2, 1],
+            axis_config={"include_numbers": False}
+        ).add_coordinates()
 
         # Function definition
-        def func(x):
-            return 0.5 * x**2 + 1
-
-        # Function graph
-        graph = axes.plot(func, color=GREEN, label="f(x)")
+        def func_right(x):
+            return np.cos(x)
+        def inverse_func_right(x):
+            return np.arccos(x)
+        def func_left(x):
+            return np.sin(x)
+                
+         # Function graph
+        graph_right = axes.plot(func_right, x_range=[0, 5], color=GREEN)
+        graph_left = axes.plot(func_left, x_range=[-5, 0], color=GREEN)
 
         # x0 and f(x0)
-        x0 = 1.5
-        fx0 = func(x0)
+        x0 = TAU/4
+        fx0 = func_right(x0)
+        x0_fx0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
+        # Labels for x0 dot
+        x0_fx0_dot_label = MathTex("(x_0,f(x_0))", color = ORANGE).next_to(x0_fx0_dot, UP).scale(0.6)
+        x0_dot = Dot(axes.coords_to_point(x0, 0), color=PURPLE_A)
+        x0_dot_label = MathTex("x_0", color = PURPLE_A).next_to(x0_dot, DOWN).scale(0.6)
 
-        # Mark x0 and f(x0)
-        x0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
-        x0_label = MathTex("x_0").next_to(x0_dot, DOWN)
-        fx0_label = MathTex("f(x_0)").next_to(x0_dot, LEFT)
+        # # Epsilon lines under y-axis
 
-        # Delta (δ) lines
-        delta = 0.5
-        x0_minus_delta = axes.coords_to_point(x0 - delta, 0)
-        x0_plus_delta = axes.coords_to_point(x0 + delta, 0)
-        delta_lines = VGroup(
-            DashedLine(x0_minus_delta, axes.coords_to_point(x0 - delta, fx0), color=BROWN),
-            DashedLine(x0_plus_delta, axes.coords_to_point(x0 + delta, fx0), color=BROWN)
+        
+        epsilon = 1
+        # Value relevant to (fx0 - epsilon) and (fx0 + epsilon)
+        fx0_minus_epsilon =fx0 - epsilon
+        fx0_plus_epsilon = fx0 + epsilon
+
+        # orange Schlauch with lines transparent background color
+        dashed_line_top = DashedLine(
+            start=axes.c2p(-5, fx0_plus_epsilon),
+            end=axes.c2p(5, fx0_plus_epsilon),
+            color=ORANGE
         )
-        delta_label = MathTex("\\delta").next_to(delta_lines, DOWN)
-
-        # Epsilon (ε) lines
-        epsilon = 0.8
-        fx0_minus_epsilon = axes.coords_to_point(0, fx0 - epsilon)
-        fx0_plus_epsilon = axes.coords_to_point(0, fx0 + epsilon)
-        epsilon_lines = VGroup(
-            DashedLine(fx0_minus_epsilon, axes.coords_to_point(x0, fx0 - epsilon), color=TURQUOISE),
-            DashedLine(fx0_plus_epsilon, axes.coords_to_point(x0, fx0 + epsilon), color=TURQUOISE)
+        dashed_line_bottom = DashedLine(
+            start=axes.c2p(-5, fx0_minus_epsilon),
+            end=axes.c2p(5, fx0_minus_epsilon),
+            color=ORANGE
         )
-        epsilon_label = MathTex("\\epsilon").next_to(epsilon_lines, LEFT)
-
-        # Highlight delta and epsilon regions
-        delta_region = axes.get_area(graph, x_range=[x0 - delta, x0 + delta], color=BROWN, opacity=0.2)
-        epsilon_region = Rectangle(
-            width=axes.c2p(x0 + delta, 0)[0] - axes.c2p(x0 - delta, 0)[0],
-            height=axes.c2p(0, fx0 + epsilon)[1] - axes.c2p(0, fx0 - epsilon)[1],
-            color=TURQUOISE,
+        # Create the background color
+        background_epsilon = Polygon(
+            axes.c2p(-5, fx0_minus_epsilon),
+            axes.c2p(5, fx0_minus_epsilon),
+            axes.c2p(5, fx0_plus_epsilon),
+            axes.c2p(-5, fx0_plus_epsilon),
+            color=ORANGE,
             fill_opacity=0.2,
-            stroke_opacity=0.3
-        ).move_to(axes.c2p(x0, fx0))
+            stroke_width=0
+        )
 
-        # Adding all elements to the scene
-        self.play(Create(axes), Write(axes_labels))
-        self.play(Create(graph))
-        self.play(FadeIn(x0_dot, x0_label, fx0_label))
-        self.play(Create(delta_lines), Write(delta_label))
-        self.play(Create(epsilon_lines), Write(epsilon_label))
-        self.play(FadeIn(delta_region, epsilon_region))
+        #todo: delta = 2 , show me the function außerhalb der Schlauch
+        delta = 2
+        x0_minus_delta = x0 - delta
+        x0_plus_delta = x0 + delta
+        # Create the dashed lines for delta
+        dashed_line_left = DashedLine(
+            start=axes.c2p(x0_minus_delta, -2),
+            end=axes.c2p(x0_minus_delta, 2),
+            color=PURPLE
+        )
+        dashed_line_right = DashedLine(
+            start=axes.c2p(x0_plus_delta, -2),
+            end=axes.c2p(x0_plus_delta, 2),
+            color=PURPLE
+        )
 
-        # Wait before finishing
-        self.wait()
+        # Create the background color for delta
+        background_delta = Polygon(
+            axes.c2p(x0_minus_delta, -2),
+            axes.c2p(x0_plus_delta, -2),
+            axes.c2p(x0_plus_delta, 2),
+            axes.c2p(x0_minus_delta, 2),
+            color=PURPLE,
+            fill_opacity=0.2,
+            stroke_width=0
+        )
+        # todo: delta move from 2 to 1, show me the function außerhalb der Schlauch with always redraw
+
+        #todo:zoom: at end all functions are in Schlauch
+
+
+        self.play(Create(grid))
+        self.play(Create(axes))
+        self.play(Create(graph_left))
+        self.play(Create(graph_right))
+        self.play(Create(x0_dot))
+        self.play(Write(x0_dot_label))
+        self.play(Create(x0_fx0_dot))
+        self.play(Write(x0_fx0_dot_label))
+        self.play(Create(dashed_line_bottom), Create(dashed_line_top))
+        self.play(Create(background_epsilon))
+        self.add(background_delta, dashed_line_left, dashed_line_right)
+
+        self.wait(2)
+
+
