@@ -1,6 +1,6 @@
 from manim import *
 
-class Test(Scene):
+class Test(ZoomedScene):
     def construct(self):
         text1 = Text("Epsilon-Delta-Kriterium in Stetigkeit", font_size=36, color=YELLOW)
         text2 = MathTex(
@@ -86,34 +86,35 @@ class Test(Scene):
             return VGroup(background_epsilon, dashed_line_top, dashed_line_bottom)
 
         #todo: delta = 2 , show me the function außerhalb der Schlauch
-        delta = 2
-        x0_minus_delta = x0 - delta
-        x0_plus_delta = x0 + delta
-        # Create the dashed lines for delta
-        dashed_line_left = DashedLine(
-            start=axes.c2p(x0_minus_delta, -2),
-            end=axes.c2p(x0_minus_delta, 2),
-            color=PURPLE
-        )
-        dashed_line_right = DashedLine(
-            start=axes.c2p(x0_plus_delta, -2),
-            end=axes.c2p(x0_plus_delta, 2),
-            color=PURPLE
-        )
+        delta_tracker = ValueTracker(2)
 
-        # Create the background color for delta
-        background_delta = Polygon(
-            axes.c2p(x0_minus_delta, -2),
-            axes.c2p(x0_plus_delta, -2),
-            axes.c2p(x0_plus_delta, 2),
-            axes.c2p(x0_minus_delta, 2),
-            color=PURPLE,
-            fill_opacity=0.2,
-            stroke_width=0
-        )
-        # todo: delta move from 2 to 1, show me the function außerhalb der Schlauch with always redraw
+        def get_delta_group():
+            delta = delta_tracker.get_value()
+            x0_minus_delta = x0 - delta
+            x0_plus_delta = x0 + delta
+            # Create the dashed lines for delta
+            dashed_line_left = DashedLine(
+                start=axes.c2p(x0_minus_delta, -2),
+                end=axes.c2p(x0_minus_delta, 2),
+                color=PURPLE
+            )
+            dashed_line_right = DashedLine(
+                start=axes.c2p(x0_plus_delta, -2),
+                end=axes.c2p(x0_plus_delta, 2),
+                color=PURPLE
+            )
 
-        #todo:zoom: at end all functions are in Schlauch
+            # Create the background color for delta
+            background_delta = Polygon(
+                axes.c2p(x0_minus_delta, -2),
+                axes.c2p(x0_plus_delta, -2),
+                axes.c2p(x0_plus_delta, 2),
+                axes.c2p(x0_minus_delta, 2),
+                color=PURPLE,
+                fill_opacity=0.2,
+                stroke_width=0
+            )
+            return VGroup(background_delta, dashed_line_left, dashed_line_right)
 
 
         self.play(Create(grid))
@@ -128,10 +129,11 @@ class Test(Scene):
         epsilon_group = always_redraw(get_epsilon_group)
         self.add(epsilon_group)
         self.wait(1)
-        self.add(background_delta, dashed_line_left, dashed_line_right)
+        delta_group = always_redraw(get_delta_group)
+        self.add(delta_group)
         self.wait(1)
          # Animate the epsilon value
-        self.play(epsilon_tracker.animate.set_value(0.7), run_time=2, rate_func=linear)
+        self.play(epsilon_tracker.animate.set_value(0.7), run_time=4, rate_func=linear)
         # Graph pieces
         graph_piece1 = axes.plot(func_left, x_range=[-0.4, 0], color=RED, stroke_width=6)
         graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
@@ -144,5 +146,23 @@ class Test(Scene):
         self.play(Create(graph_piece3))
         #self.wait(2)
         self.remove(graph_piece1,graph_piece2,graph_piece3)
+        # Animate the delta value
+        self.play(delta_tracker.animate.set_value(0.8), run_time=4, rate_func=linear)
+        #self.wait(2)
+        #todo:zoom: at end all functions are in Schlauch
+        #Zoom in, length and width here manually adjusted to look pretty
+        zoom_rect = Rectangle(
+            width=2, height=2, color=YELLOW
+        ).move_to(x0_fx0_dot)
+        self.play(Create(zoom_rect))  # Animate the zoom rectangle
+        #self.wait(2)
+         # Scale the view to focus on the red point and DoubleArrow
+        self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
+        self.wait(2)
+         # Reset the camera to its original position
+        self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        self.wait(2)
+
+
 
 
