@@ -78,7 +78,7 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
             )
             return VGroup(background_epsilon, dashed_line_top, dashed_line_bottom)
 
-        #todo: delta = 2 , show me the function außerhalb der Schlauch
+        #delta = 2 , show me the function außerhalb der Schlauch
         delta_tracker = ValueTracker(2)
 
         def get_delta_group():
