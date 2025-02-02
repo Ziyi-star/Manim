@@ -28,11 +28,11 @@ class CosineHeightStepsRadiant(Scene):
 
         # Axes for the cosine graph
         ax = Axes(
-            x_range=[0, np.pi/2, np.pi/12],  # x-axis in radians (π/12 = 15° intervals)
-            y_range=[0, 2.0, 1],  # y-axis for sine values (max value = 2)
+            x_range=[0, np.pi*7/12, np.pi/12],  # x-axis in radians (π/12 = 15° intervals)
+            y_range=[0, 1.5, 1],  # y-axis for sine values (max value = 2)
             # Adjust number for better view to align with circle
-            x_length=4,  
-            y_length=2*circle_radius,  # Matches the circle's radius
+            x_length=5,  
+            y_length=1.5*circle_radius,  # Matches the circle's radius
             axis_config={"color": WHITE},
             tips=True,
         )
