@@ -6,6 +6,11 @@ GLOBAL_DELTA = 2
 class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
     def construct(self):
         #Text
+        Text_1 = Text("Epsilon-Delta-Kriterium in Stetigkeit", font_size=36, color=YELLOW)
+        Text_2 = Tex(r"$f$ hei\ss t stetig in $x_0$, wenn zu jedem $\varepsilon > 0$",).next_to(Text_1,DOWN)
+        Text_3 = Tex(r"ein $\delta > 0$ existiert, so dass f\''ur alle $x \in D_f$ ",).next_to(Text_2,DOWN)
+        Text_4 = Tex( r"mit $\lvert x - x_0\rvert < \delta$ gilt:",).next_to(Text_3,DOWN)
+        Text_5 = Tex(r"$\lvert f(x) - f(x_0)\rvert < \varepsilon$.").next_to(Text_4,DOWN)
 
         # Background grid
         grid = NumberPlane(
@@ -30,8 +35,6 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         # Function definition
         def func_right(x):
             return np.cos(x)
-        def inverse_func_right(x):
-            return np.arccos(x)
         def func_left(x):
             return np.sin(x)
                 
@@ -80,7 +83,6 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
 
         #delta = 2 , show me the function außerhalb der Schlauch
         delta_tracker = ValueTracker(2)
-
         def get_delta_group():
             delta = delta_tracker.get_value()
             x0_minus_delta = x0 - delta
@@ -96,7 +98,6 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
                 end=axes.c2p(x0_plus_delta, 2),
                 color=PURPLE
             )
-
             # Create the background color for delta
             background_delta = Polygon(
                 axes.c2p(x0_minus_delta, -2),
@@ -116,16 +117,26 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
             left_range = -0.4 + delta_change
             middle_range = 0 + delta_change - 0.4
             if (left_range < 0):
-                graph_piece1 = axes.plot(func_left, x_range=[-0.4+delta_change, 0], color=RED, stroke_width=6)
                 graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
                 graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6-delta_change], color=RED, stroke_width=6)
             if (left_range > 0):
-                graph_piece1 = axes.plot(func_left, x_range=[0, 0], color=GREEN, stroke_width=6)
                 graph_piece2 = axes.plot(func_right, x_range=[middle_range, 0.8], color=RED, stroke_width=6)
                 graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6-delta_change], color=RED, stroke_width=6)
-            return VGroup(graph_piece1, graph_piece2, graph_piece3)
+            return VGroup(graph_piece2, graph_piece3)
 
         #Animations
+        self.play(Write(Text_1))
+        self.wait(1)
+        self.play(Write(Text_2))
+        self.wait(1)
+        self.play(Write(Text_3))
+        self.wait(1)
+        self.play(Write(Text_4))
+        self.wait(1)
+        self.play(Write(Text_5))
+        self.wait(1)
+        self.remove(Text_1,Text_2,Text_3,Text_4,Text_5)
+        self.wait(1)
         self.play(Create(grid))
         self.play(Create(axes))
         self.play(Create(graph_left))
@@ -135,30 +146,52 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         self.play(Create(x0_fx0_dot))
         self.play(Write(x0_fx0_dot_label))
         self.wait(1)
+
+        #Situation 1
         # Always redraw the epsilon group
+        math_text_1 = MathTex(r"\epsilon = 1")
+        # Position it in the top-right corner
+        math_text_1.to_corner(UL)  # UR = Upper Right
+        # Show the math text with animation
+        self.play(Write(math_text_1))
+        self.wait(2)
         epsilon_group = always_redraw(get_epsilon_group)
         self.add(epsilon_group)
         self.wait(2)
+        math_text_2 = MathTex(r"\delta = 2")
+        # Position it in the top-right corner
+        math_text_2.next_to(math_text_1,DOWN)  # UR = Upper Right
+        # Show the math text with animation
+        self.play(Write(math_text_2))
+        self.wait(2)
         delta_group = always_redraw(get_delta_group)
         self.add(delta_group)
-        self.wait(1)
-         # Animate the epsilon value
+        self.wait(2)
+
+        # Animate the epsilon value, move epsilon math text from 1 to 0,7
+        self.remove(math_text_1)
+        math_text_epsilon = always_redraw(lambda: MathTex(r"\epsilon = {:.1f}".format(epsilon_tracker.get_value())).to_corner(UL))
+        # Add the math text to the scene
+        self.add(math_text_epsilon)
         self.play(epsilon_tracker.animate.set_value(0.7), run_time=4, rate_func=linear)
         # Graph pieces
-        graph_piece1 = axes.plot(func_left, x_range=[-0.4, 0], color=RED, stroke_width=6)
         graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
         graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6], color=RED, stroke_width=6)
         # Play the creation of the graph pieces simultaneously with a runtime of 2 seconds
-        self.play(Create(graph_piece1))
-        #self.wait(1)
         self.play(Create(graph_piece2))
-        #self.wait(1)
+        self.wait(1)
         self.play(Create(graph_piece3))
-        #self.wait(2)
-        self.remove(graph_piece1,graph_piece2,graph_piece3)
-        # Animate the delta value
+        self.wait(2)
+        self.remove(graph_piece2,graph_piece3)
+        #Animate the delta value
         graph_pieces = always_redraw(get_graph_pieces)
         self.add(graph_pieces)
+
+        #Move delta from 2 to 0.8
+        self.remove(math_text_2)
+        math_text_delta = always_redraw(lambda: MathTex(r"\delta = {:.1f}".format(delta_tracker.get_value()))
+                                        .next_to(math_text_epsilon, DOWN))       
+        self.add(math_text_delta)
         self.play(delta_tracker.animate.set_value(0.8), run_time=6, rate_func=linear)
         self.wait(2)
         #Zoom in, length and width here manually adjusted to look pretty
