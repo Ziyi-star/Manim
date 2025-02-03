@@ -168,7 +168,7 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         self.add(delta_group)
         self.wait(2)
 
-        # Animate the epsilon value, move epsilon math text from 1 to 0,7
+        # Situation 2: move epsilon math text from 1 to 0,7
         self.remove(math_text_1)
         math_text_epsilon = always_redraw(lambda: MathTex(r"\epsilon = {:.1f}".format(epsilon_tracker.get_value())).to_corner(UL))
         # Add the math text to the scene

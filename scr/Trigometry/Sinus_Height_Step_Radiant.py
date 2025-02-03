@@ -64,102 +64,102 @@ class SineHeightStepsRadiant(Scene):
         )
 
         ##############################
-        # self.play(Write(text))
-        # self.wait(1)
-        # self.play(FadeOut(text))
-        self.add(
-            grid, circle, dot_center, center_label, ax, dashed_line,
-            x_radian_labels, y_labels
-        )
+        self.play(Write(text))
         self.wait(1)
+        self.play(FadeOut(text))
+        # self.add(
+        #     grid, circle, dot_center, center_label, ax, dashed_line,
+        #     x_radian_labels, y_labels
+        # )
+        # self.wait(1)
 
-        # Animation logic
-        for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
-            # Current angle in radians
-            angle_rad = np.radians(angle)
+        # # Animation logic
+        # for angle in range(0, 91, 15):  # Loop through 0° to 90° in 15° steps
+        #     # Current angle in radians
+        #     angle_rad = np.radians(angle)
 
-            # In the circle: dot, arrow, vertical line
-            arrow = Arrow(
-                start=center,
-                end=center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
-                buff=0,
-                color=GREEN
-            )
-            moving_dot = Dot(
-                center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
-                color=YELLOW
-            )
+        #     # In the circle: dot, arrow, vertical line
+        #     arrow = Arrow(
+        #         start=center,
+        #         end=center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+        #         buff=0,
+        #         color=GREEN
+        #     )
+        #     moving_dot = Dot(
+        #         center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),
+        #         color=YELLOW
+        #     )
 
-            # Horizontal line from endpoint to the x-axis
-            horizontal_line_from_end = DashedLine(
-                end=center,
-                start=center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
-                color=WHITE
-            )
-            horizontal_line_from_end_dot = Dot(
-                center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),
-                color=YELLOW
-            )
-            # Vertical line from endpoint to the y-axis
-            vertical_line_from_end = Line(
-                start=center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint projected to y-axis
-                end=center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),  # Endpoint projected to x-axis
-                color=GREEN
-            )
-            #Kreisbogen
-            angle_arc = Arc(
-                radius=circle_radius,
-                start_angle=0,
-                angle=angle_rad,
-                arc_center=center,
-                color=GOLD
-            )
+        #     # Horizontal line from endpoint to the x-axis
+        #     horizontal_line_from_end = DashedLine(
+        #         end=center,
+        #         start=center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),  # Projected down to x-axis
+        #         color=WHITE
+        #     )
+        #     horizontal_line_from_end_dot = Dot(
+        #         center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),
+        #         color=YELLOW
+        #     )
+        #     # Vertical line from endpoint to the y-axis
+        #     vertical_line_from_end = Line(
+        #         start=center + circle_radius * np.array([np.cos(angle_rad), np.sin(angle_rad), 0]),  # Endpoint projected to y-axis
+        #         end=center + circle_radius * np.array([np.cos(angle_rad), 0, 0]),  # Endpoint projected to x-axis
+        #         color=GREEN
+        #     )
+        #     #Kreisbogen
+        #     angle_arc = Arc(
+        #         radius=circle_radius,
+        #         start_angle=0,
+        #         angle=angle_rad,
+        #         arc_center=center,
+        #         color=GOLD
+        #     )
 
-            # In Graph: Dot and line
-            graph_line = Line(
-                start=ax.coords_to_point(angle_rad, 0),
-                end=ax.coords_to_point(angle_rad, np.sin(angle_rad)),
-                color=GREEN
-            )
-            graph_dot = Dot(
-                ax.coords_to_point(angle_rad, np.sin(angle_rad)),
-                color=YELLOW
-            )
-            #Winkel wachsen in x axis
-            x_axis_line = Line(
-            start=ax.get_origin(),  
-            end=ax.c2p(angle_rad, 0),  # End at the current x-value on the x-axis
-            color=GOLD
-            )
-            x_axis_line_dot=Dot(
-            ax.c2p(angle_rad, 0),
-            color=YELLOW
-            )
+        #     # In Graph: Dot and line
+        #     graph_line = Line(
+        #         start=ax.coords_to_point(angle_rad, 0),
+        #         end=ax.coords_to_point(angle_rad, np.sin(angle_rad)),
+        #         color=GREEN
+        #     )
+        #     graph_dot = Dot(
+        #         ax.coords_to_point(angle_rad, np.sin(angle_rad)),
+        #         color=YELLOW
+        #     )
+        #     #Winkel wachsen in x axis
+        #     x_axis_line = Line(
+        #     start=ax.get_origin(),  
+        #     end=ax.c2p(angle_rad, 0),  # End at the current x-value on the x-axis
+        #     color=GOLD
+        #     )
+        #     x_axis_line_dot=Dot(
+        #     ax.c2p(angle_rad, 0),
+        #     color=YELLOW
+        #     )
 
-            # Add circle arrow and radius line
-            self.play(Create(angle_arc,run_time = 2))
-            self.play(FadeIn(moving_dot))
-            self.play(GrowArrow(arrow,run_time=2))
-            self.wait(0.5)
-            self.play(Create(vertical_line_from_end, run_time =1))
-            self.play(Create(horizontal_line_from_end, run_time =1))
-            self.play(FadeIn(horizontal_line_from_end_dot))
-            self.wait(0.5)
+        #     # Add circle arrow and radius line
+        #     self.play(Create(angle_arc,run_time = 2))
+        #     self.play(FadeIn(moving_dot))
+        #     self.play(GrowArrow(arrow,run_time=2))
+        #     self.wait(0.5)
+        #     self.play(Create(vertical_line_from_end, run_time =1))
+        #     self.play(Create(horizontal_line_from_end, run_time =1))
+        #     self.play(FadeIn(horizontal_line_from_end_dot))
+        #     self.wait(0.5)
 
-            # Move radius line to graph
-            self.play(Transform(angle_arc, x_axis_line))
-            self.play(FadeIn(x_axis_line, x_axis_line_dot))
-            self.wait(0.5)
-            self.play(Transform(vertical_line_from_end, graph_line))
-            self.play(FadeIn(graph_line, graph_dot))
-            self.wait(0.5)
+        #     # Move radius line to graph
+        #     self.play(Transform(angle_arc, x_axis_line))
+        #     self.play(FadeIn(x_axis_line, x_axis_line_dot))
+        #     self.wait(0.5)
+        #     self.play(Transform(vertical_line_from_end, graph_line))
+        #     self.play(FadeIn(graph_line, graph_dot))
+        #     self.wait(0.5)
 
-            # Remove the arrow, moving dot, and radius line
-            self.remove(
-                arrow, moving_dot, horizontal_line_from_end,  horizontal_line_from_end_dot,vertical_line_from_end, 
-                angle_arc, x_axis_line, x_axis_line_dot)
+        #     # Remove the arrow, moving dot, and radius line
+        #     self.remove(
+        #         arrow, moving_dot, horizontal_line_from_end,  horizontal_line_from_end_dot,vertical_line_from_end, 
+        #         angle_arc, x_axis_line, x_axis_line_dot)
 
-        # Add sine graph
-        sine_graph = ax.plot(lambda x: np.sin(x), color=GREEN, x_range=[0, np.pi / 2])
-        self.play(Create(sine_graph), run_time=2)
-        self.wait(2)
+        # # Add sine graph
+        # sine_graph = ax.plot(lambda x: np.sin(x), color=GREEN, x_range=[0, np.pi / 2])
+        # self.play(Create(sine_graph), run_time=2)
+        # self.wait(2)
