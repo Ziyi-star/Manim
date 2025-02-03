@@ -81,9 +81,9 @@ class CosineCircleRadiant(Scene):
         # All things in Axes
         ax = Axes(
             x_range=[0, TAU, TAU / 4],  # 0 to 2π with steps of π/2
-            y_range=[-1.0, 1.0, 1],  # Range for the cosine graph
+            y_range=[-1.5, 1.5, 1],  # Range for the cosine graph
             x_length=10,
-            y_length=4,
+            y_length=6,
             axis_config={"color": WHITE},
             tips=True,
         )
