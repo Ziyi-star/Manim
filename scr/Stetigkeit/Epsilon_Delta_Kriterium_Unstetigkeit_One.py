@@ -3,6 +3,7 @@ GLOBAL_DELTA = 0.7
 
 class EpsilonDeltaKriteriumUnstetigkeitOne(ZoomedScene):
     def construct(self):
+
          # Background grid
         grid = NumberPlane(
             background_line_style={
