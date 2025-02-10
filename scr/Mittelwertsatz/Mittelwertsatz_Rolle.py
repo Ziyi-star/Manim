@@ -18,8 +18,8 @@ class MittelwertsatzRolle(Scene):
        
         # Axes setup
         axes = Axes(
-            x_range=[-5.5, 6, 1],  # X-axis range
-            y_range=[-6, 6, 1],  # Y-axis range
+            x_range=[-1, 7, 1],  # X-axis range
+            y_range=[-1, 11, 1],  # Y-axis range
             axis_config={"include_numbers": True},
         ).add_coordinates()
 
@@ -29,7 +29,7 @@ class MittelwertsatzRolle(Scene):
 
         # Function definition
         def func(x):
-            return (1 / 4) * (x + 4) * (x + 1) * (x - 2) + (x * np.tan(np.radians(45)))
+            return (1 / 0.9) * (x-0.5) * (x - 2.5) * (x - 4.5) + (x * np.tan(np.radians(60)))
         graph = axes.plot(func, color=BLUE)
         graph_label = axes.get_graph_label(graph, label="f(x)")
 
