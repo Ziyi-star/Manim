@@ -35,5 +35,23 @@ class MittelwertsatzRolle(Scene):
 
         self.play(Create(grid), Create(axes), Create(x_label), Create(y_label), Create(graph), Create(graph_label))
         self.wait(2)
+        
+        #todo: draw the tangent line at point x = 4.5 of function f(x)
+        x0 = 3.6
+        fx0 = func(x0)
+        x0_fx0_dot = Dot(axes.coords_to_point(x0, fx0),color=RED)
+        # Derivative of the function
+        def func_derivative(x):
+            h = 1e-5
+            return (func(x + h) - func(x)) / h
+        slope = func_derivative(x0)
+        tangent_line = axes.plot(lambda x: slope * (x - x0) + fx0, color=RED, x_range=[2.7, 4.5])
+
+        self.play(Create(x0_fx0_dot))
+        self.play(Create(tangent_line))
+        self.wait(2)
+
+
+
 
 
