@@ -20,8 +20,7 @@ class MittelwertsatzRolle(Scene):
         axes = Axes(
             x_range=[-1, 7, 1],  # X-axis range
             y_range=[-1, 11, 1],  # Y-axis range
-            axis_config={"include_numbers": True},
-        ).add_coordinates()
+        )
 
         # Labels for axes
         x_label = axes.get_x_axis_label("x")
@@ -30,13 +29,10 @@ class MittelwertsatzRolle(Scene):
         # Function definition
         def func(x):
             return (1 / 0.9) * (x-0.5) * (x - 2.5) * (x - 4.5) + (x * np.tan(np.radians(60)))
-        graph = axes.plot(func, color=BLUE)
-        graph_label = axes.get_graph_label(graph, label="f(x)")
-
-        self.play(Create(grid), Create(axes), Create(x_label), Create(y_label), Create(graph), Create(graph_label))
-        #self.wait(2)
         
-        #todo: draw the tangent line at point x = 4.5 of function f(x)
+        graph = axes.plot(func, color=BLUE)
+        graph_label = axes.get_graph_label(graph, label="f(x)").scale(0.7)
+
         def draw_tangent_line_at(x0):
             fx0 = func(x0)
             x0_fx0_dot = Dot(axes.coords_to_point(x0, fx0), color=RED)
@@ -47,8 +43,8 @@ class MittelwertsatzRolle(Scene):
             slope = func_derivative(x0)
             tangent_line = axes.plot(lambda x: slope * (x - x0) + fx0, color=RED, x_range=[x0 - 1, x0 + 1])
             return x0_fx0_dot, tangent_line
-
-        #todo: draw the secant line at point x = 0.5 and x = 4.5 of function f(x)
+        
+        #secant line from point a,to point b
         def draw_secant_line_at(a, b):
             fx0 = func(a)
             fx1 = func(b)
@@ -56,15 +52,61 @@ class MittelwertsatzRolle(Scene):
             x1_fx1_dot = Dot(axes.coords_to_point(b, fx1), color=RED)
             secant_line = axes.plot(lambda x: (fx1 - fx0) / (b - a) * (x - a) + fx0, color=GREEN, x_range=[a - 1, b + 1])
             return x0_fx0_dot, x1_fx1_dot, secant_line
-        
-        xa_fxa_dot, xb_fxb_dot, secant_line = draw_secant_line_at(0.7, 4.5)
-        self.play(Create(xa_fxa_dot), Create(xb_fxb_dot), Create(secant_line))
-        self.wait(2)
 
-         # Draw the tangent line at point x = 3,6 
-        x0_fx0_dot_two, tangent_line_two = draw_tangent_line_at(3.6)
-        self.play(Create(x0_fx0_dot_two))
-        self.play(Create(tangent_line_two))
+        
+        
+        # Animation
+        self.play(Create(grid))
+        self.wait(1)
+        self.play(Create(axes), Create(x_label), Create(y_label))
+        self.wait(1)
+        self.play(Create(graph),run_time = 2)
+        self.wait(1)
+        self.play(Create(graph_label))
+        self.wait(1)
+
+        a = 0.7
+        b = 4.5
+        a_label = MathTex("a").next_to(axes.coords_to_point(a, 0), DOWN).set_color(RED)
+        b_label = MathTex("b").next_to(axes.coords_to_point(b, 0), DOWN).set_color(RED)
+        self.play(Create(a_label), Create(b_label))
+        f_a = func(a)
+        f_b = func(b)
+        dashline_fa = DashedLine(axes.coords_to_point(a, 0), axes.coords_to_point(a, f_a), color=ORANGE)
+        dashline_fb = DashedLine(axes.coords_to_point(b, 0), axes.coords_to_point(b, f_b), color=ORANGE)
+        self.play(Create(dashline_fa), run_time = 1)
+        self.play(Create(dashline_fb), run_time = 1)
+        self.wait(1)
+        fa_label = MathTex("f(a)").next_to(axes.coords_to_point(a, f_a), LEFT).scale(0.7)
+        fb_label = MathTex("f(b)").next_to(axes.coords_to_point(b, f_b), RIGHT).scale(0.7)
+        self.play(Create(fa_label))
+        self.play(Create(fb_label))
+        self.wait(1)
+
+        xa_fxa_dot, xb_fxb_dot, secant_line = draw_secant_line_at(0.7, 4.5)
+        self.play(Create(xa_fxa_dot), Create(xb_fxb_dot))
+        self.wait(1)
+        self.play(Create(secant_line))
+        self.wait(1)
+        sekante_label = MathTex("Sekante").next_to(secant_line.get_center(), UP).scale(0.7)
+        self.play(Create(sekante_label))
+        self.wait(1)
+
+         # Draw the tangent line at x = 3.6
+        c = 3.6
+        f_c = func(c)
+        c_label = MathTex("c").next_to(axes.coords_to_point(c, 0), DOWN).set_color(GREEN)
+        self.play(Create(c_label))
+        dashline_fc = DashedLine(axes.coords_to_point(c, 0), axes.coords_to_point(c, f_c), color=GREEN)
+        self.play(Create(dashline_fc), run_time = 1)
+        x0_fx0_dot, tangent_line = draw_tangent_line_at(c)
+        self.play(Create(x0_fx0_dot))
+        self.play(Create(tangent_line))
+        tangent_line_label = Tex("Tangente bei c").next_to(tangent_line.get_center(), DOWN).scale(0.7).set_color(GREEN)
+        self.play(Create(tangent_line_label))
+        self.wait(2)
+        derivative_formula = MathTex(r"f'(c) = \frac{f(b) - f(a)}{b - a}", color=WHITE).to_edge(RIGHT).scale(0.7)
+        self.play(Create(derivative_formula), run_time = 2)
         self.wait(2)
 
 
