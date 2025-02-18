@@ -75,32 +75,21 @@ class MittelwertsatzDifferentialrechnung(Scene):
         dashline_fb = DashedLine(axes.coords_to_point(b, 0), axes.coords_to_point(b, f_b), color=ORANGE)
         self.play(Create(dashline_fa), run_time = 1)
         self.play(Create(dashline_fb), run_time = 1)
-        #self.wait(1)
+        self.wait(1)
         fa_label = MathTex("f(a)").next_to(axes.coords_to_point(a, f_a), LEFT).scale(0.7)
         fb_label = MathTex("f(b)").next_to(axes.coords_to_point(b, f_b), RIGHT).scale(0.7)
         self.play(Create(fa_label))
         self.play(Create(fb_label))
-        #self.wait(1)
+        self.wait(1)
 
         xa_fxa_dot, xb_fxb_dot, secant_line = draw_secant_line_at(0.7, 4.5)
         self.play(Create(xa_fxa_dot), Create(xb_fxb_dot))
-        #self.wait(1)
+        self.wait(1)
         self.play(Create(secant_line))
-        #self.wait(1)
+        self.wait(1)
         sekante_label = MathTex("Sekante").next_to(secant_line.get_center(), UP).scale(0.7)
         self.play(Create(sekante_label))
-        #self.wait(1)
-
-        #Draw the tangent line at x = 3.6
-        c = 1.4
-        f_c = func(c)
-        c_label = MathTex("c").next_to(axes.coords_to_point(c, 0), DOWN).set_color(GREEN)
-        self.play(Create(c_label))
-        dashline_fc = DashedLine(axes.coords_to_point(c, 0), axes.coords_to_point(c, f_c), color=GREEN)
-        self.play(Create(dashline_fc), run_time = 1)
-        x0_fx0_dot, tangent_line = draw_tangent_line_at(c)
-        self.play(Create(x0_fx0_dot))
-        self.play(Create(tangent_line))
+        self.wait(1)
 
         # Create a ValueTracker for the moving endpoint (starting at a)
         slope_tracker = ValueTracker(a)
@@ -114,19 +103,25 @@ class MittelwertsatzDifferentialrechnung(Scene):
         # Create an empty container for the fixed tangent line
         fixed_tangent_container = VGroup()
         self.add(fixed_tangent_container)
-
-        # Define an updater that adds the fixed tangent at x = 3.6 once,
-        # when slope_tracker reaches or exceeds 3.6.
+        
         def fixed_tangent_updater(mobject, dt):
-            if slope_tracker.get_value() >= 3.6 and len(mobject.submobjects) == 0:
-                fixed_tangent = VGroup(*draw_tangent_line_at(3.6))
-                mobject.add(fixed_tangent)
+            if slope_tracker.get_value() >= 1.4:
+                tangent_1_4 = VGroup(*draw_tangent_line_at(1.4))
+                tangent_1_4.tangent_fixed_point = 1.4  # mark with a custom attribute
+                mobject.add(tangent_1_4)
+
+            if slope_tracker.get_value() >= 3.6:
+                tangent_3_6 = VGroup(*draw_tangent_line_at(3.6))
+                tangent_3_6.tangent_fixed_point = 3.6  # mark with a custom attribute
+                mobject.add(tangent_3_6)
 
         fixed_tangent_container.add_updater(fixed_tangent_updater)
 
         # Animate the moving tangent from a to b concurrently.
         self.play(slope_tracker.animate.set_value(b), run_time=10, rate_func=linear)
+        self.remove(tangent_group)
         self.wait(1)
+
 
 
 
