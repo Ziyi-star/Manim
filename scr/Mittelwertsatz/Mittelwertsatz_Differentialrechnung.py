@@ -91,7 +91,7 @@ class MittelwertsatzDifferentialrechnung(Scene):
         self.play(Create(sekante_label))
         #self.wait(1)
 
-        #  # Draw the tangent line at x = 3.6
+        # Draw the tangent line at x = 3.6
         # c = 3.6
         # f_c = func(c)
         # c_label = MathTex("c").next_to(axes.coords_to_point(c, 0), DOWN).set_color(GREEN)
@@ -113,12 +113,17 @@ class MittelwertsatzDifferentialrechnung(Scene):
         slope_tracker = ValueTracker(a)
         
         #slope and Dot
+        # * unpacks the tuple and returned object becomes a separate argument for VGroup
         tangent_group = always_redraw(
             lambda: VGroup(*draw_tangent_line_at(slope_tracker.get_value()))
         )        
         # Add these to the scene and animate t_tracker from a to b
         self.add(tangent_group)
         self.play(slope_tracker.animate.set_value(b), run_time=10, rate_func=linear)
+        # In between (or after) the moving tangent animation, create a fixed tangent at x = 3.6
+        
+        fixed_tangent_group = VGroup(*draw_tangent_line_at(3.6))
+        self.play(Create(fixed_tangent_group), run_time=2)
         self.wait(1)
 
 
