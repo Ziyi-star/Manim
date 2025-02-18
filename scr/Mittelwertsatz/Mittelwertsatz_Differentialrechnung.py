@@ -1,6 +1,6 @@
 from manim import *
 
-class MittelwertsatzRolle(Scene):
+class MittelwertsatzDifferentialrechnung(Scene):
     def construct(self):
         # Background grid
         grid = NumberPlane(
