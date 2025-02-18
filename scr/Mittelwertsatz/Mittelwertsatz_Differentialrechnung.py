@@ -107,12 +107,10 @@ class MittelwertsatzDifferentialrechnung(Scene):
         def fixed_tangent_updater(mobject, dt):
             if slope_tracker.get_value() >= 1.4:
                 tangent_1_4 = VGroup(*draw_tangent_line_at(1.4))
-                tangent_1_4.tangent_fixed_point = 1.4  # mark with a custom attribute
                 mobject.add(tangent_1_4)
 
             if slope_tracker.get_value() >= 3.6:
                 tangent_3_6 = VGroup(*draw_tangent_line_at(3.6))
-                tangent_3_6.tangent_fixed_point = 3.6  # mark with a custom attribute
                 mobject.add(tangent_3_6)
 
         fixed_tangent_container.add_updater(fixed_tangent_updater)
