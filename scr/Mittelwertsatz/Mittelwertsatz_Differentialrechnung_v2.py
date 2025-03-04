@@ -93,28 +93,27 @@ class MittelwertsatzDifferentialrechnungV2(Scene):
 
         # Create a ValueTracker for the moving endpoint (starting at a)
         slope_tracker = ValueTracker(a)
-        # TODO: move the tangent line with methode draw_tangent_line_at(slope_tracker) from a to 1.4
-        # Always redraw the tangent line based on the current slope_tracker value
+        # move the tangent line with methode draw_tangent_line_at(slope_tracker) from a to 1.4
         moving_tangent = always_redraw(
             lambda: VGroup(*draw_tangent_line_at(slope_tracker.get_value()))
         )
         self.add(moving_tangent)
 
         # Animate the tangent line from x=a to x=1.4
-        self.play(slope_tracker.animate.set_value(1.4), run_time=3)
-
+        self.play(slope_tracker.animate.set_value(1.4), run_time=4)
         derivative_formula = MathTex(r"f'(c) = \frac{f(b) - f(a)}{b - a}", color=WHITE).to_edge(RIGHT).scale(0.7)
-        self.play(Create(derivative_formula),run_time = 2)
-        self.rem
-        self.wait(1)
+        self.play(FadeIn(derivative_formula),run_time = 3)
+        self.play(FadeOut(derivative_formula),run_time = 3)
+        self.add(VGroup(*draw_tangent_line_at(1.4)))
+        # Animate the moving tangent from 1.4 to 3.6
+        self.play(slope_tracker.animate.set_value(3.6), run_time=5)
+        self.play(FadeIn(derivative_formula),run_time = 3)
+        self.add(VGroup(*draw_tangent_line_at(3.6)))
+        # Animate the moving tangent from 3.6 to b
+        self.play(slope_tracker.animate.set_value(b), run_time=4)
+        self.remove(moving_tangent)
+        self.wait(2)
 
-
-
-
-        
-        # Animate the moving tangent from a to b concurrently.
-        # self.play(slope_tracker.animate.set_value(b), run_time=10, rate_func=linear)
-        # self.wait(1)
 
 
 
