@@ -1,5 +1,6 @@
 from manim import *
 
+
 class FolgenParabel(Scene):
     def construct(self):
         # Load the background image

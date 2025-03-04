@@ -1,6 +1,6 @@
 from manim import *
 
-class MittelwertsatzDifferentialrechnung(Scene):
+class MittelwertsatzDifferentialrechnungV2(Scene):
     def construct(self):
         # Background grid
         grid = NumberPlane(
@@ -93,34 +93,28 @@ class MittelwertsatzDifferentialrechnung(Scene):
 
         # Create a ValueTracker for the moving endpoint (starting at a)
         slope_tracker = ValueTracker(a)
-
-        # Always redraw the moving tangent line from a to the current tracker value
-        tangent_group = always_redraw(
+        # TODO: move the tangent line with methode draw_tangent_line_at(slope_tracker) from a to 1.4
+        # Always redraw the tangent line based on the current slope_tracker value
+        moving_tangent = always_redraw(
             lambda: VGroup(*draw_tangent_line_at(slope_tracker.get_value()))
         )
-        self.add(tangent_group)
+        self.add(moving_tangent)
 
-        # Create an empty container for the fixed tangent line
-        fixed_tangent_container = VGroup()
-        self.add(fixed_tangent_container)
+        # Animate the tangent line from x=a to x=1.4
+        self.play(slope_tracker.animate.set_value(1.4), run_time=3)
+
         derivative_formula = MathTex(r"f'(c) = \frac{f(b) - f(a)}{b - a}", color=WHITE).to_edge(RIGHT).scale(0.7)
+        self.play(Create(derivative_formula),run_time = 2)
+        self.rem
+        self.wait(1)
+
+
+
 
         
-        def fixed_tangent_updater(mobject, dt):
-            if slope_tracker.get_value() >= 1.4:
-                tangent_1_4 = VGroup(*draw_tangent_line_at(1.4))
-                mobject.add(tangent_1_4)
-
-            if slope_tracker.get_value() >= 3.6:
-                tangent_3_6 = VGroup(*draw_tangent_line_at(3.6))
-                mobject.add(tangent_3_6)
-
-        fixed_tangent_container.add_updater(fixed_tangent_updater)
-
         # Animate the moving tangent from a to b concurrently.
-        self.play(slope_tracker.animate.set_value(b), run_time=10, rate_func=linear)
-        self.remove(tangent_group)
-        self.wait(1)
+        # self.play(slope_tracker.animate.set_value(b), run_time=10, rate_func=linear)
+        # self.wait(1)
 
 
 
