@@ -110,7 +110,7 @@ class MittelwertsatzDifferentialrechnungV2(Scene):
         self.play(FadeIn(derivative_formula),run_time = 3)
         self.add(VGroup(*draw_tangent_line_at(3.6)))
         # Animate the moving tangent from 3.6 to b
-        self.play(slope_tracker.animate.set_value(b), run_time=4)
+        self.play(slope_tracker.animate.set_value(4.0), run_time=4)
         self.remove(moving_tangent)
         self.wait(2)
 
