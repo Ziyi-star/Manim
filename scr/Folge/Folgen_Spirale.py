@@ -1,7 +1,7 @@
 from manim import *
 import numpy as np
 
-class GrowingCircles(Scene):
+class FolgenSpirale(Scene):
     def construct(self):
         circles = VGroup()
         num_circles = 50  # Mehr Kreise
@@ -26,12 +26,19 @@ class GrowingCircles(Scene):
         self.play(Create(circles), run_time=4)
         #self.wait(2)
 
-        # Animate flipping each circle individually
-        animations = []
+         # Flip each circle one by one around its x-axis
         for circle in circles:
-            animations.append(Rotate(circle, angle=PI))
+            center = circle.get_center()
+            self.play(
+                Rotate(
+                    circle,
+                    angle=PI,
+                    axis=RIGHT,  # This makes it rotate around x-axis
+                    about_point=center  # This makes it rotate around its own center
+                ),
+                run_time=0.1  # Adjust this value to control flip speed
+            )
         
-        self.play(*animations, run_time=5)
         self.wait(2)
 
        
