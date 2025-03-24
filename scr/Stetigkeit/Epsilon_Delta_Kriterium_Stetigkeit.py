@@ -110,12 +110,9 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
             )
             return VGroup(background_delta, dashed_line_left, dashed_line_right)
 
-    # Combined function for compute the highlighted points
+    # Help function for compute the highlighted points
         def combined_func(x):
-            if x >= 0:
-                return np.cos(x)
-            else:
-                return np.sin(x)
+            return np.where(x >= 0, np.cos(x), np.sin(x))
         
         def get_in_delta_but_not_in_epsilon():
             delta = delta_tracker.get_value()
@@ -130,24 +127,24 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
 
             highlighted_points = VGroup()
             for x, y in zip(x_values[highlight], y_values[highlight]):
-                point = Dot(axes.c2p(x, y), color=RED)
+                point = Dot(axes.c2p(x, y), color=RED, radius=0.03)
                 highlighted_points.add(point)
 
             return highlighted_points
 
-        # #Animations
-        # self.play(Write(Text_1))
-        # self.wait(1)
-        # self.play(Write(Text_2))
-        # self.wait(1)
-        # self.play(Write(Text_3))
-        # self.wait(1)
-        # self.play(Write(Text_4))
-        # self.wait(1)
-        # self.play(Write(Text_5))
-        # self.wait(1)
-        # self.remove(Text_1,Text_2,Text_3,Text_4,Text_5)
-        # self.wait(1)
+        #Animations
+        self.play(Write(Text_1))
+        self.wait(1)
+        self.play(Write(Text_2))
+        self.wait(1)
+        self.play(Write(Text_3))
+        self.wait(1)
+        self.play(Write(Text_4))
+        self.wait(1)
+        self.play(Write(Text_5))
+        self.wait(1)
+        self.remove(Text_1,Text_2,Text_3,Text_4,Text_5)
+        self.wait(1)
 
         #Graph
         self.play(Create(grid))
@@ -159,26 +156,25 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         self.play(Create(dashline_x0_fx0))
         self.play(Create(x0_fx0_dot))
         self.play(Write(x0_fx0_dot_label))
-        #self.wait(1)
+        self.wait(1)
 
         # #Situation 1
         # Always redraw the epsilon group
         math_text_1 = MathTex(r"\epsilon = 1", color = ORANGE)
         math_text_1.to_corner(UL)  # UR = Upper Right
         self.play(Write(math_text_1))
-        #self.wait(2)
-
+        self.wait(1)
         epsilon_group = always_redraw(get_epsilon_group)
-        self.add(epsilon_group)
-        #self.wait(2)
+        self.play(Create(epsilon_group), run_time = 1)
+        self.wait(1)
 
         math_text_2 = MathTex(r"\delta = 2", color = PURPLE)
         math_text_2.next_to(math_text_1,DOWN)  
         # Show the math text with animation
         self.play(Write(math_text_2))
-        #self.wait(2)
+        self.wait(1)
         delta_group = always_redraw(get_delta_group)
-        self.add(delta_group)
+        self.play(Create(delta_group), run_time =1)
         self.wait(2)
 
         # Situation 2: move epsilon math text from 1 to 0,7
@@ -186,36 +182,28 @@ class EpsilonDeltaKriteriumStetigkeit(ZoomedScene):
         math_text_epsilon = always_redraw(lambda: MathTex(r"\epsilon = {:.1f}".format(epsilon_tracker.get_value()),color = ORANGE).to_corner(UL))
         # Add the math text to the scene
         self.add(math_text_epsilon)
-        self.play(epsilon_tracker.animate.set_value(0.7), run_time=4, rate_func=linear)
+        self.play(epsilon_tracker.animate.set_value(0.5), run_time=4, rate_func=linear)
         #Graph pieces
-        graph_piece2 = axes.plot(func_right, x_range=[0, 0.8], color=RED, stroke_width=6)
-        graph_piece3 = axes.plot(func_right, x_range=[2.4, 3.6], color=RED, stroke_width=6)
-        #Play the creation of the graph pieces simultaneously with a runtime of 2 seconds
-        self.play(Create(graph_piece2))
-        self.wait(1)
-        self.play(Create(graph_piece3))
+        highlighted_points = always_redraw(get_in_delta_but_not_in_epsilon) 
+        self.play(Create(highlighted_points), run_time=2)
         self.wait(2)
-        self.remove(graph_piece2,graph_piece3)
-        #Animate the delta value
-        graph_pieces = always_redraw(get_graph_pieces)
-        self.add(graph_pieces)
 
-        # #Move delta from 2 to 0.8
-        # self.remove(math_text_2)
-        # math_text_delta = always_redraw(lambda: MathTex(r"\delta = {:.1f}".format(delta_tracker.get_value()))
-        #                                 .next_to(math_text_epsilon, DOWN))       
-        # self.add(math_text_delta)
-        # self.play(delta_tracker.animate.set_value(0.8), run_time=6, rate_func=linear)
-        # self.wait(2)
-        # #Zoom in, length and width here manually adjusted to look pretty
-        # zoom_rect = Rectangle(
-        #     width=2, height=2, color=YELLOW
-        # ).move_to(x0_fx0_dot)
-        # self.play(Create(zoom_rect))  # Animate the zoom rectangle
-        # self.wait(1)
-        #  # Scale the view to focus on the red point and DoubleArrow
-        # self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
-        # self.wait(2)
-        #  # Reset the camera to its original position
-        # self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
-        # self.wait(2)
+        #Move delta from 2 to 0.6
+        self.remove(math_text_2)
+        math_text_delta = always_redraw(lambda: MathTex(r"\delta = {:.1f}".format(delta_tracker.get_value()), color = PURPLE).next_to(math_text_epsilon, DOWN))       
+        self.add(math_text_delta)
+        self.play(delta_tracker.animate.set_value(0.5), run_time=6, rate_func=linear)
+        self.wait(2)
+
+        #Zoom in, length and width here manually adjusted to look pretty
+        zoom_rect = Rectangle(
+            width=1.8, height=1.8, color=YELLOW
+        ).move_to(x0_fx0_dot)
+        self.play(Create(zoom_rect))  # Animate the zoom rectangle
+        self.wait(1)
+         # Scale the view to focus on the red point
+        self.play(self.camera.frame.animate.scale(0.5).move_to(x0_dot))  # Zoom in
+        self.wait(2)
+         # Reset the camera to its original position
+        self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        self.wait(2)

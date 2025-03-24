@@ -4,15 +4,20 @@ import numpy as np
 class GrowingCircles(Scene):
     def construct(self):
         circles = VGroup()
-        num_circles = 32
-        
+        num_circles = 50  # Mehr Kreise
+
+        angle_offset = -0.8  # Radians (z.B. ~23°)
+
         for i in range(num_circles):
-            t = (num_circles - i - 1) * 0.3  # Reverse order
-            radius = 0.05 + (num_circles - i - 1) * 0.01  # Decrease size gradually
-            x = (1 + 0.5 * t) * np.cos(t)
+            # Kleinerer Multiplikator für eine engere Spiralbahn
+            t = (num_circles - i - 1) * 0.2
             
-            # Add +2 as an offset to move circles upward
-            y = -(1 + 0.5 * t) * np.sin(t) + 1
+            # Radius etwas kleiner halten, damit die Kreise weniger wachsen
+            radius = 0.04 + (num_circles - i - 1) * 0.007
+            
+            x = (0.5 + 0.35 * t) * np.cos(t+angle_offset)
+            # +1 als Offset, um die Spirale etwas anzuheben
+            y = -(0.5 + 0.35 * t) * np.sin(t+angle_offset) + 1
             
             circle = Circle(radius=radius, color=WHITE)
             circle.move_to([x, y, 0])

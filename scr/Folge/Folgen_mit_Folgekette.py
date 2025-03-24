@@ -3,9 +3,12 @@ from manim import *
 class FolgenMitFolgekette(Scene):
     def construct(self):
         # Load the background image
-        background = ImageMobject("Hintergrundbild.jpg")
-        background.scale_to_fit_height(config.frame_height)
-        background.scale_to_fit_width(config.frame_width)
+        background = Rectangle(
+            width=config.frame_width,
+            height=config.frame_height,
+            fill_color=WHITE,
+            fill_opacity=1
+        )
         self.add(background)
 
         # Add a title
@@ -22,7 +25,7 @@ class FolgenMitFolgekette(Scene):
             ("a", 5),
             ("a", 6),
             ("a", 7),
-            ("a", 8)
+            ("...", "")
         ]
         
         # Horizontal chain
@@ -63,10 +66,10 @@ class FolgenMitFolgekette(Scene):
         
         # Vertical chain 0
         elements_b = [
-            ("b", 1),  # (element, subscript)
-            ("b", 2),
-            ("b", 3),
-            ("b", 4)
+            ("...", ""),  # (element, subscript)
+            ("...", ""),
+            ("...", ""),
+            ("...", "")
         ]
         # Create new circles and labels for each new element
         circles_b = []
@@ -118,10 +121,10 @@ class FolgenMitFolgekette(Scene):
 
         # Vertical chain 1
         elements_c = [
-            ("c", 1),  # (element, subscript)
-            ("c", 2),
-            ("c", 3),
-            ("c", 4)
+            ("...", ""),  # (element, subscript)
+            ("...", ""),
+            ("...", ""),
+            ("...", "")
         ]
         # Create new circles and labels for each new element
         circles_c = []
@@ -168,3 +171,5 @@ class FolgenMitFolgekette(Scene):
             if i > 0:
                 self.play(Create(lines_c[i-1]), run_time=0.2)
         self.wait(1)
+
+        
