@@ -24,5 +24,15 @@ class GrowingCircles(Scene):
             circles.add(circle)
         
         self.play(Create(circles), run_time=4)
+        #self.wait(2)
+
+        # Animate flipping each circle individually
+        animations = []
+        for circle in circles:
+            animations.append(Rotate(circle, angle=PI))
+        
+        self.play(*animations, run_time=5)
         self.wait(2)
+
+       
 
