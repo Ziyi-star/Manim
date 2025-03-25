@@ -1,17 +1,10 @@
 from manim import *
 import numpy as np
 
+config.background_color = WHITE
+
 class FolgenSpirale(Scene):
     def construct(self):
-         # Load the background image
-        background = Rectangle(
-            width=config.frame_width,
-            height=config.frame_height,
-            fill_color=WHITE,
-            fill_opacity=1
-        )
-        self.add(background)
-
         circles = VGroup()
         front_labels = VGroup() 
         back_labels = VGroup()
