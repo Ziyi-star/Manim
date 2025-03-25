@@ -1,5 +1,7 @@
 from manim import *
 
+config.background_color = WHITE
+
 class CircleFlip(Scene):
     def construct(self):
         axis = Axes(

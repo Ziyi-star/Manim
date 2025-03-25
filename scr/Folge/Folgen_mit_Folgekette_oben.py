@@ -1,16 +1,9 @@
 from manim import *
 
+config.background_color = WHITE
+
 class FolgenMitFolgekette(Scene):
     def construct(self):
-        # Load the background image
-        background = Rectangle(
-            width=config.frame_width,
-            height=config.frame_height,
-            fill_color=WHITE,
-            fill_opacity=1
-        )
-        self.add(background)
-
         # Horizontal chain
         main_circles = []
         labels_in = []
@@ -20,7 +13,7 @@ class FolgenMitFolgekette(Scene):
             circle = Circle(radius=0.5, color=BLACK, fill_color=WHITE, fill_opacity=1)
             # Create the label inside the circle (e.g., a₁)
             if i < 7:
-                label = MathTex(f"a_{{{i+1}}}", font_size=20, color=BLACK)
+                label = MathTex("a_{\\mathbf{" + str(i+1) + "}}", font_size=25, color=BLACK)
                 label_out = MathTex(f"n = {i+1}", font_size=30, color=BLACK)
                 main_circles.append(circle)
                 labels_in.append(label)
@@ -66,7 +59,7 @@ class FolgenMitFolgekette(Scene):
         self.play(Create(group), run_time=2)
         self.wait(1)
 
-        def create_vertical_chain(main_circle, circle_color=ORANGE):
+        def create_vertical_chain(main_circle, circle_color=ORANGE,bold_num=1):
             """
             Creates a vertical chain of circles connected to a main circle.
             
@@ -89,7 +82,7 @@ class FolgenMitFolgekette(Scene):
                     fill_color=circle_color,
                     fill_opacity=0.5
                 )
-                label = MathTex("...", font_size=20, color=BLACK)
+                label = MathTex(f"a_{{\\mathbf{{{bold_num}}}{i+1}}}", font_size=25, color=BLACK)
                 ellipses.append(ellipse)
                 labels.append(label)
             
@@ -122,7 +115,8 @@ class FolgenMitFolgekette(Scene):
         # Vertical chain 1
         circles_one, labels_one, lines_one, connecting_line_one = create_vertical_chain(
             main_circle=main_circles[0],
-            circle_color=ORANGE
+            circle_color=ORANGE, 
+            bold_num=1
         )
         # Animation
         self.play(main_circles[0].animate.set_fill(ORANGE, 1), run_time=0.5)
@@ -140,7 +134,8 @@ class FolgenMitFolgekette(Scene):
         # Vertical chain 2
         circles_two, labels_two, lines_two, connecting_line_two = create_vertical_chain(
             main_circle=main_circles[1],
-            circle_color=GREEN
+            circle_color=GREEN,
+            bold_num=2
         )
         # Animation
         self.play(main_circles[1].animate.set_fill(GREEN, 1), run_time=0.5)
@@ -158,7 +153,8 @@ class FolgenMitFolgekette(Scene):
         # Vertical chain 3
         circles_three, labels_three, lines_three, connecting_line_three = create_vertical_chain(
             main_circle=main_circles[2],
-            circle_color=BLUE
+            circle_color=BLUE,
+            bold_num=3
         )
         # Animation
         self.play(main_circles[2].animate.set_fill(BLUE, 1), run_time=0.5)

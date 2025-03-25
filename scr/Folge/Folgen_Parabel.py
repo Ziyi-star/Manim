@@ -1,15 +1,9 @@
 from manim import *
 
+config.background_color = WHITE
+
 class FolgenParabel(Scene):
     def construct(self):
-        # Create a white background
-        background = Rectangle(
-            width=config.frame_width,
-            height=config.frame_height,
-            fill_color=WHITE,
-            fill_opacity=1
-        )
-        self.add(background)
 
         # Add a title
         title = Text("Folgen", font_size=60, color=BLACK)

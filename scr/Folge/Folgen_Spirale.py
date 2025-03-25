@@ -46,7 +46,7 @@ class FolgenSpirale(Scene):
             # Create label
             front_label = MathTex(front_label_text, color=BLACK, font_size=20)
             front_label.move_to(circle.get_center())
-            back_label = MathTex(back_label_text, color=BLACK, font_size=20)
+            back_label = MathTex(back_label_text, color=BLUE_D, font_size=20)
             back_label.move_to(circle.get_center())
 
             circles.add(circle)
@@ -58,26 +58,28 @@ class FolgenSpirale(Scene):
         self.wait(2)
 
         # Flip each circle and switch labels
-        for i in range(len(circles)):
+        for i in range(15):
             circle = circles[i]
             front_label = front_labels[i]
             back_label = back_labels[i]
-            
-            # Hide back label initially
-            back_label.set_opacity(0)
-            self.add(back_label)
 
-            # Flip animation
+            # Flip animation with staggered timing
             self.play(
-                Rotate(
-                    circle,
-                    angle=PI,
-                    axis=RIGHT,
-                    about_point=circle.get_center()
+                AnimationGroup(
+                    Rotate(
+                        circle,
+                        angle=PI,
+                        axis=RIGHT,
+                        about_point=circle.get_center(),
+                        rate_func=rate_functions.ease_in_out_sine
+                    ),
+                    ReplacementTransform(
+                        front_label, 
+                        back_label, 
+                        rate_func=rate_functions.ease_in_out_sine),
+                    lag_ratio=0.3  # Back label transform starts when rotation is 30% complete
                 ),
-                front_label.animate.set_opacity(0),  # Fade out front label
-                back_label.animate.set_opacity(1),   # Fade in back label
-                run_time=0.5
+                run_time=1.5
             )
         
         self.wait(2)

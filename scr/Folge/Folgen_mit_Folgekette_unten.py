@@ -1,16 +1,9 @@
 from manim import *
 
+config.background_color = WHITE
+
 class FolgenMitFolgekette(Scene):
     def construct(self):
-        # Load the background image
-        background = Rectangle(
-            width=config.frame_width,
-            height=config.frame_height,
-            fill_color=WHITE,
-            fill_opacity=1
-        )
-        self.add(background)
-
         # Define the elements with subscripts
         elements = [
             ("a", 1),  # (element, subscript)
