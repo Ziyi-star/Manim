@@ -4,8 +4,7 @@ from manim import *
 config.background_color = WHITE
 
 
-class FolgenRekursion(Scene):
-        
+class FolgenRekursionVertikal(Scene):
     def construct(self):
         # Store the first blob's points
         stored_blob_points = None
