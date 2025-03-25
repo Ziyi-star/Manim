@@ -11,11 +11,6 @@ class FolgenMitFolgekette(Scene):
         )
         self.add(background)
 
-        # Add a title
-        title = Text("Folgen", font_size=60, color=BLACK)
-        title.to_edge(UP)
-        self.add(title)
-
         # Define the elements with subscripts
         elements = [
             ("a", 1),  # (element, subscript)

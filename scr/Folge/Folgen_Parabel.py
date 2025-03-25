@@ -26,28 +26,14 @@ class FolgenParabel(Scene):
             ("a", 6),
             ("a", 7),
             ("...",""),
-            ("...",""),  
-            ("...",""),
-            ("a", "n"),
-            ("...",""),
-            ("...",""),
-            ("...",""),
-            ("...",""),
-            ("...",""),
         ]
         
-        num_circles = 21
-        min_radius = 0.1
-        max_radius = 0.4
+        num_circles = 8
         circles = []
         labels = []
 
         for i in range(num_circles):
-            alpha = i / (num_circles - 1)
-            # Beta = 1 at the middle, 0 at the ends
-            beta = 1 - 2 * abs(alpha - 0.5)
-            radius = min_radius + (max_radius - min_radius) * beta
-
+            radius = 1
             circle = Circle(radius=radius, color=BLACK, fill_color=WHITE, fill_opacity=1)
             label = MathTex(f"a_{{{i+1}}}", font_size=20, color=BLACK)
             label.move_to(circle.get_center())
