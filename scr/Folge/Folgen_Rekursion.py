@@ -1,11 +1,18 @@
+import random
 from manim import *
 
 config.background_color = WHITE
 
 
 class FolgenRekursion(Scene):
+        
     def construct(self):
+        # Store the first blob's points
+        stored_blob_points = None
+        
         def create_plate_with_dot(position=ORIGIN):
+            nonlocal stored_blob_points  # Add this line to access outer variable
+            
             # Create outer circle
             outer_circle = Circle(
                 radius=0.7,
@@ -23,12 +30,28 @@ class FolgenRekursion(Scene):
                 fill_opacity=1,
                 stroke_width=2,  # Thinner border for inner rim
             ).move_to(outer_circle.get_center())
-            # Create dot
-            dot = Dot(color=BLACK)
-            dot.move_to(inner_circle.get_center())
-
-            # Group all elements
-            plate = VGroup(outer_circle, inner_circle, dot)
+            
+            # Create irregular shape
+            blob = VMobject(color=BLACK, fill_opacity=1)
+            if stored_blob_points is not None:
+                blob.set_points(stored_blob_points)
+            if stored_blob_points is None:
+                # Create new blob shape
+                radius = 0.1
+                num_points = 8
+                points = []
+                for i in range(num_points):
+                    angle = i * TAU / num_points
+                    offset = random.uniform(0.7, 1.3)
+                    x = radius * np.cos(angle) * offset
+                    y = radius * np.sin(angle) * offset
+                    points.append([x, y, 0])
+                points.append(points[0])  # Close the shape
+                blob.set_points_smoothly(points)
+                stored_blob_points = blob.get_points()
+                
+            blob.move_to(inner_circle.get_center())
+            plate = VGroup(outer_circle, inner_circle, blob)
             return plate
 
         # Create main plate
