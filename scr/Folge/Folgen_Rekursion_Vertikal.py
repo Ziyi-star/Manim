@@ -14,7 +14,7 @@ class FolgenRekursionVertikal(Scene):
             
             # Create outer circle
             outer_circle = Circle(
-                radius=0.7,
+                radius=0.5,
                 color=BLACK,
                 fill_color=WHITE,
                 fill_opacity=1,
@@ -23,7 +23,7 @@ class FolgenRekursionVertikal(Scene):
 
             # Create inner circle
             inner_circle = Circle(
-                radius=0.5,
+                radius=0.4,
                 color=BLACK,
                 fill_color=BLUE_B,
                 fill_opacity=1,
