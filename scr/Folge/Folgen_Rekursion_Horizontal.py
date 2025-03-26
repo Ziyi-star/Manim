@@ -14,7 +14,7 @@ class FolgenRekursionHorizontal(Scene):
             
             # Create outer circle
             outer_circle = Circle(
-                radius=0.4,
+                radius=0.3,
                 color=BLACK,
                 fill_color=WHITE,
                 fill_opacity=1,
@@ -23,7 +23,7 @@ class FolgenRekursionHorizontal(Scene):
 
             # Create inner circle
             inner_circle = Circle(
-                radius=0.3,
+                radius=0.2,
                 color=BLACK,
                 fill_color=BLUE_B,
                 fill_opacity=1,
@@ -36,7 +36,7 @@ class FolgenRekursionHorizontal(Scene):
                 blob.set_points(stored_blob_points)
             if stored_blob_points is None:
                 # Create new blob shape
-                radius = 0.1
+                radius = 0.05
                 num_points = 8
                 points = []
                 for i in range(num_points):
