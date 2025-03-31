@@ -12,7 +12,7 @@ Arrows from second to third iteration are called arrow_second_one_to_third_one, 
 '''
 
 
-class FolgenRekursionHorizontal(Scene):
+class FolgenRekursionHorizontalExpliziteForm(Scene):
     def construct(self):
         # Store the first blob's points
         stored_blob_points = None
@@ -134,64 +134,49 @@ class FolgenRekursionHorizontal(Scene):
             end = third_four_plate.get_top(),
             color = BLACK,
         )
-
-
-        fourth_iteration_positions = [
-            third_one_plate.get_center() + DOWN * 1 + LEFT * 0.5,    # Increased horizontal spacing
-            third_one_plate.get_center() + DOWN * 1 + RIGHT * 0.5,
-            third_two_plate.get_center() + DOWN * 1 + LEFT * 0.5,
-            third_two_plate.get_center() + DOWN * 1 + RIGHT * 0.5,
-            third_three_plate.get_center() + DOWN * 1 + LEFT * 0.5,
-            third_three_plate.get_center() + DOWN * 1 + RIGHT * 0.5,
-            third_four_plate.get_center() + DOWN * 1 + LEFT * 0.5,
-            third_four_plate.get_center() + DOWN * 1 + RIGHT * 0.5,
-        ]
-        fourth_iteration_plates = [
-            create_plate_with_blob(pos) for pos in fourth_iteration_positions
-        ]
-
-        # Create arrows from third to fourth iteration
-        third_plates = [third_one_plate, third_two_plate, third_three_plate, third_four_plate]
-        third_to_fourth_arrows = []
-
-        for i, plate in enumerate(third_plates):
-            # Create left arrow to corresponding fourth iteration plate
-            left_arrow = Arrow(
-                start=plate.get_left(),
-                end=fourth_iteration_plates[i*2].get_top(),  # Connect to corresponding fourth plate
-                color=BLACK,
-            )
-            # Create right arrow to next fourth iteration plate
-            right_arrow = Arrow(
-                start=plate.get_right(),
-                end=fourth_iteration_plates[i*2+1].get_top(),  # Connect to next fourth plate
-                color=BLACK,
-            )
-            third_to_fourth_arrows.extend([left_arrow, right_arrow])
-
-        label_fourth_iteration = MathTex("a_4 = 2a_3", color=BLACK).next_to(
-            fourth_iteration_plates[0], LEFT, buff=1.5)
-        
-        # Create arrows for fourth iteration plates
-        fourth_iteration_arrows = []
-        for plate in fourth_iteration_plates:
-            # Create left arrow
-            left_arrow = Arrow(
-                start=plate.get_left(),
-                end=plate.get_center() + DOWN * 1 + LEFT * 0.5,
-                color=BLACK,
-            )
-            # Create right arrow
-            right_arrow = Arrow(
-                start=plate.get_right(),
-                end=plate.get_center() + DOWN * 1 + RIGHT * 0.5,
-                color=BLACK,
-            )
-            fourth_iteration_arrows.extend([left_arrow, right_arrow])
-
-    
+        # Arrows from third to fourth iteration
+        arrow_second_zero_to_left = Arrow(
+            start=third_one_plate.get_left(),
+            end=third_one_plate.get_center() + DOWN * 1 + LEFT * 1,  # Position for next plate
+            color=BLACK,
+        )
+        arrow_second_zero_to_right = Arrow(
+            start=third_one_plate.get_right(),
+            end=third_one_plate.get_center() + DOWN * 1 + RIGHT * 1,  # Position for next plate
+            color=BLACK,
+        )
+        arrow_second_first_to_left = Arrow(
+            start=third_two_plate.get_left(),
+            end=third_two_plate.get_center() + DOWN * 1 + LEFT * 1,
+            color=BLACK,
+        )
+        arrow_second_first_to_right = Arrow(
+            start=third_two_plate.get_right(),
+            end=third_two_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            color=BLACK,
+        )
+        arrow_second_second_to_left = Arrow(
+            start=third_three_plate.get_left(),
+            end=third_three_plate.get_center() + DOWN * 1 + LEFT * 1,
+            color=BLACK,
+        )
+        arrow_second_second_to_right = Arrow(
+            start=third_three_plate.get_right(),
+            end=third_three_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            color=BLACK,
+        )
+        arrow_second_third_to_left = Arrow(
+            start=third_four_plate.get_left(),
+            end=third_four_plate.get_center() + DOWN * 1 + LEFT * 1,
+            color=BLACK,
+        )
+        arrow_second_third_to_right = Arrow(
+            start=third_four_plate.get_right(),
+            end=third_four_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            color=BLACK,
+        )
         dots = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            fourth_iteration_arrows[0].get_end(), DOWN, buff=0.5
+            arrow_second_zero_to_left.get_end(), DOWN, buff=0.5
         )
 
        
@@ -227,14 +212,14 @@ class FolgenRekursionHorizontal(Scene):
         self.add(third_four_plate)
         self.add(label_third_iteration)
         self.wait(1)
-        self.add(*third_to_fourth_arrows)
-        self.wait(1)
-
-        # Fourth Iteration
-        self.add(*fourth_iteration_plates)
-        self.add(label_fourth_iteration)
-        self.wait(1)
-        self.add(*fourth_iteration_arrows)
+        self.add(arrow_second_zero_to_left)
+        self.add(arrow_second_zero_to_right)
+        self.add(arrow_second_first_to_left)
+        self.add(arrow_second_first_to_right)
+        self.add(arrow_second_second_to_left)
+        self.add(arrow_second_second_to_right)
+        self.add(arrow_second_third_to_left)
+        self.add(arrow_second_third_to_right)
         self.wait(1)
         self.add(dots)
         self.wait(1)
