@@ -3,13 +3,21 @@ from manim import *
 
 config.background_color = WHITE
 
+'''
+Name convention:
+Circle from first iteration is called first plate, second plate, third plate, etc.
+Circle from second iteration is called second one plate, second two plate, etc.
+Arrows from first to second iteration are called arrow_first_to_second_one, arrow_first_to_second_two, etc.
+Arrows from second to third iteration are called arrow_second_one_to_third_one, arrow_second_one_to_third_two, etc.
+'''
+
 
 class FolgenRekursionHorizontal(Scene):
     def construct(self):
         # Store the first blob's points
         stored_blob_points = None
         
-        def create_plate_with_dot(position=ORIGIN):
+        def create_plate_with_blob(position=ORIGIN):
             nonlocal stored_blob_points  # Add this line to access outer variable
             
             # Create outer circle
@@ -53,176 +61,157 @@ class FolgenRekursionHorizontal(Scene):
             plate = VGroup(outer_circle, inner_circle, blob)
             return plate
 
-        # Create main plate
-        zero_plate = create_plate_with_dot(position=UP*3)
-        # # Create label
-        # label = MathTex("a_1 = 1", color=BLACK)
-        # label.next_to(zero_plate, UP, buff=0.3)
-            
-        # Second iteration
-        first_left_plate = create_plate_with_dot(
-            position=zero_plate.get_center() + DOWN * 1 + LEFT * 2
+        # Create the text "Beispiel:"
+        beispiel_text = Tex("Beispiel:", color=BLACK, font_size=36).to_edge(UP + LEFT)
+
+        # Create the formula a_{n+1} = 2 \cdot a_n
+        formula = MathTex(
+            "a_{n+1}", "=", "2", "\\cdot", "a_n",
+            font_size=48,
+            color=BLACK
+        ).next_to(beispiel_text, RIGHT, buff=0.5)
+
+        
+        # First iteration Circles
+        first_plate = create_plate_with_blob(position=UP*2 + RIGHT*2)
+        # label for first plate
+        label_first_plate = MathTex("a_1 = p", color=BLACK
+            ).next_to(first_plate, LEFT, buff=5.4)
+
+        # Second iteration Circles
+        second_one_plate = create_plate_with_blob(
+            position=first_plate.get_center() + DOWN * 1 + LEFT * 2
         )
-        first_right_plate = create_plate_with_dot(
-            position=zero_plate.get_center() + DOWN * 1 + RIGHT * 2
+        second_two_plate = create_plate_with_blob(
+            position=first_plate.get_center() + DOWN * 1 + RIGHT * 2
         )
-        # Arrows
-        arrow_zero_to_left = Arrow(
-            start=zero_plate.get_left(),
-            end=first_left_plate.get_top(),
+        label_second_iteration = MathTex("a_2 = 2a_1", color=BLACK
+            ).next_to(second_one_plate, LEFT, buff=3)
+        #arrows from first to second iteration
+        arrow_first_to_second_one = Arrow(
+            start=first_plate.get_left(),
+            end=second_one_plate.get_top(),
             color=BLACK,
         )
-        arrow_zero_to_right = Arrow(
-            start=zero_plate.get_right(), 
-            end=first_right_plate.get_top(),
+        arrow_first_to_second_two = Arrow(
+            start=first_plate.get_right(), 
+            end=second_two_plate.get_top(),
             color=BLACK,
         )
         
-        # Third iteration
-        second_zero_plate = create_plate_with_dot(
-            position=first_left_plate.get_center() + DOWN * 1 + LEFT * 1
+        # Third iteration Circles
+        third_one_plate = create_plate_with_blob(
+            position=second_one_plate.get_center() + DOWN * 1 + LEFT * 1
         )
-        second_first_plate = create_plate_with_dot(
-            position=first_left_plate.get_center() + DOWN * 1 + RIGHT * 1
+        third_two_plate = create_plate_with_blob(
+            position=second_one_plate.get_center() + DOWN * 1 + RIGHT * 1
         )
-        second_second_plate = create_plate_with_dot(
-            position=first_right_plate.get_center() + DOWN * 1 + LEFT * 1
+        third_three_plate = create_plate_with_blob(
+            position=second_two_plate.get_center() + DOWN * 1 + LEFT * 1
         )
-        second_third_plate = create_plate_with_dot(
-            position=first_right_plate.get_center() + DOWN * 1 + RIGHT * 1
+        third_four_plate = create_plate_with_blob(
+            position=second_two_plate.get_center() + DOWN * 1 + RIGHT * 1
         )
-        arrow_first_up_to_second_zero = Arrow(
-            start = first_left_plate.get_left(),
-            end = second_zero_plate.get_top(),
+        label_third_iteration = MathTex("a_3 = 2a_2", color=BLACK).next_to(third_one_plate, LEFT, buff=2)
+        #arrows from second to third iteration
+        arrow_second_one_to_third_one = Arrow(
+            start = second_one_plate.get_left(),
+            end = third_one_plate.get_top(),
             color = BLACK,
         )
-        arrow_first_up_to_second_first = Arrow(
-            start = first_left_plate.get_right(),
-            end = second_first_plate.get_top(),
+        arrow_second_one_to_third_two = Arrow(
+            start = second_one_plate.get_right(),
+            end = third_two_plate.get_top(),
             color = BLACK,
         )
-        arrow_first_down_to_second_second = Arrow(
-            start = first_right_plate.get_left(),
-            end = second_second_plate.get_top(),
+        arrow_second_two_to_third_three = Arrow(
+            start = second_two_plate.get_left(),
+            end = third_three_plate.get_top(),
             color = BLACK,
         )
-        arrow_first_down_to_second_third = Arrow(
-            start = first_right_plate.get_right(),
-            end = second_third_plate.get_top(),
+        arrow_second_two_to_third_fourth = Arrow(
+            start = second_two_plate.get_right(),
+            end = third_four_plate.get_top(),
             color = BLACK,
         )
-
-        # Fourth Arrows
+        # Arrows from third to fourth iteration
         arrow_second_zero_to_left = Arrow(
-            start=second_zero_plate.get_left(),
-            end=second_zero_plate.get_center() + DOWN * 1 + LEFT * 1,  # Position for next plate
+            start=third_one_plate.get_left(),
+            end=third_one_plate.get_center() + DOWN * 1 + LEFT * 1,  # Position for next plate
             color=BLACK,
         )
         arrow_second_zero_to_right = Arrow(
-            start=second_zero_plate.get_right(),
-            end=second_zero_plate.get_center() + DOWN * 1 + RIGHT * 1,  # Position for next plate
+            start=third_one_plate.get_right(),
+            end=third_one_plate.get_center() + DOWN * 1 + RIGHT * 1,  # Position for next plate
             color=BLACK,
         )
         arrow_second_first_to_left = Arrow(
-            start=second_first_plate.get_left(),
-            end=second_first_plate.get_center() + DOWN * 1 + LEFT * 1,
+            start=third_two_plate.get_left(),
+            end=third_two_plate.get_center() + DOWN * 1 + LEFT * 1,
             color=BLACK,
         )
         arrow_second_first_to_right = Arrow(
-            start=second_first_plate.get_right(),
-            end=second_first_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            start=third_two_plate.get_right(),
+            end=third_two_plate.get_center() + DOWN * 1 + RIGHT * 1,
             color=BLACK,
         )
         arrow_second_second_to_left = Arrow(
-            start=second_second_plate.get_left(),
-            end=second_second_plate.get_center() + DOWN * 1 + LEFT * 1,
+            start=third_three_plate.get_left(),
+            end=third_three_plate.get_center() + DOWN * 1 + LEFT * 1,
             color=BLACK,
         )
         arrow_second_second_to_right = Arrow(
-            start=second_second_plate.get_right(),
-            end=second_second_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            start=third_three_plate.get_right(),
+            end=third_three_plate.get_center() + DOWN * 1 + RIGHT * 1,
             color=BLACK,
         )
         arrow_second_third_to_left = Arrow(
-            start=second_third_plate.get_left(),
-            end=second_third_plate.get_center() + DOWN * 1 + LEFT * 1,
+            start=third_four_plate.get_left(),
+            end=third_four_plate.get_center() + DOWN * 1 + LEFT * 1,
             color=BLACK,
         )
         arrow_second_third_to_right = Arrow(
-            start=second_third_plate.get_right(),
-            end=second_third_plate.get_center() + DOWN * 1 + RIGHT * 1,
+            start=third_four_plate.get_right(),
+            end=third_four_plate.get_center() + DOWN * 1 + RIGHT * 1,
             color=BLACK,
         )
         dots = Tex("......", color=BLACK, font_size = 30 ).next_to(
             arrow_second_zero_to_left.get_end(), DOWN, buff=0.5
         )
 
-        #Fifth iteration
-        third_zero_plate = create_plate_with_dot(
-            position=dots.get_center() + DOWN * 1 + LEFT * 0.5
-        )
-        dots_at_fifth_zero = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            third_zero_plate.get_center(), RIGHT, buff=0.5
-        )
-
-        third_first_plate = create_plate_with_dot(
-            position=dots_at_fifth_zero.get_center() + RIGHT * 1
-        )
-        dots_at_fifth_first = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            third_first_plate.get_center(), RIGHT, buff=0.5
-        )
-
-        third_second_plate = create_plate_with_dot(
-            position=dots_at_fifth_first.get_center() + RIGHT * 1
-        )
-        dots_at_fifth_second = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            third_second_plate.get_center(), RIGHT, buff=0.5
-        )
-
-        third_third_plate = create_plate_with_dot(
-            position=dots_at_fifth_second.get_center() + RIGHT * 1
-        )
-        dots_at_fifth_third = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            third_third_plate.get_center(), RIGHT, buff=0.5
-        )
-
-        third_fourth_plate = create_plate_with_dot(
-            position=dots_at_fifth_third.get_center() + RIGHT * 1
-        )
-        dots_at_fifth_fourth = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            third_fourth_plate.get_center(), RIGHT, buff=0.5
-        )
-        third_fifth_plate = create_plate_with_dot(
-            position=dots_at_fifth_fourth.get_center() + RIGHT * 1
-        )
+       
 
         # Animation
-        # 1. Zeile
-        self.add(zero_plate)
-        #self.add(label)
+        # Schrift
+        self.add(beispiel_text, formula)
         self.wait(1)
 
-        # 2. Zeile
-        self.add(first_left_plate)
-        self.add(first_right_plate)
+        # First Iteration
+        self.add(first_plate)
+        self.add(label_first_plate)
         self.wait(1)
-        self.add(arrow_zero_to_left)
-        self.add(arrow_zero_to_right)
-        self.wait(1)
-
-        # 3. Zeile
-        self.add(second_zero_plate)
-        self.add(second_first_plate)
-        self.add(second_second_plate)
-        self.add(second_third_plate)
-        self.wait(1)
-        self.add(arrow_first_up_to_second_zero)
-        self.add(arrow_first_up_to_second_first)
-        self.add(arrow_first_down_to_second_second)
-        self.add(arrow_first_down_to_second_third)
+        self.add(arrow_first_to_second_one)
+        self.add(arrow_first_to_second_two)
         self.wait(1)
 
-        # 4. Zeile arrows
+        # Second Iteration
+        self.add(second_one_plate)
+        self.add(second_two_plate)
+        self.add(label_second_iteration)
+        self.wait(1)
+        self.add(arrow_second_one_to_third_one)
+        self.add(arrow_second_one_to_third_two)
+        self.add(arrow_second_two_to_third_three)
+        self.add(arrow_second_two_to_third_fourth)
+        self.wait(1)
+
+        # Third Iteration
+        self.add(third_one_plate)
+        self.add(third_two_plate)
+        self.add(third_three_plate)
+        self.add(third_four_plate)
+        self.add(label_third_iteration)
+        self.wait(1)
         self.add(arrow_second_zero_to_left)
         self.add(arrow_second_zero_to_right)
         self.add(arrow_second_first_to_left)
@@ -233,18 +222,4 @@ class FolgenRekursionHorizontal(Scene):
         self.add(arrow_second_third_to_right)
         self.wait(1)
         self.add(dots)
-        self.wait(1)
-
-        # 5. Zeile
-        self.add(third_zero_plate)
-        self.add(dots_at_fifth_zero)
-        self.add(third_first_plate)
-        self.add(dots_at_fifth_first)
-        self.add(third_second_plate)
-        self.add(dots_at_fifth_second)
-        self.add(third_third_plate)
-        self.add(dots_at_fifth_third)
-        self.add(third_fourth_plate)
-        self.add(dots_at_fifth_fourth)
-        self.add(third_fifth_plate)
         self.wait(1)
