@@ -74,11 +74,15 @@ class FolgenRekursionHorizontal(Scene):
         # First iteration Circles
         first_plate = create_plate_with_blob(position=UP*2.5 + RIGHT*2.5)
         # label for first plate
-        label_first_plate = MathTex("a_1 = 2^1", color=BLACK).to_edge(
-            LEFT, buff=0.5
-        ).shift(
-            UP * first_plate.get_center()[1]  # Align vertically with first_plate
+        label_first_plate = MathTex(
+            "a_{", "1", "} = ", "2", "= ", "2", "^{", "1", "}",
+            color=BLACK
+        ).to_edge(LEFT, buff=0.5).shift(
+            UP * first_plate.get_center()[1]
         )
+        # Color the indices in red and base in blue
+        label_first_plate[1].set_color(RED)    # First "1" (index)
+        label_first_plate[7].set_color(RED)    
 
         # Second iteration Circles
         second_one_plate = create_plate_with_blob(
@@ -87,8 +91,10 @@ class FolgenRekursionHorizontal(Scene):
         second_two_plate = create_plate_with_blob(
             position=first_plate.get_center() + DOWN * 1 + RIGHT * 2
         )
-        label_second_iteration = MathTex("a_2 = 2a_1 = 2^2", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * second_one_plate.get_center()[1])
-        
+        label_second_iteration = MathTex("a_{", "2", "} = ", "2", "a_{", "1", "} = ", "2", "^{", "2", "}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * second_one_plate.get_center()[1])
+        label_second_iteration[1].set_color(RED)
+        label_second_iteration[9].set_color(RED)        
+
         #arrows from first to second iteration
         arrow_first_to_second_one = Arrow(
             start=first_plate.get_left(),
@@ -114,7 +120,10 @@ class FolgenRekursionHorizontal(Scene):
         third_four_plate = create_plate_with_blob(
             position=second_two_plate.get_center() + DOWN * 1 + RIGHT * 1
         )
-        label_third_iteration = MathTex("a_3 = 2a_2 = 2^3", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * third_one_plate.get_center()[1])
+        label_third_iteration = MathTex("a_{", "3", "} = ", "2", "a_{", "2", "} = ", "2", "^{", "3", "}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * third_one_plate.get_center()[1])
+        label_third_iteration[1].set_color(RED)    
+        label_third_iteration[9].set_color(RED)
+        
         #arrows from second to third iteration
         arrow_second_one_to_third_one = Arrow(
             start = second_one_plate.get_left(),
@@ -170,8 +179,16 @@ class FolgenRekursionHorizontal(Scene):
             )
             third_to_fourth_arrows.extend([left_arrow, right_arrow])
 
-        label_fourth_iteration = MathTex("a_4 = 2a_3 = 2^4", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * fourth_iteration_plates[0 ].get_center()[1])
-        
+        label_fourth_iteration = MathTex("a_{", "4", "} = ", "2", "a_{", "3", "} = ", "2", "^{", "4", "}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * fourth_iteration_plates[0 ].get_center()[1])
+        label_fourth_iteration[1].set_color(RED)
+        label_fourth_iteration[9].set_color(RED)
+        # After label_fourth_iteration definition, add:
+        vertical_dots_one = Tex("\\vdots", color=BLACK, font_size=40).next_to(
+            label_fourth_iteration, 
+            DOWN,
+            buff=0.5
+        )
+
         # Create arrows for fourth iteration plates
         fourth_iteration_arrows = []
         for plate in fourth_iteration_plates:
@@ -188,7 +205,17 @@ class FolgenRekursionHorizontal(Scene):
                 color=BLACK,
             )
             fourth_iteration_arrows.extend([left_arrow, right_arrow])
-
+        
+        # Add three sets of vertical dots under fourth iteration arrows
+        fourth_iteration_vertical_dots = []
+        for i in range(3):
+            dots = Tex("\\vdots", color=BLACK, font_size=30).next_to(
+                fourth_iteration_arrows[i*7].get_end(), 
+                DOWN,
+                buff=0.3
+            )
+            fourth_iteration_vertical_dots.append(dots)
+    
 
         # n iteration
         # positions for n iteration plates (5 plates evenly distributed)
@@ -207,11 +234,11 @@ class FolgenRekursionHorizontal(Scene):
         n_iteration_plates = [
             create_plate_with_blob(pos) for pos in n_iteration_positions
         ]
-        # dots = Tex("......", color=BLACK, font_size = 30).next_to(
-        #     n_iteration_plates[0].get_center(), UP
-        # )
         #label
-        label_n_iteration = MathTex("a_n = 2a_{n-1} = 2^n", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_iteration_plates[0].get_center()[1])
+        label_n_iteration = MathTex("a_{", "n", "} = ", "2", "a_{", "n-1", "} = ", "2", "^{", "n", "}",color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_iteration_plates[0].get_center()[1])
+        label_n_iteration[1].set_color(RED)    
+        label_n_iteration[9].set_color(RED)
+        
         #dots
         n_iteration_dots = []
         for i in range(4):
@@ -239,7 +266,9 @@ class FolgenRekursionHorizontal(Scene):
             )
             n_plus_1_iteration_dots.append(dots)
         #label
-        label_n_plus_1_iteration = MathTex("a_{n+1} = 2a_n = 2^{n+1}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_plus_1_iteration_plates[0].get_center()[1])
+        label_n_plus_1_iteration = MathTex("a_{", "n+1", "} = ", "2", "a_{", "n", "} = ", "2", "^{", "n+1", "}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_plus_1_iteration_plates[0].get_center()[1])
+        label_n_plus_1_iteration[1].set_color(RED)
+        label_n_plus_1_iteration[9].set_color(RED)
 
         # Arrows from n to n+1 iteration
         n_to_n_plus_1_arrows = []
@@ -299,7 +328,8 @@ class FolgenRekursionHorizontal(Scene):
         self.wait(1)
         self.add(*fourth_iteration_arrows)
         self.wait(1)
-        self.add(dots)
+        self.add(vertical_dots_one)
+        self.add(*fourth_iteration_vertical_dots)
         self.wait(1)
 
         # n iteration 
