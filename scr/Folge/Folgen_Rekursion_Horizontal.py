@@ -11,7 +11,6 @@ Arrows from first to second iteration are called arrow_first_to_second_one, arro
 Arrows from second to third iteration are called arrow_second_one_to_third_one, arrow_second_one_to_third_two, etc.
 '''
 
-
 class FolgenRekursionHorizontal(Scene):
     def construct(self):
         # Store the first blob's points
@@ -73,10 +72,13 @@ class FolgenRekursionHorizontal(Scene):
 
         
         # First iteration Circles
-        first_plate = create_plate_with_blob(position=UP*2.5 + RIGHT*2)
+        first_plate = create_plate_with_blob(position=UP*2.5 + RIGHT*2.5)
         # label for first plate
-        label_first_plate = MathTex("a_1 = p", color=BLACK
-            ).next_to(first_plate, LEFT, buff=5.4)
+        label_first_plate = MathTex("a_1 = 2^1", color=BLACK).to_edge(
+            LEFT, buff=0.5
+        ).shift(
+            UP * first_plate.get_center()[1]  # Align vertically with first_plate
+        )
 
         # Second iteration Circles
         second_one_plate = create_plate_with_blob(
@@ -85,8 +87,8 @@ class FolgenRekursionHorizontal(Scene):
         second_two_plate = create_plate_with_blob(
             position=first_plate.get_center() + DOWN * 1 + RIGHT * 2
         )
-        label_second_iteration = MathTex("a_2 = 2a_1", color=BLACK
-            ).next_to(second_one_plate, LEFT, buff=3)
+        label_second_iteration = MathTex("a_2 = 2a_1 = 2^2", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * second_one_plate.get_center()[1])
+        
         #arrows from first to second iteration
         arrow_first_to_second_one = Arrow(
             start=first_plate.get_left(),
@@ -112,7 +114,7 @@ class FolgenRekursionHorizontal(Scene):
         third_four_plate = create_plate_with_blob(
             position=second_two_plate.get_center() + DOWN * 1 + RIGHT * 1
         )
-        label_third_iteration = MathTex("a_3 = 2a_2", color=BLACK).next_to(third_one_plate, LEFT, buff=2)
+        label_third_iteration = MathTex("a_3 = 2a_2 = 2^3", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * third_one_plate.get_center()[1])
         #arrows from second to third iteration
         arrow_second_one_to_third_one = Arrow(
             start = second_one_plate.get_left(),
@@ -168,8 +170,7 @@ class FolgenRekursionHorizontal(Scene):
             )
             third_to_fourth_arrows.extend([left_arrow, right_arrow])
 
-        label_fourth_iteration = MathTex("a_4 = 2a_3", color=BLACK).next_to(
-            fourth_iteration_plates[0], LEFT, buff=1.5)
+        label_fourth_iteration = MathTex("a_4 = 2a_3 = 2^4", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * fourth_iteration_plates[0 ].get_center()[1])
         
         # Create arrows for fourth iteration plates
         fourth_iteration_arrows = []
@@ -206,13 +207,11 @@ class FolgenRekursionHorizontal(Scene):
         n_iteration_plates = [
             create_plate_with_blob(pos) for pos in n_iteration_positions
         ]
-        dots = Tex("......", color=BLACK, font_size = 30).next_to(
-            n_iteration_plates[0].get_center(), UP
-        )
+        # dots = Tex("......", color=BLACK, font_size = 30).next_to(
+        #     n_iteration_plates[0].get_center(), UP
+        # )
         #label
-        label_n_iteration = MathTex("a_n = 2a_{n-1}", color=BLACK).next_to(
-            n_iteration_plates[0], LEFT, buff=0.8
-        )
+        label_n_iteration = MathTex("a_n = 2a_{n-1} = 2^n", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_iteration_plates[0].get_center()[1])
         #dots
         n_iteration_dots = []
         for i in range(4):
@@ -240,9 +239,7 @@ class FolgenRekursionHorizontal(Scene):
             )
             n_plus_1_iteration_dots.append(dots)
         #label
-        label_n_plus_1_iteration = MathTex("a_{n+1} = 2a_n", color=BLACK).next_to(
-            n_plus_1_iteration_plates[0], LEFT, buff=0.5
-        )
+        label_n_plus_1_iteration = MathTex("a_{n+1} = 2a_n = 2^{n+1}", color=BLACK).to_edge(LEFT, buff=0.5).shift(UP * n_plus_1_iteration_plates[0].get_center()[1])
 
         # Arrows from n to n+1 iteration
         n_to_n_plus_1_arrows = []
@@ -260,8 +257,6 @@ class FolgenRekursionHorizontal(Scene):
                 color=BLACK,
             )
             n_to_n_plus_1_arrows.extend([left_arrow, right_arrow])
-
-
 
 
         # Animation
