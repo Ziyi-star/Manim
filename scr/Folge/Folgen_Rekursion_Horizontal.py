@@ -73,7 +73,7 @@ class FolgenRekursionHorizontal(Scene):
 
         
         # First iteration Circles
-        first_plate = create_plate_with_blob(position=UP*2 + RIGHT*2)
+        first_plate = create_plate_with_blob(position=UP*2.5 + RIGHT*2)
         # label for first plate
         label_first_plate = MathTex("a_1 = p", color=BLACK
             ).next_to(first_plate, LEFT, buff=5.4)
@@ -135,7 +135,6 @@ class FolgenRekursionHorizontal(Scene):
             color = BLACK,
         )
 
-
         fourth_iteration_positions = [
             third_one_plate.get_center() + DOWN * 1 + LEFT * 0.5,    # Increased horizontal spacing
             third_one_plate.get_center() + DOWN * 1 + RIGHT * 0.5,
@@ -189,12 +188,81 @@ class FolgenRekursionHorizontal(Scene):
             )
             fourth_iteration_arrows.extend([left_arrow, right_arrow])
 
-    
-        dots = Tex("......", color=BLACK, font_size = 30 ).next_to(
-            fourth_iteration_arrows[0].get_end(), DOWN, buff=0.5
+
+        # n iteration
+        # positions for n iteration plates (5 plates evenly distributed)
+        left_pos = fourth_iteration_plates[0].get_center() + DOWN * 2 + LEFT * 0.5
+        right_pos = fourth_iteration_plates[7].get_center() + DOWN * 2 + RIGHT * 0.5
+
+        # Calculate horizontal spacing between plates
+        total_distance = abs(right_pos[0] - left_pos[0])  # X-axis distance
+        spacing = total_distance / 4  # For 5 plates, we need 4 intervals
+
+        n_iteration_positions = [
+            np.array([left_pos[0] + i * spacing, left_pos[1], left_pos[2]]) 
+            for i in range(5)
+        ]
+        # plates
+        n_iteration_plates = [
+            create_plate_with_blob(pos) for pos in n_iteration_positions
+        ]
+        dots = Tex("......", color=BLACK, font_size = 30).next_to(
+            n_iteration_plates[0].get_center(), UP
+        )
+        #label
+        label_n_iteration = MathTex("a_n = 2a_{n-1}", color=BLACK).next_to(
+            n_iteration_plates[0], LEFT, buff=0.8
+        )
+        #dots
+        n_iteration_dots = []
+        for i in range(4):
+            dots = Tex("......", color=BLACK, font_size=30).next_to(
+                n_iteration_plates[i].get_center(), RIGHT, buff=0.8
+            )
+            n_iteration_dots.append(dots)
+
+        # n+1 iteration
+        # plates
+        n_plus_1_iteration_positions = []
+        for plate in n_iteration_plates:
+            # Create positions for left and right child plates
+            left_pos = plate.get_center() + DOWN * 1 + LEFT * 0.4
+            right_pos = plate.get_center() + DOWN * 1 + RIGHT * 0.4
+            n_plus_1_iteration_positions.extend([left_pos, right_pos])
+        n_plus_1_iteration_plates = [
+            create_plate_with_blob(pos) for pos in n_plus_1_iteration_positions
+        ]
+        #dots
+        n_plus_1_iteration_dots = []
+        for i in range(1,8,2):
+            dots = Tex("...", color=BLACK, font_size=30).next_to(
+                n_plus_1_iteration_plates[i].get_right(), RIGHT
+            )
+            n_plus_1_iteration_dots.append(dots)
+        #label
+        label_n_plus_1_iteration = MathTex("a_{n+1} = 2a_n", color=BLACK).next_to(
+            n_plus_1_iteration_plates[0], LEFT, buff=0.5
         )
 
-       
+        # Arrows from n to n+1 iteration
+        n_to_n_plus_1_arrows = []
+        for i, plate in enumerate(n_iteration_plates):
+            # Create left arrow
+            left_arrow = Arrow(
+                start=plate.get_left(),
+                end=n_plus_1_iteration_plates[i*2].get_top(),
+                color=BLACK,
+            )
+            # Create right arrow
+            right_arrow = Arrow(
+                start=plate.get_right(),
+                end=n_plus_1_iteration_plates[i*2+1].get_top(),
+                color=BLACK,
+            )
+            n_to_n_plus_1_arrows.extend([left_arrow, right_arrow])
+
+
+
 
         # Animation
         # Schrift
@@ -238,3 +306,18 @@ class FolgenRekursionHorizontal(Scene):
         self.wait(1)
         self.add(dots)
         self.wait(1)
+
+        # n iteration 
+        self.add(*n_iteration_plates)
+        self.add(*n_iteration_dots)
+        self.add(label_n_iteration)
+        self.wait(1)
+
+        # n plus 1 iteration_plates:
+        self.add(*n_plus_1_iteration_plates)
+        self.add(*n_plus_1_iteration_dots)
+        self.add(label_n_plus_1_iteration)
+        self.add(*n_to_n_plus_1_arrows)
+        self.wait(1)
+
+
