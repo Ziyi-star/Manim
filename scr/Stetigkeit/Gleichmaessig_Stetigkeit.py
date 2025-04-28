@@ -38,41 +38,66 @@ class gleichmassigStetigkeit(Scene):
         #function_label = MathTex("f(x)=\\frac{1}{x}").next_to(graph, UP)
 
         #Label epsilon and delta = 1/2 at top right corner
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE)
+        math_text_epsilon = MathTex(r"\epsilon = 1").set_color(ORANGE)
         math_text_epsilon.to_corner(UR)
-        math_text_delta = MathTex(r"\delta = 0.5")
+        math_text_delta = MathTex(r"\delta = 1")
         math_text_delta.next_to(math_text_epsilon, DOWN).set_color(PURPLE)
 
         # Create me 2 boxes with epsilon and delta in the point (1,1)
         epsilon = 1
         delta = 1
-        point = axes.coords_to_point(1.5, func(1.5))
-        dot = Dot(point, color=YELLOW)
+        # Create a ValueTracker for the x coordinate
+        x_tracker = ValueTracker(1.5)
+        moving_point = axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value()))
+        # Define moving dots using always_redraw
+        moving_dot_left = always_redraw(
+            lambda: Dot(
+                point=axes.coords_to_point(
+                    x_tracker.get_value() - 0.4,
+                    func(x_tracker.get_value() - 0.4)
+                ),
+                color=RED
+            )
+        )
 
+        moving_dot_right = always_redraw(
+            lambda: Dot(
+                point=axes.coords_to_point(
+                    x_tracker.get_value() + 0.4,
+                    func(x_tracker.get_value() + 0.4)
+                ),
+                color=GREEN
+            )
+        )
 
-        # Epsilon box (vertical)
-        epsilon_box = Rectangle(
-            width=3 * axes.x_axis.unit_size, 
-            height=epsilon * axes.y_axis.unit_size,
-            color=ORANGE,
-            fill_opacity=0.4,
-            stroke_width=2
-        ).move_to(point)
-        delta_box = Rectangle(
-            width=delta * axes.x_axis.unit_size,
-            height=3 * axes.y_axis.unit_size,
-            color=PURPLE,
-            fill_opacity=0.4,
-            stroke_width=2
-        ).move_to(point)
+        moving_epsilon_box = always_redraw(
+            lambda: Rectangle(
+                width=3 * axes.x_axis.unit_size,
+                height=epsilon * axes.y_axis.unit_size,
+                color=ORANGE,
+                fill_opacity=0.4,
+                stroke_width=2
+            ).move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
+        )
+        moving_delta_box = always_redraw(
+            lambda: Rectangle(
+                width=delta * axes.x_axis.unit_size,
+                height=3 * axes.y_axis.unit_size,
+                color=PURPLE,
+                fill_opacity=0.4,
+                stroke_width=2
+            ).move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
+        )
 
-
-
-        # Add all elements to the scene
+        # Add elements to the scene
         self.add(grid, axes, graph)
-        #self.wait(1)
         self.add(math_text_epsilon, math_text_delta)
-        #self.wait(1)
-        self.add(dot, epsilon_box, delta_box)
+        self.add(moving_dot_left, moving_dot_right, moving_epsilon_box, moving_delta_box)
+        
+        # Animate the movement
+        self.play(
+            x_tracker.animate.set_value(7.5),
+            run_time=5,
+            rate_func=linear
+        )
         self.wait(1)
-
