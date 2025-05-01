@@ -1,9 +1,8 @@
 from manim import *
 
-class gleichmassigUnstetigkeit(ZoomedScene):
-    # draw the graph of the function f(x) 1/x in x range (0,9)
+class GleichmassigUnstetigkeitZoom(ZoomedScene):
     def construct(self):
-         # Background grid
+        # Set up grid and axes
         grid = NumberPlane(
             background_line_style={
                 "stroke_color": BLUE_D,
@@ -27,18 +26,17 @@ class gleichmassigUnstetigkeit(ZoomedScene):
         def func(x):
             return 1/x
 
-        # Create the graph of f(x) = 1/x
         graph = axes.plot(
             func,
-            x_range=[0.2, 8],  # Avoid x=0 since function is undefined there
+            x_range=[0.2, 8],
             color=BLUE
         )
 
-        # Create a ValueTracker for the x coordinate
         epsilon = 0.5
         delta_tracker = ValueTracker(0.5)
         x_tracker = ValueTracker(1)
-       
+
+        # Moving boxes
         moving_epsilon_box = always_redraw(
             lambda: Rectangle(
                 width=3 * axes.x_axis.unit_size,
@@ -57,61 +55,49 @@ class gleichmassigUnstetigkeit(ZoomedScene):
                 stroke_width=2
             ).move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
         )
-         # Add highlighted portion of graph between boxes
-        # Add highlighted portion of graph between boxes with better visibility
-        graph_piece = always_redraw(
-            lambda: VGroup(                
-                # Add dots at endpoints for emphasis
-                Dot(
-                    point=axes.coords_to_point(
-                        x_tracker.get_value() - delta_tracker.get_value()/2,
-                        func(x_tracker.get_value() - delta_tracker.get_value()/2)
-                    ),
-                    color=RED,
-                    radius=0.1
+
+        # Two Dots around delta
+        left_dot = always_redraw(
+            lambda: Dot(
+                point=axes.coords_to_point(
+                    x_tracker.get_value() - delta_tracker.get_value()/2,
+                    func(x_tracker.get_value() - delta_tracker.get_value()/2)
                 ),
-                Dot(
-                    point=axes.coords_to_point(
-                        x_tracker.get_value() + delta_tracker.get_value()/2,
-                        func(x_tracker.get_value() + delta_tracker.get_value()/2)
-                    ),
-                    color=GREEN,
-                    radius=0.1
-                )
+                color=RED,
+                radius=0.1
             )
         )
-        
+        right_dot = always_redraw(
+            lambda: Dot(
+                point=axes.coords_to_point(
+                    x_tracker.get_value() + delta_tracker.get_value()/2,
+                    func(x_tracker.get_value() + delta_tracker.get_value()/2)
+                ),
+                color=GREEN,
+                radius=0.1
+            )
+        )
 
-      
-        # Make sure to add graph_piece AFTER the main graph
-        self.add(grid, axes, graph)
-        self.add(moving_epsilon_box, moving_delta_box)
-        self.add(graph_piece)  # Add this last to ensure it's on top
+        # Label epsilon and delta
+        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UR)
+        # Replace the static math_text_delta with:
+        math_text_delta = always_redraw(
+            lambda: MathTex(r"\delta = {:.1f}".format(delta_tracker.get_value()))
+            .set_color(PURPLE)
+            .next_to(math_text_epsilon, DOWN)
+        )
 
-       
-        #Label epsilon and delta = 1/2 at top right corner
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE)
-        math_text_epsilon.to_corner(UR)
-        math_text_delta = MathTex(r"\delta = 0.5")
-        math_text_delta.next_to(math_text_epsilon, DOWN).set_color(PURPLE)
-        self.add(moving_epsilon_box, moving_delta_box)
-        self.add(graph_piece)
+        # Add main objects
+        self.add(grid, axes, graph, moving_epsilon_box, moving_delta_box, left_dot, right_dot, math_text_epsilon, math_text_delta)
 
-        # Add elements to the scene
-        self.add(grid, axes, graph)
-        self.add(math_text_epsilon, math_text_delta)
-        self.wait(1)
-
-        # Activate zooming
-        self.activate_zooming()
-
-        # Animate the movement
+        # Animate x and delta trackers
         self.play(
-            x_tracker.animate.set_value(0.5),
-            delta_tracker.animate.set_value(0.1),
-            run_time=3,
+            x_tracker.animate.set_value(0.4),
+            delta_tracker.animate.set_value(0.05),
+            run_time=6,
             rate_func=linear
         )
-        self.wait(1)
+        self.wait(2)
 
         
+
