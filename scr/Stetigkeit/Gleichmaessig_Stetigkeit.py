@@ -97,7 +97,7 @@ class gleichmassigStetigkeit(Scene):
         # Animate the movement
         self.play(
             x_tracker.animate.set_value(7.5),
-            run_time=5,
+            run_time=10,
             rate_func=linear
         )
         self.wait(1)

@@ -1,6 +1,19 @@
 from manim import *
 
 class GleichmassigUnstetigkeitZoom(ZoomedScene):
+    def __init__(self, **kwargs):
+        ZoomedScene.__init__(
+        self,
+        zoom_factor=0.3,
+        zoomed_display_height=5,
+        zoomed_display_width=3,
+        image_frame_stroke_width=20,
+        zoomed_camera_config={
+            "default_frame_stroke_width": 3,
+        },
+        **kwargs
+    )
+
     def construct(self):
         # Set up grid and axes
         grid = NumberPlane(
@@ -79,10 +92,10 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
         )
 
         # Label epsilon and delta
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UR)
+        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UL).shift(RIGHT * 1)
         # Replace the static math_text_delta with:
         math_text_delta = always_redraw(
-            lambda: MathTex(r"\delta = {:.1f}".format(delta_tracker.get_value()))
+            lambda: MathTex(r"\delta = {:.2f}".format(delta_tracker.get_value()))
             .set_color(PURPLE)
             .next_to(math_text_epsilon, DOWN)
         )
@@ -91,6 +104,16 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
         self.add(grid, axes, graph, moving_epsilon_box, moving_delta_box, left_dot, right_dot, math_text_epsilon, math_text_delta)
 
         # Animate x and delta trackers
+        self.activate_zooming(animate=False)
+        # Make frame and display invisible
+        self.zoomed_camera.frame.set_stroke(width=0)
+        self.zoomed_camera.frame.add_updater(
+            lambda f: f.move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
+        )
+        self.wait(1)
+        self.play(
+            self.zoomed_camera.frame.animate.set_stroke(width=3),
+        )
         self.play(
             x_tracker.animate.set_value(0.4),
             delta_tracker.animate.set_value(0.05),
