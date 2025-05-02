@@ -74,15 +74,18 @@ class FolgenMitFolgekette(Scene):
             labels = []
             
             # Create circles and labels
-            for i in range(4):
+            for i in range(5):
                 ellipse = Ellipse(
-                    width=0.8,
-                    height=0.9,
+                    width=0.6,
+                    height=0.7,
                     color=BLACK,
                     fill_color=circle_color,
                     fill_opacity=0.5
                 )
-                label = MathTex(f"a_{{\\mathbf{{{bold_num}}}{i+1}}}", font_size=25, color=BLACK)
+                if i != 4:
+                    label = MathTex(f"a_{{\\mathbf{{{bold_num}}}{i+1}}}", font_size=25, color=BLACK)
+                if i == 4:
+                    label = MathTex(f"...", font_size=20, color=BLACK)
                 ellipses.append(ellipse)
                 labels.append(label)
             
@@ -90,9 +93,9 @@ class FolgenMitFolgekette(Scene):
             lines = []
             for i in range(len(ellipses)):
                 if i == 0:
-                    ellipses[i].next_to(main_circle, DOWN, buff=0.4)
+                    ellipses[i].next_to(main_circle, DOWN, buff=0.3)
                 else:
-                    ellipses[i].next_to(ellipses[i-1], DOWN, buff=0.3)
+                    ellipses[i].next_to(ellipses[i-1], DOWN, buff=0.2)
                 labels[i].move_to(ellipses[i].get_center())
                 
                 if i > 0:

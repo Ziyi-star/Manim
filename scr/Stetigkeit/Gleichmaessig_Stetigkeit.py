@@ -44,8 +44,8 @@ class gleichmassigStetigkeit(Scene):
         math_text_delta.next_to(math_text_epsilon, DOWN).set_color(PURPLE)
 
         # Create me 2 boxes with epsilon and delta in the point (1,1)
-        epsilon = 1
-        delta = 1
+        epsilon = 0.5
+        delta = 0.5
         # Create a ValueTracker for the x coordinate
         x_tracker = ValueTracker(1.5)
         moving_point = axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value()))
@@ -72,7 +72,7 @@ class gleichmassigStetigkeit(Scene):
 
         moving_epsilon_box = always_redraw(
             lambda: Rectangle(
-                width=3 * axes.x_axis.unit_size,
+                width=1.5 * axes.x_axis.unit_size,
                 height=epsilon * axes.y_axis.unit_size,
                 color=ORANGE,
                 fill_opacity=0.4,
@@ -82,7 +82,7 @@ class gleichmassigStetigkeit(Scene):
         moving_delta_box = always_redraw(
             lambda: Rectangle(
                 width=delta * axes.x_axis.unit_size,
-                height=3 * axes.y_axis.unit_size,
+                height=1.5 * axes.y_axis.unit_size, 
                 color=PURPLE,
                 fill_opacity=0.4,
                 stroke_width=2
@@ -97,7 +97,7 @@ class gleichmassigStetigkeit(Scene):
         # Animate the movement
         self.play(
             x_tracker.animate.set_value(7.5),
-            run_time=10,
+            run_time=5,
             rate_func=linear
         )
         self.wait(1)
