@@ -1,6 +1,6 @@
 from manim import *
 
-class GleichmassigUnstetigkeitZoom(ZoomedScene):
+class UngleichmassigStetigkeitZoom(ZoomedScene):
     def __init__(self, **kwargs):
         ZoomedScene.__init__(
         self,
@@ -46,7 +46,7 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
         )
 
         epsilon = 0.5
-        delta_tracker = ValueTracker(0.5)
+        delta_tracker = ValueTracker(0.4)
         x_tracker = ValueTracker(1)
 
         # Moving boxes
@@ -77,7 +77,7 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
                     func(x_tracker.get_value() - delta_tracker.get_value()/2)
                 ),
                 color=RED,
-                radius=0.1
+                radius=0.05
             )
         )
         right_dot = always_redraw(
@@ -87,7 +87,7 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
                     func(x_tracker.get_value() + delta_tracker.get_value()/2)
                 ),
                 color=GREEN,
-                radius=0.1
+                radius=0.05
             )
         )
 
@@ -105,7 +105,7 @@ class GleichmassigUnstetigkeitZoom(ZoomedScene):
 
         # Animate x and delta trackers
         self.activate_zooming(animate=False)
-        # Make frame and display invisible
+        # Make frame invisible
         self.zoomed_camera.frame.set_stroke(width=0)
         self.zoomed_camera.frame.add_updater(
             lambda f: f.move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
