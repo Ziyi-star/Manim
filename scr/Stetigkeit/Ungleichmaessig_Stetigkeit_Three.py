@@ -49,10 +49,22 @@ class UngleichmassigStetigkeitZoom(ZoomedScene):
         delta_tracker = ValueTracker(0.4)
         x_tracker = ValueTracker(1)
 
+        highlighted_graph = always_redraw(
+            lambda: axes.plot(
+                func,
+                x_range=[
+                    x_tracker.get_value() - delta_tracker.get_value()/2,
+                    x_tracker.get_value() + delta_tracker.get_value()/2
+                ],
+                color=YELLOW,
+                stroke_width=6
+            )
+        )
+
         # Moving boxes
         moving_epsilon_box = always_redraw(
             lambda: Rectangle(
-                width=3 * axes.x_axis.unit_size,
+                width=1.5 * axes.x_axis.unit_size,
                 height=epsilon * axes.y_axis.unit_size,
                 color=ORANGE,
                 fill_opacity=0.4,
@@ -62,46 +74,26 @@ class UngleichmassigStetigkeitZoom(ZoomedScene):
         moving_delta_box = always_redraw(
             lambda: Rectangle(
                 width=delta_tracker.get_value() * axes.x_axis.unit_size,
-                height=3 * axes.y_axis.unit_size,
+                height=1.5 * axes.y_axis.unit_size,
                 color=PURPLE,
                 fill_opacity=0.4,
                 stroke_width=2
             ).move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
         )
 
-        # Two Dots around delta
-        left_dot = always_redraw(
-            lambda: Dot(
-                point=axes.coords_to_point(
-                    x_tracker.get_value() - delta_tracker.get_value()/2,
-                    func(x_tracker.get_value() - delta_tracker.get_value()/2)
-                ),
-                color=RED,
-                radius=0.05
-            )
-        )
-        right_dot = always_redraw(
-            lambda: Dot(
-                point=axes.coords_to_point(
-                    x_tracker.get_value() + delta_tracker.get_value()/2,
-                    func(x_tracker.get_value() + delta_tracker.get_value()/2)
-                ),
-                color=GREEN,
-                radius=0.05
-            )
-        )
-
         # Label epsilon and delta
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UL).shift(RIGHT * 1)
+        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UR).shift(LEFT * 4)
         # Replace the static math_text_delta with:
         math_text_delta = always_redraw(
-            lambda: MathTex(r"\delta = {:.2f}".format(delta_tracker.get_value()))
+            lambda: MathTex(
+                "\\mathbf{\\delta = " + f"{delta_tracker.get_value():.2f}" + "}"
+            )
             .set_color(PURPLE)
             .next_to(math_text_epsilon, DOWN)
         )
 
         # Add main objects
-        self.add(grid, axes, graph, moving_epsilon_box, moving_delta_box, left_dot, right_dot, math_text_epsilon, math_text_delta)
+        self.add(grid, axes, graph, moving_epsilon_box, highlighted_graph, moving_delta_box, math_text_epsilon, math_text_delta)
 
         # Animate x and delta trackers
         self.activate_zooming(animate=False)

@@ -1,6 +1,6 @@
 from manim import *
 
-class gleichmassigStetigkeit(Scene):
+class gleichmassigStetigkeitOne(Scene):
     # draw the graph of the function f(x) 1/x in x range (0,9)
     def construct(self):
          # Background grid
@@ -38,38 +38,28 @@ class gleichmassigStetigkeit(Scene):
         #function_label = MathTex("f(x)=\\frac{1}{x}").next_to(graph, UP)
 
         #Label epsilon and delta = 1/2 at top right corner
-        math_text_epsilon = MathTex(r"\epsilon = 1").set_color(ORANGE)
+        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE)
         math_text_epsilon.to_corner(UR)
-        math_text_delta = MathTex(r"\delta = 1")
-        math_text_delta.next_to(math_text_epsilon, DOWN).set_color(PURPLE)
+        math_text_delta = MathTex(r"\delta = 0.5").next_to(math_text_epsilon, DOWN).set_color(PURPLE)
 
         # Create me 2 boxes with epsilon and delta in the point (1,1)
         epsilon = 0.5
         delta = 0.5
         # Create a ValueTracker for the x coordinate
         x_tracker = ValueTracker(1.5)
-        moving_point = axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value()))
-        # Define moving dots using always_redraw
-        moving_dot_left = always_redraw(
-            lambda: Dot(
-                point=axes.coords_to_point(
-                    x_tracker.get_value() - 0.4,
-                    func(x_tracker.get_value() - 0.4)
-                ),
-                color=RED
+        # Create highlighted section of the graph
+        highlighted_graph = always_redraw(
+            lambda: axes.plot(
+                func,
+                x_range=[
+                    x_tracker.get_value() - delta/2,
+                    x_tracker.get_value() + delta/2
+                ],
+                color=YELLOW,
+                stroke_width=6
             )
         )
-
-        moving_dot_right = always_redraw(
-            lambda: Dot(
-                point=axes.coords_to_point(
-                    x_tracker.get_value() + 0.4,
-                    func(x_tracker.get_value() + 0.4)
-                ),
-                color=GREEN
-            )
-        )
-
+       
         moving_epsilon_box = always_redraw(
             lambda: Rectangle(
                 width=1.5 * axes.x_axis.unit_size,
@@ -92,12 +82,20 @@ class gleichmassigStetigkeit(Scene):
         # Add elements to the scene
         self.add(grid, axes, graph)
         self.add(math_text_epsilon, math_text_delta)
-        self.add(moving_dot_left, moving_dot_right, moving_epsilon_box, moving_delta_box)
+        self.add(moving_epsilon_box, moving_delta_box)
+        self.add(highlighted_graph)
         
         # Animate the movement
         self.play(
-            x_tracker.animate.set_value(7.5),
+            x_tracker.animate.set_value(3),
+            run_time=4,  # Longer runtime for slower movement
+            rate_func=linear
+        )
+        self.play(
+            x_tracker.animate.set_value(7.7),
+            x_tracker.animate.set_value(7.7),
             run_time=5,
             rate_func=linear
         )
+        
         self.wait(1)
