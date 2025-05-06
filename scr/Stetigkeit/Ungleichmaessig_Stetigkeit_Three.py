@@ -45,8 +45,8 @@ class UngleichmassigStetigkeitZoom(ZoomedScene):
             color=BLUE
         )
 
-        epsilon = 0.5
-        delta_tracker = ValueTracker(0.4)
+        epsilon = 0.3
+        delta_tracker = ValueTracker(0.3)
         x_tracker = ValueTracker(1)
 
         highlighted_graph = always_redraw(
@@ -82,8 +82,7 @@ class UngleichmassigStetigkeitZoom(ZoomedScene):
         )
 
         # Label epsilon and delta
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE).to_corner(UR).shift(LEFT * 4)
-        # Replace the static math_text_delta with:
+        math_text_epsilon = MathTex(r"\epsilon = 0.3").set_color(ORANGE).to_corner(UR).shift(LEFT * 4)
         math_text_delta = always_redraw(
             lambda: MathTex(
                 "\\mathbf{\\delta = " + f"{delta_tracker.get_value():.2f}" + "}"
@@ -108,7 +107,7 @@ class UngleichmassigStetigkeitZoom(ZoomedScene):
         )
         self.play(
             x_tracker.animate.set_value(0.4),
-            delta_tracker.animate.set_value(0.05),
+            delta_tracker.animate.set_value(0.06),
             run_time=6,
             rate_func=linear
         )

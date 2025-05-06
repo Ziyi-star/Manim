@@ -36,12 +36,12 @@ class gleichmassigStetigkeitTwo(Scene):
 
 
         #Label epsilon and delta = 1/2 at top right corner
-        math_text_epsilon = MathTex(r"\epsilon = 0.5").set_color(ORANGE)
+        math_text_epsilon = MathTex(r"\epsilon = 0.3").set_color(ORANGE)
         math_text_epsilon.to_corner(UR)
         math_text_delta = MathTex(r"\delta = 0.5").next_to(math_text_epsilon, DOWN).set_color(PURPLE)
 
         # Create me 2 boxes with epsilon and delta in the point (1,1)
-        epsilon = 0.5
+        epsilon = 0.3
         delta = 0.5
         # Create a ValueTracker for the x coordinate
         x_tracker = ValueTracker(1.5)
