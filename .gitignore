@@ -9,6 +9,7 @@ __pycache__/
 
 # Only track Python files
 !*.py
+!* LICENSE
 
 # Allow directories to be tracked so .py files inside them are also tracked
 !*/
