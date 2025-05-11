@@ -1,18 +1,50 @@
 # Ignore all files
 *
 
-# Do not ignore .gitignore itself
+# Don't ignore .gitignore and important project files
 !.gitignore
-
-# Ignore __pycache__ folders
-__pycache__/
-
-# Only track Python files
 !*.py
-!* LICENSE
+!LICENSE
 !README.md
 
-# Allow directories to be tracked so .py files inside them are also tracked
+# Allow tracking of directories
 !*/
 
+# Python specific ignores
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Manim specific
+media/
