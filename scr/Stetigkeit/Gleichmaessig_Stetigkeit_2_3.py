@@ -27,25 +27,15 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
             rate_func=linear
         )
         self.wait(1)
+        # Update the class attribute delta first
+        self.delta = target_delta 
 
         # Handle zoom functionality
-        self.remove(self.highlighted_graph)
+        # self.remove(self.highlighted_graph)
 
-        # Update delta and related elements
-        delta = target_delta
         self.math_text_delta.become(
             MathTex(f"\\delta = {target_delta}").next_to(self.math_text_epsilon, DOWN).set_color(PURPLE)
         )
-        self.moving_delta_box.become(
-            Rectangle(
-                width=target_delta * self.axes.x_axis.unit_size,
-                height=1.5 * self.axes.y_axis.unit_size, 
-                color=PURPLE,
-                fill_opacity=0.4,
-                stroke_width=2
-            ).move_to(self.axes.coords_to_point(self.x_tracker.get_value(), self.func(self.x_tracker.get_value())))
-        )
-        self.wait(1)
 
         self.activate_zooming(animate=False)
         self.zoomed_camera.frame.set_stroke(width=0)
@@ -100,9 +90,16 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         # Create a ValueTracker for the x coordinate
         x_tracker = ValueTracker(1.5)
 
+        
+        # Make variables class attributes FIRST
+        self.func = func
+        self.axes = axes
+        self.x_tracker = x_tracker
+        self.delta = delta  
+
          #Label epsilon and delta at top right corner
         math_text_epsilon = MathTex(r"\epsilon = 0.3").set_color(ORANGE)
-        math_text_epsilon.to_corner(UR)
+        math_text_epsilon.to_corner(UL).shift(RIGHT * 2)
         math_text_delta = MathTex(r"\delta = 0.5").next_to(math_text_epsilon, DOWN).set_color(PURPLE)
         math_text_X = always_redraw(
             lambda: MathTex(
@@ -118,8 +115,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
             lambda: axes.plot(
                 func,
                 x_range=[
-                    x_tracker.get_value() - delta/2,
-                    x_tracker.get_value() + delta/2
+                    x_tracker.get_value() - self.delta/2,
+                    x_tracker.get_value() + self.delta/2
                 ],
                 color=RED,
                 stroke_width=3
@@ -133,8 +130,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
                     radius=0.01
                 )
                 for x in np.linspace(
-                    x_tracker.get_value() - delta/2,
-                    x_tracker.get_value() + delta/2,
+                    x_tracker.get_value() - self.delta/2,
+                    x_tracker.get_value() + self.delta/2,
                     100
                 )
                 if (abs(func(x) - func(x_tracker.get_value())) <= epsilon/2)
@@ -153,7 +150,7 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         )
         moving_delta_box = always_redraw(
             lambda: Rectangle(
-                width=delta * axes.x_axis.unit_size,
+                width=self.delta * axes.x_axis.unit_size,
                 height=1.5 * axes.y_axis.unit_size, 
                 color=PURPLE,
                 fill_opacity=0.4,
@@ -162,10 +159,6 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         )
         
         # Make variables class attributes
-        self.func = func
-        self.axes = axes
-        self.x_tracker = x_tracker
-        self.delta = delta
         self.math_text_epsilon = math_text_epsilon
         self.math_text_delta = math_text_delta
         self.moving_delta_box = moving_delta_box
@@ -178,7 +171,12 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         self.add(highlighted_graph, in_Schnitt)
         
         # Scene 1:
-        self.animate_scene_with_zoom(target_x=1.10, target_delta=0.4)
+        self.animate_scene_with_zoom(target_x=1.10, target_delta=0.33)
 
         #Scene 2:
+        self.animate_scene_with_zoom(target_x= 0.85, target_delta=0.20)
+
+        #Scene 3:
+        self.animate_scene_with_zoom(target_x= 0.60, target_delta=0.09)
+
 
