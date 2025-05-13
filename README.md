@@ -3,7 +3,7 @@
 ## Autor
 
 - **Code**: Ziyi Liu
-- **- Mathematical idea**: Dr Anen Lakhal
+- **Mathematical idea**: Dr Anen Lakhal
 
 ---
 
