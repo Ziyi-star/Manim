@@ -27,15 +27,6 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
             rate_func=linear
         )
         self.wait(1)
-        # Update the class attribute delta first
-        self.delta = target_delta 
-
-        # Handle zoom functionality
-        # self.remove(self.highlighted_graph)
-
-        self.math_text_delta.become(
-            MathTex(f"\\delta = {target_delta}").next_to(self.math_text_epsilon, DOWN).set_color(PURPLE)
-        )
 
         self.activate_zooming(animate=False)
         self.zoomed_camera.frame.set_stroke(width=0)
@@ -46,6 +37,15 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
             self.zoomed_camera.frame.animate.set_stroke(width=3),
         )
         self.wait(2)
+
+        # Animate delta movement
+        self.play(
+            self.delta_tracker.animate.set_value(target_delta),
+            run_time=3,
+            rate_func=linear
+        )
+        self.wait(2)
+
         # Cleanup zoom
         self.zoomed_camera.frame.clear_updaters()
         self.remove(self.zoomed_display, self.zoomed_camera.frame)
@@ -86,7 +86,7 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
 
         # Create me 2 boxes with epsilon and delta in the point (1,1)
         epsilon = 0.3
-        delta = 0.5
+        delta_tracker = ValueTracker(0.5)  # Initial delta value
         # Create a ValueTracker for the x coordinate
         x_tracker = ValueTracker(1.5)
 
@@ -95,15 +95,22 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         self.func = func
         self.axes = axes
         self.x_tracker = x_tracker
-        self.delta = delta  
+        self.delta_tracker = delta_tracker 
 
-         #Label epsilon and delta at top right corner
+        #Label epsilon and delta at top right corner
         math_text_epsilon = MathTex(r"\epsilon = 0.3").set_color(ORANGE)
-        math_text_epsilon.to_corner(UL).shift(RIGHT * 2)
-        math_text_delta = MathTex(r"\delta = 0.5").next_to(math_text_epsilon, DOWN).set_color(PURPLE)
+        math_text_epsilon.to_corner(UR).shift(LEFT * 4)
+        math_text_delta = always_redraw(
+            lambda: MathTex(
+                f"\\delta = {self.delta_tracker.get_value():.2f}"
+            )
+            .set_color(PURPLE)
+            .next_to(math_text_epsilon, DOWN)
+        )
+
         math_text_X = always_redraw(
             lambda: MathTex(
-                r"\mathbf{x = " + f"{x_tracker.get_value():.2f}" + "}"
+                r"x = " + f"{x_tracker.get_value():.2f}" 
             )
             .set_color(WHITE)
             .next_to(math_text_delta, DOWN)
@@ -115,8 +122,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
             lambda: axes.plot(
                 func,
                 x_range=[
-                    x_tracker.get_value() - self.delta/2,
-                    x_tracker.get_value() + self.delta/2
+                    x_tracker.get_value() - self.delta_tracker.get_value()/2,
+                    x_tracker.get_value() + self.delta_tracker.get_value()/2
                 ],
                 color=RED,
                 stroke_width=3
@@ -130,8 +137,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
                     radius=0.01
                 )
                 for x in np.linspace(
-                    x_tracker.get_value() - self.delta/2,
-                    x_tracker.get_value() + self.delta/2,
+                    x_tracker.get_value() - self.delta_tracker.get_value()/2,
+                    x_tracker.get_value() + self.delta_tracker.get_value()/2,
                     100
                 )
                 if (abs(func(x) - func(x_tracker.get_value())) <= epsilon/2)
@@ -150,14 +157,14 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         )
         moving_delta_box = always_redraw(
             lambda: Rectangle(
-                width=self.delta * axes.x_axis.unit_size,
+                width=self.delta_tracker.get_value() * axes.x_axis.unit_size,
                 height=1.5 * axes.y_axis.unit_size, 
                 color=PURPLE,
                 fill_opacity=0.4,
                 stroke_width=2
             ).move_to(axes.coords_to_point(x_tracker.get_value(), func(x_tracker.get_value())))
         )
-        
+
         # Make variables class attributes
         self.math_text_epsilon = math_text_epsilon
         self.math_text_delta = math_text_delta
