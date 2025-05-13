@@ -59,6 +59,9 @@ The `src/` directory is where your Manim scenes are defined.
 
 ---
 
+## 🎞️ Videos in Youtube:
+https://www.youtube.com/@Ziyi-star0503/videos
+
 ## 🔧 Contributing
 
 Contributions are welcome! To contribute:
