@@ -38,6 +38,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         )
         self.wait(2)
 
+        # Show box first
+        self.play(self.delta_text_box.animate.set_stroke(opacity=1))
         # Animate delta movement
         self.play(
             self.delta_tracker.animate.set_value(target_delta),
@@ -49,6 +51,8 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         # Cleanup zoom
         self.zoomed_camera.frame.clear_updaters()
         self.remove(self.zoomed_display, self.zoomed_camera.frame)
+        self.play(self.delta_text_box.animate.set_stroke(opacity=0))
+
         self.wait(2)
 
     def construct(self):
@@ -100,20 +104,26 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         #Label epsilon and delta at top right corner
         math_text_epsilon = MathTex(r"\epsilon = 0.3").set_color(ORANGE)
         math_text_epsilon.to_corner(UR).shift(LEFT * 4)
+        delta_text_box = Rectangle(
+            width=2.5,  
+            height=0.7,  
+            stroke_color=WHITE,
+            stroke_width=4,
+            stroke_opacity=0  # Set to 0 for invisible stroke
+        ).next_to(math_text_epsilon, DOWN)
         math_text_delta = always_redraw(
             lambda: MathTex(
                 f"\\delta = {self.delta_tracker.get_value():.2f}"
             )
             .set_color(PURPLE)
-            .next_to(math_text_epsilon, DOWN)
+            .move_to(delta_text_box)
         )
-
         math_text_X = always_redraw(
             lambda: MathTex(
                 r"x = " + f"{x_tracker.get_value():.2f}" 
             )
             .set_color(WHITE)
-            .next_to(math_text_delta, DOWN)
+            .next_to(delta_text_box, DOWN)
         )
 
         # the graph between moving_epsilon_box and moving_delta_box are marked
@@ -170,14 +180,15 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         self.math_text_delta = math_text_delta
         self.moving_delta_box = moving_delta_box
         self.highlighted_graph = highlighted_graph
+        self.delta_text_box = delta_text_box
 
         # Add elements to the scene
         self.add(grid, axes, graph)
-        self.add(math_text_epsilon, math_text_delta, math_text_X)
+        self.add(math_text_epsilon, math_text_delta, math_text_X, delta_text_box)
         self.add(moving_epsilon_box, moving_delta_box)
         self.add(highlighted_graph, in_Schnitt)
         
-        # Scene 1:
+        #Scene 1:
         self.animate_scene_with_zoom(target_x=1.10, target_delta=0.33)
 
         #Scene 2:
