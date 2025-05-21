@@ -13,47 +13,47 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         },
         **kwargs
     )
-    def animate_scene_with_zoom(self, target_x, target_delta):
-        """
-        Animates scene with x movement and delta change, including zoom functionality
-        Args:
-            target_x (float): Target value for x_tracker
-            target_delta (float): New delta value to set
-        """
-        # Animate x movement
-        self.play(
-            self.x_tracker.animate.set_value(target_x),
-            run_time=3,
-            rate_func=linear
-        )
-        self.wait(1)
+    def animate_scene_with_zoom(self, target_x, target_delta, time_factor=1.0):
+            """
+            Animates scene with x movement and delta change, including zoom functionality
+            Args:
+                target_x (float): Target value for x_tracker
+                target_delta (float): New delta value to set
+            """
+            # Animate x movement
+            self.play(
+                self.x_tracker.animate.set_value(target_x),
+                run_time=3 * time_factor,
+                rate_func=linear
+            )
+            self.wait(1* time_factor)
 
-        self.activate_zooming(animate=False)
-        self.zoomed_camera.frame.set_stroke(width=0)
-        self.zoomed_camera.frame.add_updater(
-            lambda f: f.move_to(self.axes.coords_to_point(self.x_tracker.get_value(), self.func(self.x_tracker.get_value())))
-        )
-        self.play(
-            self.zoomed_camera.frame.animate.set_stroke(width=3),
-        )
-        self.wait(2)
+            self.activate_zooming(animate=False)
+            self.zoomed_camera.frame.set_stroke(width=0)
+            self.zoomed_camera.frame.add_updater(
+                lambda f: f.move_to(self.axes.coords_to_point(self.x_tracker.get_value(), self.func(self.x_tracker.get_value())))
+            )
+            self.play(
+                self.zoomed_camera.frame.animate.set_stroke(width=3),
+            )
+            self.wait(2* time_factor)
 
-        # Show box first
-        self.play(self.delta_text_box.animate.set_stroke(opacity=1))
-        # Animate delta movement
-        self.play(
-            self.delta_tracker.animate.set_value(target_delta),
-            run_time=3,
-            rate_func=linear
-        )
-        self.wait(2)
+            # Show box first
+            self.play(self.delta_text_box.animate.set_stroke(opacity=1))
+            # Animate delta movement
+            self.play(
+                self.delta_tracker.animate.set_value(target_delta),
+                run_time=3 * time_factor,
+                rate_func=linear
+            )
+            self.wait(2 * time_factor)
 
-        # Cleanup zoom
-        self.zoomed_camera.frame.clear_updaters()
-        self.remove(self.zoomed_display, self.zoomed_camera.frame)
-        self.play(self.delta_text_box.animate.set_stroke(opacity=0))
+            # Cleanup zoom
+            self.zoomed_camera.frame.clear_updaters()
+            self.remove(self.zoomed_display, self.zoomed_camera.frame)
+            self.play(self.delta_text_box.animate.set_stroke(opacity=0))
 
-        self.wait(2)
+            self.wait(2 * time_factor)
 
     def construct(self):
         # Background settings
@@ -189,12 +189,12 @@ class gleichmassigStetigkeitTwoThree(ZoomedScene):
         self.add(highlighted_graph, in_Schnitt)
         
         #Scene 1:
-        self.animate_scene_with_zoom(target_x=1.10, target_delta=0.33)
+        self.animate_scene_with_zoom(target_x=1.10, target_delta=0.33, time_factor=1.0)
 
         #Scene 2:
-        self.animate_scene_with_zoom(target_x= 0.85, target_delta=0.20)
+        self.animate_scene_with_zoom(target_x= 0.85, target_delta=0.20, time_factor=1.0)
 
         #Scene 3:
-        self.animate_scene_with_zoom(target_x= 0.60, target_delta=0.09)
+        self.animate_scene_with_zoom(target_x= 0.60, target_delta=0.09, time_factor=1.0)
 
 
