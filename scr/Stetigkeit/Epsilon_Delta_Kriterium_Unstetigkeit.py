@@ -1,7 +1,7 @@
 from manim import *
 GLOBAL_DELTA = 0.7
 
-class EpsilonDeltaKriteriumUnstetigkeitOne(ZoomedScene):
+class EpsilonDeltaKriteriumUnstetigkeit(ZoomedScene):
     def construct(self):
 
          # Background grid
