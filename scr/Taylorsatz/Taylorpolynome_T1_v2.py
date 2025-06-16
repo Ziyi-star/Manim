@@ -21,6 +21,8 @@ class TaylorpolynomeT1Version2(ZoomedScene):
             y_range=[0, 8, 1],
             axis_config={"include_numbers": True}
         ).add_coordinates()
+        # Create a label "0" at the origin
+        zero_label = MathTex("0").next_to(axes.c2p(0, 0), DOWN, buff=0.1)
 
                 
         legend = Rectangle(
@@ -81,7 +83,7 @@ class TaylorpolynomeT1Version2(ZoomedScene):
 
         
         # Animate
-        self.add(grid, axes)
+        self.add(grid, axes, zero_label)
         self.play(Create(point))
         self.play(Create((graph_exp), run_time =2.0))
         self.play(Create(legend), run_time=1.0)
@@ -97,9 +99,8 @@ class TaylorpolynomeT1Version2(ZoomedScene):
         self.play(FadeIn(highlighted_regions_rest_1), run_time=2.0)
         self.play(FadeIn(label_tolerance), run_time=1.0)
         self.play(Create(vline_left), Create(vline_right), run_time=2.0)
-        self.wait(2)
         self.play(FadeIn(highlighted_regions_taylor_1, run_time =2.0))
-        self.wait(2)
+        self.wait(1)
         # todo: zoom in on the highlighted regions
         self.play(self.camera.frame.animate.scale(1/3).move_to(axes.c2p(0, 0)))  # Zoom in
         self.wait(5)
