@@ -100,3 +100,10 @@ class TaylorpolynomeT1Version2(ZoomedScene):
         self.wait(2)
         self.play(FadeIn(highlighted_regions_taylor_1, run_time =2.0))
         self.wait(2)
+        # todo: zoom in on the highlighted regions
+        self.play(self.camera.frame.animate.scale(1/3).move_to(axes.c2p(0, 0)))  # Zoom in
+        self.wait(5)
+         # Reset the camera to its original position
+        self.play(self.camera.frame.animate.scale(3).move_to(ORIGIN))  # Zoom out
+        self.wait(2)
+       
