@@ -31,20 +31,20 @@ class TaylorpolynomeT2V2(ZoomedScene):
         graph_exp = axes.plot(exp_func, color=WHITE, x_range=[-2.0, 2.0])
         label_exp = MathTex("f(x) = e^x", color=WHITE).to_corner(UP + LEFT*1.5).scale(0.7)
 
-        # Taylorpolynom_2 Grad = 1 + x + x^2/2
-        def t_2(x):
-            return 1 + x + (x**2) / 2
-        graph_t2 = axes.plot(t_2, color=BLUE, x_range=[-2.0, 2.0])
-        label_t2 = MathTex("T_2(x) = 1 + x + \\frac{x^2}{2}", color=BLUE).next_to(label_exp, DOWN).scale(0.7)
-        
-        # Restglied
-        def r_2(x):
-            return abs(exp_func(x) - (t_2(x)))
-        graph_r2 = axes.plot(r_2, color=ORANGE, x_range=[-2.0, 2.0])
-        label_r2 = MathTex(r"R_2(x) = |f(x) - T_2(x)|", color=ORANGE).next_to(label_t2, DOWN).scale(0.7)
+        # Taylorpolynom_3 Grad = 1 + x + x^2/2 + x^3/6
+        def t_3(x):
+            return 1 + x + (x**2) / 2 + (x**3) / 6
+        graph_t3 = axes.plot(t_3, color=BLUE, x_range=[-2.0, 2.0])
+        label_t3 = MathTex("T_3(x) = 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6}", color=BLUE).next_to(label_exp, DOWN).scale(0.7)
 
-        #Tolerenz = 0.1, Highlight regions where |R2(x)| < 0.1
-        xs_within = [x for x in np.linspace(-2.0, 2.0, 100) if abs(r_2(x)) < 0.1]
+        # Restglied
+        def r_3(x):
+            return abs(exp_func(x) - (t_3(x)))
+        graph_r3 = axes.plot(r_3, color=ORANGE, x_range=[-2.0, 2.0])
+        label_r3 = MathTex(r"R_3(x) = |f(x) - T_3(x)|", color=ORANGE).next_to(label_t3, DOWN).scale(0.7)
+
+        #Tolerenz = 0.1, Highlight regions where |R3(x)| < 0.1
+        xs_within = [x for x in np.linspace(-2.0, 2.0, 100) if abs(r_3(x)) < 0.1]
         if xs_within:
             left_x, right_x = min(xs_within), max(xs_within)
             mid_x = (left_x + right_x) / 2
@@ -68,7 +68,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
         label_left_x.next_to(arrow_left_x.get_start(), DOWN, buff=0.2)
         label_right_x.next_to(arrow_right_x.get_start(), DOWN, buff=0.2)
 
-        label_x0 = MathTex("x_0 = 0", color=WHITE).next_to(label_r2, DOWN).scale(0.7)
+        label_x0 = MathTex("x_0 = 0", color=WHITE).next_to(label_r3, DOWN).scale(0.7)
         x_tracker = ValueTracker(left_x)
         #Labels
         label_x = always_redraw(
@@ -77,11 +77,11 @@ class TaylorpolynomeT2V2(ZoomedScene):
                         .scale(0.7)
                         .next_to(label_x0, DOWN)
         )
-        label_r2_wert = always_redraw(
+        label_r3_wert = always_redraw(
             lambda: MathTex(
-                f"={(r_2(x_tracker.get_value())):.3f}"
+                f"={(r_3(x_tracker.get_value())):.3f}"
             ).set_color(ORANGE)
-            .next_to(label_r2, RIGHT,buff=0.01).scale(0.7)
+            .next_to(label_r3, RIGHT,buff=0.01).scale(0.7)
         )
         
         # Line on x achse and area between curves
@@ -97,7 +97,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
                 lambda: axes.get_area(
                     graph_exp,
                     x_range=[left_x, x_tracker.get_value()],
-                    bounded_graph=graph_t2,
+                    bounded_graph=graph_t3,
                     color=color,
                     opacity=0.7,
                 )
@@ -105,7 +105,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
             line_vertical = always_redraw(
                 lambda: Line(
                     axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),
-                    axes.c2p(x_tracker.get_value(), t_2(x_tracker.get_value())),
+                    axes.c2p(x_tracker.get_value(), t_3(x_tracker.get_value())),
                     color=RED,
                     stroke_width=3.0,
                 )
@@ -115,7 +115,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
             arrow_below_line = always_redraw(
                 lambda: Arrow(
                     start=axes.c2p(x_tracker.get_value(), -0.5),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),      # End at the x-axis
+                    end=axes.c2p(x_tracker.get_value(), 0),      # End at the x-axis
                     color=ORANGE
                 )
             )
@@ -139,7 +139,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
                 lambda: Polygon(
                     *(
                         [axes.c2p(x, exp_func(x)) for x in np.linspace(left_x, x_tracker.get_value(), 200)] +
-                        [axes.c2p(x, t_2(x)) for x in np.linspace(x_tracker.get_value(), left_x, 200)]
+                        [axes.c2p(x, t_3(x)) for x in np.linspace(x_tracker.get_value(), left_x, 200)]
                     ),
                     color=color,
                     fill_color=color,
@@ -150,7 +150,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
             line_vertical = always_redraw(
                 lambda: Line(
                     axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),
-                    axes.c2p(x_tracker.get_value(), t_2(x_tracker.get_value())),
+                    axes.c2p(x_tracker.get_value(), t_3(x_tracker.get_value())),
                     color=RED,
                     stroke_width=3.0,
                 )
@@ -160,7 +160,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
             arrow_below_line = always_redraw(
                 lambda: Arrow(
                     start=axes.c2p(x_tracker.get_value(), -0.5),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),      # End at the x-axis
+                    end=axes.c2p(x_tracker.get_value(), 0),      # End at the x-axis
                     color=ORANGE
                 )
             )
@@ -176,17 +176,17 @@ class TaylorpolynomeT2V2(ZoomedScene):
         self.play(Create((graph_exp), run_time =2.0))
         self.play(FadeIn(label_exp), run_time=1.0)
         #self.wait(1)
-        self.play(Create(graph_t2), run_time =2.0)
-        self.play(FadeIn(label_t2), run_time=1.0)
+        self.play(Create(graph_t3), run_time =2.0)
+        self.play(FadeIn(label_t3), run_time=1.0)
         #self.wait(2)
-        self.play(Create(graph_r2), run_time=2.0)
-        self.play(FadeIn(label_r2), run_time=1.0)
+        self.play(Create(graph_r3), run_time=2.0)
+        self.play(FadeIn(label_r3), run_time=1.0)
         #self.wait(2)
         self.add(label_x0)
         self.add(label_x)
-        self.add(label_r2_wert)
+        self.add(label_r3_wert)
 
-        # Scene 1: Animate x_tracker to the right_x value with r_2 < 0.1
+        # Scene 1: Animate x_tracker to the right_x value with r_3 < 0.1
         line_on_x_achse, area_between_curves,line_vertical, arrow_below_line, label_rn = create_highlighted_elements(left_x, GREEN)
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.play(x_tracker.animate.set_value(right_x), run_time=10.0, rate=linear)
@@ -201,7 +201,7 @@ class TaylorpolynomeT2V2(ZoomedScene):
         self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
         self.wait(2)
         # remove the highlighted elements
-        self.remove(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
+        self.remove(line_on_x_achse, area_between_curves, line_vertical)
         self.wait(1)
         #Scene 2: Animate x_tracker with r_2 > 0.1 left area
         x_tracker = ValueTracker(left_x)
