@@ -1,7 +1,7 @@
 from manim import *
 from matplotlib.pyplot import axes
 
-class TaylorpolynomeT2V2(ZoomedScene):
+class TaylorpolynomeT3V2(ZoomedScene):
     def construct(self):
         # Background grid
         grid = NumberPlane(
@@ -30,12 +30,14 @@ class TaylorpolynomeT2V2(ZoomedScene):
         
         graph_exp = axes.plot(exp_func, color=WHITE, x_range=[-2.0, 2.0])
         label_exp = MathTex("f(x) = e^x", color=WHITE).to_corner(UP + LEFT*1.5).scale(0.7)
+        label_graph_exp = axes.get_graph_label(graph_exp, label='f(x)', direction=UP).scale(0.7)
 
-        # Taylorpolynom_3 Grad = 1 + x + x^2/2 + x^3/6
+        # Taylorpolynom_3 Grad
         def t_3(x):
             return 1 + x + (x**2) / 2 + (x**3) / 6
         graph_t3 = axes.plot(t_3, color=BLUE, x_range=[-2.0, 2.0])
         label_t3 = MathTex("T_3(x) = 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6}", color=BLUE).next_to(label_exp, DOWN).scale(0.7)
+        #label_graph_t3 = axes.get_graph_label(graph_t3, label='T_3(x)', direction=LEFT + DOWN).scale(0.7)
 
         # Restglied
         def r_3(x):
@@ -114,8 +116,8 @@ class TaylorpolynomeT2V2(ZoomedScene):
              # Create an arrow pointing to the vertical line
             arrow_below_line = always_redraw(
                 lambda: Arrow(
-                    start=axes.c2p(x_tracker.get_value(), -0.5),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), 0),      # End at the x-axis
+                    start=axes.c2p(x_tracker.get_value(), (t_3(x_tracker.get_value())-1)),  # Start below the x-axis
+                    end=axes.c2p(x_tracker.get_value(), t_3(x_tracker.get_value())),      # End at the x-axis
                     color=ORANGE
                 )
             )
@@ -159,8 +161,8 @@ class TaylorpolynomeT2V2(ZoomedScene):
             # Create an arrow pointing to the vertical line
             arrow_below_line = always_redraw(
                 lambda: Arrow(
-                    start=axes.c2p(x_tracker.get_value(), -0.5),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), 0),      # End at the x-axis
+                    start=axes.c2p(x_tracker.get_value(), (exp_func(x_tracker.get_value())-1)),  # Start below the x-axis
+                    end=axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),      # End at the x-axis
                     color=ORANGE
                 )
             )
@@ -175,9 +177,11 @@ class TaylorpolynomeT2V2(ZoomedScene):
         self.add(grid, axes,zero_label)
         self.play(Create((graph_exp), run_time =2.0))
         self.play(FadeIn(label_exp), run_time=1.0)
+        self.add(label_graph_exp)
         #self.wait(1)
         self.play(Create(graph_t3), run_time =2.0)
         self.play(FadeIn(label_t3), run_time=1.0)
+        #self.add(label_graph_t3)
         #self.wait(2)
         self.play(Create(graph_r3), run_time=2.0)
         self.play(FadeIn(label_r3), run_time=1.0)
@@ -195,15 +199,15 @@ class TaylorpolynomeT2V2(ZoomedScene):
         self.add(arrow_left_x, label_left_x, arrow_right_x, label_right_x)
         self.wait(1)
         #zoom in on the highlighted regions
-        self.play(self.camera.frame.animate.scale(1/2).move_to(axes.c2p(mid_x, 0)))  # Zoom in
+        self.play(self.camera.frame.animate.scale(1/1.5).move_to(axes.c2p(mid_x, 0)))  # Zoom in
         self.wait(5)
         # Reset the camera to its original position
-        self.play(self.camera.frame.animate.scale(2).move_to(ORIGIN))  # Zoom out
+        self.play(self.camera.frame.animate.scale(1.5).move_to(ORIGIN))  # Zoom out
         self.wait(2)
         # remove the highlighted elements
-        self.remove(line_on_x_achse, area_between_curves, line_vertical)
+        self.remove(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.wait(1)
-        #Scene 2: Animate x_tracker with r_2 > 0.1 left area
+        #Scene 2: Animate x_tracker with r_3 > 0.1 left area
         x_tracker = ValueTracker(left_x)
         line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(left_x, RED_B)
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
@@ -211,9 +215,9 @@ class TaylorpolynomeT2V2(ZoomedScene):
         self.wait(2)
         self.remove(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.wait(1)
-        # Scene 3: Animate x_tracker with r_2 > 0.1 right area
+        # Scene 3: Animate x_tracker with r_3 > 0.1 right area
         x_tracker = ValueTracker(right_x)
-        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(right_x, RED_B)
+        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements(right_x, RED_B)
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.play(x_tracker.animate.set_value(2.0), run_time=10.0, rate=linear)
         self.wait(2)
