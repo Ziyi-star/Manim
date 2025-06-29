@@ -32,7 +32,7 @@ class NullstellenHerleitung(Scene):
 
         # Plot the function
         graph = axes.plot(func, x_range=[-3, 3], color=BLUE)
-        graph_label = axes.get_graph_label(
+        label_graph = axes.get_graph_label(
             graph, 
             label="f(x)", 
             x_val=3.2,  # Position where label appears
@@ -58,8 +58,8 @@ class NullstellenHerleitung(Scene):
         )
         
         # Add labels
-        xn_label = MathTex(r"\mathbf{x_n}", color=YELLOW).next_to(axes.c2p(xn, 0), DOWN).scale(0.6)
-        fxn_label = MathTex("f(x_n)", color=WHITE).next_to(axes.c2p(0, func(xn)), RIGHT).scale(0.6)
+        label_xn = MathTex(r"\mathbf{x_n}", color=YELLOW).next_to(axes.c2p(xn, 0), DOWN).scale(0.6)
+        label_fxn = MathTex("f(x_n)", color=WHITE).next_to(axes.c2p(0, func(xn)), RIGHT).scale(0.6)
 
         # Define derivative function
         def func_derivative(x):
@@ -80,17 +80,31 @@ class NullstellenHerleitung(Scene):
             end=axes.c2p(x2, y2),
             color=ORANGE
         )
-        tangent_label = MathTex("T(x)", color=ORANGE).next_to(
+        label_tangent = MathTex("T(x)", color=ORANGE).next_to(
             axes.c2p(3, func(xn) + slope * (3 - xn)),  # Position on tangent line
-            UP,  # Label appears above the tangent line
+            DOWN,  # Label appears below the tangent line
         ).scale(0.6)
 
         # Add point and label for x_{n+1}
         xn_next = -2.4
-        point_zero = Dot(axes.c2p(xn_next, 0), color=RED).scale(0.6)
+        point_zero_approximate = Dot(axes.c2p(xn_next, 0), color=RED).scale(0.6)
+        label_xn_zero_approximate = MathTex(r"\mathbf{x_{n+1}}", color=RED).next_to(axes.c2p(xn_next, 0), DOWN).scale(0.6)
 
-        xn_zero_label = MathTex(r"\mathbf{x_{n+1}}", color=RED).next_to(axes.c2p(xn_next, 0), DOWN).scale(0.6)
+        point_zero = Dot(axes.c2p(-1.76, 0), color=RED).scale(0.6)
 
+        # Beschriftung in Rectangle
+        label_fxn_beschriftung = MathTex("f(x) = x^3 - 2x + 2", color=BLUE).scale(0.4).move_to(axes.c2p(-3, 20))
+        label_xn_beschriftung = MathTex(r"\mathbf{x_n} = -1,2", color=YELLOW).scale(0.4).next_to(label_fxn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
+        label_tn_beschriftung = MathTex(
+            r"T(x): \text{ Tangente bei } x = -1{,}2", 
+            color=ORANGE
+        ).scale(0.4).next_to(label_xn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
+        label_x_zero_beschriftung = MathTex(
+            r"\text{Nullstelle } x = -1{,}7693", 
+            color=RED
+        ).scale(0.4).next_to(label_tn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
+        labels_group = VGroup(label_fxn_beschriftung, label_xn_beschriftung, label_tn_beschriftung, label_x_zero_beschriftung)
+        label_rect = SurroundingRectangle(labels_group, color=WHITE, buff=0.2)
 
         # Texts
         title = Tex("Newton Verfahren:", font_size=36).to_edge(LEFT * 1.5 + UP*1.5)
@@ -103,51 +117,63 @@ class NullstellenHerleitung(Scene):
         eq2 = MathTex(
             "T(x)", "=", "0",
             color=WHITE
-        ).scale(0.6).next_to(eq1, DOWN,buff=0.5)
+        ).scale(0.6).next_to(eq1, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         eq3 = MathTex(
             "f(x_n)", "+", "f'(x_n)", "(x-x_n)", "=", "0",
             color=WHITE
-        ).scale(0.6).next_to(eq2, DOWN,buff=0.5)
+        ).scale(0.6).next_to(eq2, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         eq4 = MathTex(
             "x", "-", "x_n", "=",  "-", "\\frac{f(x_n)}{f'(x_n)}",
             color=WHITE
-        ).scale(0.6).next_to(eq3, DOWN,buff=0.5)
+        ).scale(0.6).next_to(eq3, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         eq5 = MathTex(
             "x", "=", "x_{n+1}",
             color=WHITE
-        ).scale(0.6).next_to(eq4, DOWN,buff=0.5)
+        ).scale(0.6).next_to(eq4, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         eq6 = MathTex(
             "x_{n+1}", "=", "x_n", "-", "\\frac{f(x_n)}{f'(x_n)}",
             color=WHITE
-        ).scale(0.6).next_to(eq5, DOWN,buff=0.5)
+        ).scale(0.6).next_to(eq5, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         # Add text and graph to the scene
         self.add(grid, title, axes)
         self.play(Create(graph), run_time=1)
-        self.play(Write(graph_label), run_time=1)
+        self.play(Write(label_graph), run_time=1)
+        self.add(label_rect)
+        self.play(Create(label_fxn_beschriftung), run_time=1)
         self.wait(1)
         self.play(Create(point), run_time=1)
         self.play(Create(vertical_line), run_time=1)
-        self.play(Write(xn_label), run_time=1)
+        self.play(Write(label_xn), run_time=1)
+        self.add(label_xn_beschriftung)
         self.play(Create(horizontal_line), run_time=1)
-        self.play(Write(fxn_label), run_time=1)
+        self.play(Write(label_fxn), run_time=1)
         self.wait(1)
         self.play(Create(tangent_line), run_time=1)
-        self.play(Write(tangent_label), run_time=1)
+        self.play(Write(label_tangent), run_time=1)
+        self.add(label_tn_beschriftung)
+        self.wait(1)
+        self.play(Create(point_zero_approximate), run_time=1)
+        self.play(Write(label_xn_zero_approximate), run_time=1)
         self.wait(1)
         self.play(Create(point_zero), run_time=1)
-        self.play(Write(xn_zero_label), run_time=1)
+        self.add(label_x_zero_beschriftung)
         self.wait(1)
 
         # Add equations to the scene
         self.play(Write(eq1), run_time=2)
+        self.wait(1)
         self.play(Write(eq2), run_time=2)
+        self.wait(1)
         self.play(Write(eq3), run_time=2)
+        self.wait(1)
         self.play(Write(eq4), run_time=2)
+        self.wait(1)
         self.play(Write(eq5), run_time=2)
+        self.wait(1)
         self.play(Write(eq6), run_time=2)
         self.wait(2)
