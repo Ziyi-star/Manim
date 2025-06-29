@@ -16,10 +16,11 @@ class NullstellenHerleitung(Scene):
             },
         )
 
+        # Funktion Animation
         # Create axes for the graph on the right
         axes = Axes(
-            x_range=[-3, 3.5, 1],
-            y_range=[-12, 12.5, 2.5],
+            x_range=[-3, 3.2, 1],
+            y_range=[-25, 25, 5],
             axis_config={"include_numbers": True}
         ).scale(0.75).to_edge(LEFT, buff=5)
 
@@ -28,8 +29,11 @@ class NullstellenHerleitung(Scene):
             return x**3 - 2*x + 2
 
         # Plot the function
-        graph = axes.plot(func, x_range=[-2.6, 2.6], color=BLUE)
+        graph = axes.plot(func, x_range=[-3, 3], color=BLUE)
+
+        # Texts
+        title = Tex("Newton Verfahren:", font_size=36).to_edge(LEFT + UP*2)
 
         # Add text and graph to the scene
-        self.add(grid, axes, graph)
+        self.add(grid, title, axes, graph)
         self.wait(1)
