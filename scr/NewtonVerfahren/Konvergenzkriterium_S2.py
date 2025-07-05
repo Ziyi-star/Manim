@@ -54,6 +54,7 @@ class KonvergenzkriteriumS2(Scene):
             color=BLUE,
             use_smoothing=False,
         )
+        label_eta_graph = axes.get_graph_label(eta_graph, label='\\eta(x)', x_val=3, direction=UP)
 
         # Define shaded region: η(x) < 1
         def eta_clipped(x):
@@ -69,6 +70,7 @@ class KonvergenzkriteriumS2(Scene):
             x_range=[-3, 3],
             color=GREEN,
         )
+ 
 
         # Generate shaded rectangles under shaded_graph
         shaded_area = axes.get_riemann_rectangles(
@@ -88,12 +90,76 @@ class KonvergenzkriteriumS2(Scene):
             color=RED,
         )
 
+        # Create green line segments on x-axis for regions where η(x) < 1
+        x_values = np.linspace(-3, 3, 1000)
+        green_intervals = [(x1, x2) for x1, x2 in zip(x_values[:-1], x_values[1:]) 
+                    if eta(x1) < 1 and eta(x2) < 1]
+        red_intervals = [(x1, x2) for x1, x2 in zip(x_values[:-1], x_values[1:]) 
+                if eta(x1) >= 1 and eta(x2) >= 1]
+
+        x_axis_green_highlights = VGroup(*[
+            Line(
+                start=axes.c2p(interval[0], 0),
+                end=axes.c2p(interval[1], 0),
+                color=GREEN,
+                stroke_width=5
+            )
+            for interval in green_intervals
+        ])
+
+        x_axis_red_highlights = VGroup(*[
+            Line(
+                start=axes.c2p(interval[0], 0),
+                end=axes.c2p(interval[1], 0),
+                color=RED,
+                stroke_width=5
+            )
+            for interval in red_intervals
+        ])
+
+        # Create labels for specific x-values
+        x_points = [-1.44, -0.22, 0.32, 1.47]
+        x_dots = VGroup(*[
+            Dot(
+                axes.c2p(x, 0),
+                color=YELLOW,
+                radius=0.05
+            )
+            for x in x_points
+        ])
+        x_labels = VGroup(*[
+            MathTex(f"{x:.2f}", color=WHITE)
+            .scale(0.6)
+            .next_to(axes.c2p(x, 0), DOWN, buff=0.2)
+            for x in x_points
+        ])
+
+        #labels
+        convergence_label = MathTex(
+            r"\eta(x) < 1:", r"\text{ Newton Verfahren}", r"\\\text{ konvergiert lokal}",
+            color=GREEN
+        ).scale(0.6).to_edge(LEFT + UP * 2)
+        divergence_label = MathTex(
+            r"\eta(x) \geq 1:", r"\text{ Newton Verfahren}", r"\\\text{ divergiert}",
+            color=RED
+        ).scale(0.6).next_to(convergence_label, DOWN, aligned_edge=LEFT)
+
 
         # Animation
         self.add(grid)
         self.play(Create(axes))
-        self.play(Create(eta_graph))
-        self.play(Create(shaded_area))
-        self.play(Create(h_line))
+        self.play(Create(eta_graph), run_time=2)
+        self.play(Write(label_eta_graph), run_time=1)
+        self.play(Create(h_line), run_time=2)
+        self.play(Create(shaded_area), run_time=2)
+        self.play(Create(x_axis_green_highlights), run_time=2)
+        self.play(Create(x_axis_red_highlights), run_time=2)
+        self.play(
+            Create(x_dots),
+            Write(x_labels),
+            run_time=2
+        )
+        #self.wait(2)
+        self.play(Write(convergence_label), run_time=2)
+        self.play(Write(divergence_label), run_time=2)
         self.wait(2)
-
