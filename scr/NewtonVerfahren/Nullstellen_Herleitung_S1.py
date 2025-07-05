@@ -1,4 +1,5 @@
 from manim import *
+from matplotlib import axes
 
 class NullstellenHerleitung(Scene):
     def construct(self):
@@ -86,24 +87,24 @@ class NullstellenHerleitung(Scene):
         ).scale(0.6)
 
         # Add point and label for x_{n+1}
-        xn_next = -2.4
-        point_zero_approximate = Dot(axes.c2p(xn_next, 0), color=RED).scale(0.6)
-        label_xn_zero_approximate = MathTex(r"\mathbf{x_{n+1}}", color=RED).next_to(axes.c2p(xn_next, 0), DOWN).scale(0.6)
+        x_n_plus_one = -2.4
+        point_zero_approximate = Dot(axes.c2p(x_n_plus_one, 0), color=YELLOW).scale(0.6)
+        label_xn_zero_approximate = MathTex(r"\mathbf{x_{n+1}}", color=YELLOW).next_to(axes.c2p(x_n_plus_one, 0), DOWN).scale(0.6)
 
-        point_zero = Dot(axes.c2p(-1.76, 0), color=RED).scale(0.6)
+        # ZERO POINT:
+        point_zero = MathTex(r"\mathbf{x}", color=RED).scale(0.7).move_to(axes.c2p(-1.76, 0))
 
         # Beschriftung in Rectangle
         label_fxn_beschriftung = MathTex("f(x) = x^3 - 2x + 2", color=BLUE).scale(0.4).move_to(axes.c2p(-3, 20))
-        label_xn_beschriftung = MathTex(r"\mathbf{x_n} = -1,2", color=YELLOW).scale(0.4).next_to(label_fxn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
         label_tn_beschriftung = MathTex(
-            r"T(x): \text{ Tangente bei } x = -1{,}2", 
+            r"T(x): \text{ Tangente bei } (x_n, f(x_n))", 
             color=ORANGE
-        ).scale(0.4).next_to(label_xn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
+        ).scale(0.4).next_to(label_fxn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
         label_x_zero_beschriftung = MathTex(
-            r"\text{Nullstelle } x = -1{,}7693", 
-            color=RED
+            r"x_{n+1}: T(x_{n+1}) = 0", 
+            color=YELLOW
         ).scale(0.4).next_to(label_tn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
-        labels_group = VGroup(label_fxn_beschriftung, label_xn_beschriftung, label_tn_beschriftung, label_x_zero_beschriftung)
+        labels_group = VGroup(label_fxn_beschriftung, label_tn_beschriftung, label_x_zero_beschriftung)
         label_rect = SurroundingRectangle(labels_group, color=WHITE, buff=0.2)
 
         # Texts
@@ -115,65 +116,72 @@ class NullstellenHerleitung(Scene):
         ).scale(0.6).next_to(title, DOWN, buff=0.5)
 
         eq2 = MathTex(
-            "T(x)", "=", "0",
+            "T(x_{n+1})", "=", "0",
             color=WHITE
         ).scale(0.6).next_to(eq1, DOWN,buff=0.5).align_to(eq1, LEFT)
 
-        eq3 = MathTex(
-            "f(x_n)", "+", "f'(x_n)", "(x-x_n)", "=", "0",
+        eq4 = MathTex(
+            "=>", "x_{n+1}", "-", "x_n", "=",  "-", "\\frac{f(x_n)}{f'(x_n)}",
             color=WHITE
         ).scale(0.6).next_to(eq2, DOWN,buff=0.5).align_to(eq1, LEFT)
 
-        eq4 = MathTex(
-            "x", "-", "x_n", "=",  "-", "\\frac{f(x_n)}{f'(x_n)}",
+        # Create equation with two parts to allow surrounding only the formula
+        eq6_part1 = MathTex(
+            "=>", 
             color=WHITE
-        ).scale(0.6).next_to(eq3, DOWN,buff=0.5).align_to(eq1, LEFT)
+        ).scale(0.6)
 
-        eq5 = MathTex(
-            "x", "=", "x_{n+1}",
-            color=WHITE
-        ).scale(0.6).next_to(eq4, DOWN,buff=0.5).align_to(eq1, LEFT)
-
-        eq6 = MathTex(
+        eq6_part2 = MathTex(
             "x_{n+1}", "=", "x_n", "-", "\\frac{f(x_n)}{f'(x_n)}",
             color=WHITE
-        ).scale(0.6).next_to(eq5, DOWN,buff=0.5).align_to(eq1, LEFT)
+        ).scale(0.6)
+
+        # Group and position the parts
+        eq6 = VGroup(eq6_part1, eq6_part2).arrange(RIGHT).next_to(eq4, DOWN, buff=0.5).align_to(eq1, LEFT)
+
+        # Create rectangle around only the formula part
+        rectangle_last = SurroundingRectangle(eq6_part2, color=WHITE, buff=0.2)
 
         # Add text and graph to the scene
         self.add(grid, title, axes)
-        self.play(Create(graph), run_time=1)
-        self.play(Write(label_graph), run_time=1)
+        self.play(Create(graph), run_time=2)
+        self.play(Write(label_graph), run_time=1.5)
         self.add(label_rect)
-        self.play(Create(label_fxn_beschriftung), run_time=1)
-        self.wait(1)
-        self.play(Create(point), run_time=1)
-        self.play(Create(vertical_line), run_time=1)
-        self.play(Write(label_xn), run_time=1)
-        self.add(label_xn_beschriftung)
-        self.play(Create(horizontal_line), run_time=1)
-        self.play(Write(label_fxn), run_time=1)
-        self.wait(1)
-        self.play(Create(tangent_line), run_time=1)
-        self.play(Write(label_tangent), run_time=1)
-        self.add(label_tn_beschriftung)
-        self.wait(1)
-        self.play(Create(point_zero_approximate), run_time=1)
-        self.play(Write(label_xn_zero_approximate), run_time=1)
-        self.wait(1)
-        self.play(Create(point_zero), run_time=1)
-        self.add(label_x_zero_beschriftung)
-        self.wait(1)
+        self.play(Create(label_fxn_beschriftung), run_time=1.5)
+        self.wait(1.5)
 
-        # Add equations to the scene
-        self.play(Write(eq1), run_time=2)
-        self.wait(1)
-        self.play(Write(eq2), run_time=2)
-        self.wait(1)
-        self.play(Write(eq3), run_time=2)
-        self.wait(1)
-        self.play(Write(eq4), run_time=2)
-        self.wait(1)
-        self.play(Write(eq5), run_time=2)
-        self.wait(1)
-        self.play(Write(eq6), run_time=2)
+        # Add point and lines
+        self.play(Create(point), run_time=1.5)
+        self.wait(0.5)
+        self.play(Create(vertical_line), run_time=1.5)
+        self.play(Write(label_xn), run_time=1.5)
+        self.wait(0.5)
+        self.play(Create(horizontal_line), run_time=1.5)
+        self.play(Write(label_fxn), run_time=1.5)
+        self.wait(1.5)
+
+        # Add tangent line and its label
+        self.play(Create(tangent_line), run_time=2)
+        self.play(Write(label_tangent), run_time=1.5)
+        self.add(label_tn_beschriftung)
+        self.wait(1.5)
+
+        # Add approximate zero point
+        self.play(Create(point_zero_approximate), run_time=1.5)
+        self.play(Write(label_xn_zero_approximate), run_time=1.5)
+        self.wait(1.5)
+        self.add(label_x_zero_beschriftung)
+        self.wait(1.5)
+        self.play(Create(point_zero), run_time=1.5)
+        self.wait(1.5)
+
+        # Add equations with longer animations
+        self.play(Write(eq1), run_time=3)
+        self.wait(1.5)
+        self.play(Write(eq2), run_time=3)
+        self.wait(1.5)
+        self.play(Write(eq4), run_time=3)
+        self.wait(1.5)
+        self.add(rectangle_last)
+        self.play(Write(eq6), run_time=3)
         self.wait(2)
