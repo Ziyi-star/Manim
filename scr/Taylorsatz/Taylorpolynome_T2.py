@@ -237,6 +237,7 @@ class TaylorpolynomeT2(ZoomedScene):
         line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements(right_x_bigger, RED, r"|R_n(x)| \geq 0.1")
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.play(x_tracker.animate.set_value(2.0), run_time=10.0, rate=linear)
+        self.play(x_tracker.animate.set_value(2.0), run_time=10.0, rate=linear)
         self.wait(2)
 
 

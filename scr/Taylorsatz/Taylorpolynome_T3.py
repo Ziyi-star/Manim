@@ -49,6 +49,8 @@ class TaylorpolynomeT3(ZoomedScene):
         if xs_within:
             left_x, right_x = xs_within[0], xs_within[-1]
             mid_x = (left_x + right_x) / 2
+            left_x_bigger = -1.32
+            right_x_bigger = 1.17
         
         # Create labels for left_x and right_x
         label_left_x = MathTex(f"{left_x:.2f}", color=GREEN).scale(0.7)
@@ -146,14 +148,14 @@ class TaylorpolynomeT3(ZoomedScene):
             # Create an arrow pointing to the vertical line
             arrow_below_line = always_redraw(
                 lambda: Arrow(
-                    start=axes.c2p(x_tracker.get_value(), (exp_func(x_tracker.get_value())-1)),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),      # End at the x-axis
+                    start=axes.c2p(x_tracker.get_value(), (t_3(x_tracker.get_value())+1)),  
+                    end=axes.c2p(x_tracker.get_value(), t_3(x_tracker.get_value())),      
                     color=color
                 )
             )
 
             label_rn = always_redraw(
-                lambda: MathTex(r"|R_n(x)| \geq 0.1", color=color).next_to(arrow_below_line.get_start(), DOWN, buff=0.2).scale(0.6)
+                lambda: MathTex(r"|R_n(x)| \geq 0.1", color=color).next_to(arrow_below_line.get_start(), UP, buff=0.2).scale(0.6)
             )
             return line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn
         
@@ -170,7 +172,7 @@ class TaylorpolynomeT3(ZoomedScene):
         )
         label_x = always_redraw(
             lambda: MathTex(f"x = {x_tracker.get_value():.2f}")
-                        .set_color(GREEN)
+                        .set_color(GREEN if left_x_bigger <= x_tracker.get_value() <= right_x_bigger else RED)
                         .scale(0.7)
                         .next_to(label_r3_wert, DOWN)
         )
@@ -222,9 +224,8 @@ class TaylorpolynomeT3(ZoomedScene):
         self.wait(1)
 
         #Scene 2: Animate x_tracker with r_3 > 0.1 left area
-        left_x_bigger = -1.32
         x_tracker = ValueTracker(left_x_bigger)
-        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(left_x_bigger, RED_B)
+        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(left_x_bigger, RED)
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.play(x_tracker.animate.set_value(-2.0), run_time=10.0, rate=linear)
         self.wait(2)
@@ -232,7 +233,6 @@ class TaylorpolynomeT3(ZoomedScene):
         self.wait(1)
 
         # Scene 3: Animate x_tracker with r_3 > 0.1 right area
-        right_x_bigger = 1.17
         x_tracker = ValueTracker(right_x_bigger)
         line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements(right_x_bigger, RED, r"|R_n(x)| \geq 0.1")
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
