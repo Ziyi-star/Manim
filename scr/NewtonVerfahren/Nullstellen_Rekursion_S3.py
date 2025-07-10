@@ -16,7 +16,6 @@ class NullstellenRekursion(Scene):
                 "stroke_opacity": 0.6,
             },
         )
-
         # Funktion Animation
         # Create axes for the graph on the right
         axes = Axes(
@@ -26,7 +25,6 @@ class NullstellenRekursion(Scene):
             x_length=12,
             axis_config={"include_numbers": True, "font_size": 24}
         ).scale(0.75).to_edge(LEFT, buff=5)
-
         # Define a function for the graph
         def func(x):
             return x**3 - 2*x + 2
@@ -72,6 +70,10 @@ class NullstellenRekursion(Scene):
         # Ensure column labels are visible
         for label in table.get_col_labels():
             label.set_opacity(1)
+        title = MathTex(
+            r"\text{Newton Iteration }(x_0 = -2.5)",
+            color=WHITE
+        ).scale(0.8).next_to(table, UP, buff=0.5).align_to(table, LEFT)
 
         def create_point_elements(x_val, fx_val, index):
             # Create point on function
@@ -80,13 +82,11 @@ class NullstellenRekursion(Scene):
                 color=GREEN,
                 radius=0.05
             )
-            
             # Create x-axis marker and label
             cross = MathTex(
-                r"\mathbf{x}",
+                r"\mathbf{X}",
                 color=GREEN
             ).scale(0.6).move_to(axes.c2p(x_val, 0))
-            
             label = MathTex(
                 f"x_{index}",
                 color=GREEN
@@ -104,14 +104,15 @@ class NullstellenRekursion(Scene):
         self.add(grid,axes)
         self.play(Create(graph), run_time=2)
         self.play(Write(label_graph), run_time=1.5)
-        #self.wait(1.5)
+        self.wait(1.5)
         # Show the table
+        self.add(title)
         self.play(FadeIn(table), run_time=2)
-        #self.wait(1.5)
-        #1. Scene
+        self.wait(1.5)
+        # 1. Scene
         x0_val = float(table_data[0][1]) 
         fx0_val = float(table_data[0][2]) 
-        x0_index = table.get_entries()[3]# Second row, first column
+        x0_index = table.get_entries()[3]   # Second row, first column
         x0_cell = table.get_entries()[4] 
         fx0_val_cell = table.get_entries()[5]
         point_on_graph, x0_cross, x0_label, x0_vertical_line = create_point_elements(
@@ -124,13 +125,13 @@ class NullstellenRekursion(Scene):
         self.play(fx0_val_cell.animate.set_opacity(1), run_time=1)
         self.play(Create(x0_vertical_line), run_time=1)
         self.play(Create(point_on_graph), run_time=1)
-        #self.wait(2)
+        self.wait(2)
         # 2. Scene
-        x1_val = float(table_data[1][1])  # -1.9851
-        fx1_val = float(table_data[1][2])  # -1.8521
-        x1_index = table.get_entries()[6]  # Second row, first column
-        x1_cell = table.get_entries()[7]   # Second row, second column
-        fx1_val_cell = table.get_entries()[8]  # Second row, third column
+        x1_val = float(table_data[1][1])  
+        fx1_val = float(table_data[1][2])  
+        x1_index = table.get_entries()[6]  
+        x1_cell = table.get_entries()[7]   
+        fx1_val_cell = table.get_entries()[8]  
         point_on_graph_1, x1_cross, x1_label, x1_vertical_line = create_point_elements(
             x1_val, fx1_val, 1
         )
@@ -141,13 +142,13 @@ class NullstellenRekursion(Scene):
         self.play(fx1_val_cell.animate.set_opacity(1), run_time=1)
         self.play(Create(x1_vertical_line), run_time=1)
         self.play(Create(point_on_graph_1), run_time=1)
-        #self.wait(2)
+        self.wait(2)
         # 3. Scene
-        x2_val = float(table_data[2][1])  # -1.7965
-        fx2_val = float(table_data[2][2])  # -0.2051
-        x2_index = table.get_entries()[9]  # Third row, first column
-        x2_cell = table.get_entries()[10]  # Third row, second column
-        fx2_val_cell = table.get_entries()[11]  # Third row, third column
+        x2_val = float(table_data[2][1])  
+        fx2_val = float(table_data[2][2])  
+        x2_index = table.get_entries()[9]  
+        x2_cell = table.get_entries()[10]  
+        fx2_val_cell = table.get_entries()[11]  
         point_on_graph_2, x2_cross, x2_label, x2_vertical_line = create_point_elements(
             x2_val, fx2_val, 2
         )
@@ -160,11 +161,11 @@ class NullstellenRekursion(Scene):
         self.play(Create(point_on_graph_2), run_time=1)
         self.wait(2)
         # 4. Scene
-        x3_val = float(table_data[3][1])  # -1.7698
-        fx3_val = float(table_data[3][2])  # -0.0038
-        x3_index = table.get_entries()[12]  # Fourth row, first column
-        x3_cell = table.get_entries()[13]   # Fourth row, second column
-        fx3_val_cell = table.get_entries()[14]  # Fourth row, third column
+        x3_val = float(table_data[3][1])  
+        fx3_val = float(table_data[3][2])  
+        x3_index = table.get_entries()[12]  
+        x3_cell = table.get_entries()[13]   
+        fx3_val_cell = table.get_entries()[14] 
         point_on_graph_3, x3_cross, x3_label, x3_vertical_line = create_point_elements(
             x3_val, fx3_val, 3
         )
@@ -206,12 +207,12 @@ class NullstellenRekursion(Scene):
         self.play(x7_index.animate.set_opacity(1), run_time=1)
         self.play(x7_cell.animate.set_opacity(1), run_time=1)
         self.play(fx7_val_cell.animate.set_opacity(1), run_time=1)
-        #self.wait(2)
+        self.wait(2)
         # Create root marker and label
         x7_val = float(table_data[7][1])
         x_root = MathTex(
-                r"\mathbf{x}",
-                color=GREEN
+                r"\mathbf{\boldsymbol{X}}",
+                color=RED
             ).scale(0.6).move_to(axes.c2p(x7_val, 0))
         x_root_label = MathTex(r"\text{root}", color=RED).scale(0.6).next_to(x_root, UP, buff=0.2)
         # Animate the root marker and label
@@ -220,5 +221,5 @@ class NullstellenRekursion(Scene):
             Write(x_root_label),
             run_time=2
         )
-        self.wait(1)
+        self.wait(2)
 

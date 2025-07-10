@@ -120,10 +120,15 @@ class NullstellenHerleitung(Scene):
             color=WHITE
         ).scale(0.6).next_to(eq1, DOWN,buff=0.5).align_to(eq1, LEFT)
 
+        eq3 = MathTex(
+            "=>",-"f(x_n)", "+", "f'(x_n)", "(x-x_n)","=", "0",
+            color=WHITE
+        ).scale(0.6).next_to(eq2, DOWN, buff=0.5).align_to(eq1, LEFT)
+
         eq4 = MathTex(
             "=>", "x_{n+1}", "-", "x_n", "=",  "-", "\\frac{f(x_n)}{f'(x_n)}",
             color=WHITE
-        ).scale(0.6).next_to(eq2, DOWN,buff=0.5).align_to(eq1, LEFT)
+        ).scale(0.6).next_to(eq3, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         # Create equation with two parts to allow surrounding only the formula
         eq6_part1 = MathTex(
@@ -179,6 +184,8 @@ class NullstellenHerleitung(Scene):
         self.play(Write(eq1), run_time=3)
         self.wait(1.5)
         self.play(Write(eq2), run_time=3)
+        self.wait(1.5)
+        self.play(Write(eq3), run_time=3)
         self.wait(1.5)
         self.play(Write(eq4), run_time=3)
         self.wait(1.5)
