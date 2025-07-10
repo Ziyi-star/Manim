@@ -48,6 +48,8 @@ class TaylorpolynomeT2(ZoomedScene):
         xs_within = [x for x in np.linspace(-2.0, 2.0, 1000) if abs(r_2(x)) < 0.1]
         if xs_within:
             left_x, right_x = xs_within[0], xs_within[-1]
+            left_x_bigger = -0.91
+            right_x_bigger = 0.79
             mid_x = (left_x + right_x) / 2
         
         # Create labels for left_x and right_x
@@ -146,14 +148,14 @@ class TaylorpolynomeT2(ZoomedScene):
             # Create an arrow pointing to the vertical line
             arrow_below_line = always_redraw(
                 lambda: Arrow(
-                    start=axes.c2p(x_tracker.get_value(), (exp_func(x_tracker.get_value())-1)),  # Start below the x-axis
-                    end=axes.c2p(x_tracker.get_value(), exp_func(x_tracker.get_value())),      # End at the x-axis
+                    start=axes.c2p(x_tracker.get_value(), (t_2(x_tracker.get_value())+1)),  
+                    end=axes.c2p(x_tracker.get_value(), t_2(x_tracker.get_value())),      
                     color=color
                 )
             )
 
             label_rn = always_redraw(
-                lambda: MathTex(r"|R_n(x)| \geq 0.1", color=color).next_to(arrow_below_line.get_start(), DOWN, buff=0.2).scale(0.6)
+                lambda: MathTex(r"|R_n(x)| \geq 0.1", color=color).next_to(arrow_below_line.get_start(), UP, buff=0.2).scale(0.6)
             )
             return line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn
         
@@ -170,9 +172,9 @@ class TaylorpolynomeT2(ZoomedScene):
         )
         label_x = always_redraw(
             lambda: MathTex(f"x = {x_tracker.get_value():.2f}")
-                        .set_color(GREEN)
-                        .scale(0.7)
-                        .next_to(label_r2_wert, DOWN)
+                .set_color(GREEN if left_x_bigger <= x_tracker.get_value() <= right_x_bigger else RED)
+                .scale(0.7)
+                .next_to(label_r2_wert, DOWN)
         )
         # Create a VGroup of the two labels
         labels_group = VGroup(label_r2_wert, label_x)
@@ -198,7 +200,7 @@ class TaylorpolynomeT2(ZoomedScene):
         self.play(Create(graph_r2), run_time=2.0)
         self.play(FadeIn(label_r2), run_time=1.0)
         self.add(label_graph_r2)
-        self.wait(2)
+        #self.wait(2)
         self.add(white_box)
         self.add(label_x)
         self.add(label_r2_wert)
@@ -211,7 +213,7 @@ class TaylorpolynomeT2(ZoomedScene):
         # Add labels to the scene
         self.add(arrow_left_x, label_left_x, arrow_right_x, label_right_x)
         self.wait(1)
-        #zoom in on the highlighted regions
+        # zoom in on the highlighted regions
         self.play(self.camera.frame.animate.scale(1/2).move_to(axes.c2p(mid_x, 0)))  # Zoom in
         self.wait(5)
         # Reset the camera to its original position
@@ -221,10 +223,9 @@ class TaylorpolynomeT2(ZoomedScene):
         self.remove(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.wait(1)
 
-        #Scene 2: Animate x_tracker with r_2 > 0.1 left area
-        left_x_bigger = -0.91
+        # Scene 2: Animate x_tracker with r_2 > 0.1 left area
         x_tracker = ValueTracker(left_x_bigger)
-        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(left_x_bigger, RED_B)
+        line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements_version_2(left_x_bigger, RED)
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
         self.play(x_tracker.animate.set_value(-2.0), run_time=10.0, rate=linear)
         self.wait(2)
@@ -232,7 +233,6 @@ class TaylorpolynomeT2(ZoomedScene):
         self.wait(1)
 
         # Scene 3: Animate x_tracker with r_2 > 0.1 right area
-        right_x_bigger = 0.79
         x_tracker = ValueTracker(right_x_bigger)
         line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn = create_highlighted_elements(right_x_bigger, RED, r"|R_n(x)| \geq 0.1")
         self.add(line_on_x_achse, area_between_curves, line_vertical, arrow_below_line, label_rn)
