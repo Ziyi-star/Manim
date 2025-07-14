@@ -88,8 +88,8 @@ class NullstellenHerleitung(Scene):
 
         # Add point and label for x_{n+1}
         x_n_plus_one = -2.4
-        point_zero_approximate = Dot(axes.c2p(x_n_plus_one, 0), color=YELLOW).scale(0.6)
-        label_xn_zero_approximate = MathTex(r"\mathbf{x_{n+1}}", color=YELLOW).next_to(axes.c2p(x_n_plus_one, 0), DOWN).scale(0.6)
+        point_zero_approximate = Dot(axes.c2p(x_n_plus_one, 0), color=GREEN).scale(0.6)
+        label_xn_zero_approximate = MathTex(r"\mathbf{x_{n+1}}", color=GREEN).next_to(axes.c2p(x_n_plus_one, 0), DOWN).scale(0.6)
 
         # ZERO POINT:
         point_zero = MathTex(r"\mathbf{x}", color=RED).scale(0.7).move_to(axes.c2p(-1.76, 0))
@@ -102,7 +102,7 @@ class NullstellenHerleitung(Scene):
         ).scale(0.4).next_to(label_fxn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
         label_x_zero_beschriftung = MathTex(
             r"x_{n+1}: T(x_{n+1}) = 0", 
-            color=YELLOW
+            color=GREEN
         ).scale(0.4).next_to(label_tn_beschriftung, DOWN, buff=0.1).align_to(label_fxn_beschriftung, LEFT)
         labels_group = VGroup(label_fxn_beschriftung, label_tn_beschriftung, label_x_zero_beschriftung)
         label_rect = SurroundingRectangle(labels_group, color=WHITE, buff=0.2)
@@ -121,7 +121,7 @@ class NullstellenHerleitung(Scene):
         ).scale(0.6).next_to(eq1, DOWN,buff=0.5).align_to(eq1, LEFT)
 
         eq3 = MathTex(
-            "=>",-"f(x_n)", "+", "f'(x_n)", "(x-x_n)","=", "0",
+            "=>", "f(x_n)", "+", "f'(x_n)", "(x_{n+1}-x_n)","=", "0",
             color=WHITE
         ).scale(0.6).next_to(eq2, DOWN, buff=0.5).align_to(eq1, LEFT)
 
