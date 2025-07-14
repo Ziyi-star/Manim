@@ -1,6 +1,6 @@
 from manim import *
 
-class KonvergenzkriteriumS2(Scene):
+class KonvergenzkriteriumS2MinusTwoFive(Scene):
 
     def construct(self):
          # Background grid
@@ -43,7 +43,7 @@ class KonvergenzkriteriumS2(Scene):
             y_range=[0, 4.5, 0.5],
             x_length=12,
             y_length=6,
-            axis_config={"include_numbers": True},
+            axis_config={"include_numbers": True, "font_size": 24},
             tips=True,
         ).shift(UP*0.5 + RIGHT*1)
  
@@ -128,11 +128,33 @@ class KonvergenzkriteriumS2(Scene):
             for x in x_points
         ])
         x_labels = VGroup(*[
-            MathTex(f"{x:.2f}", color=WHITE)
+            MathTex(r"\mathbf{" + f"{x:.2f}" + "}", color=YELLOW)  # Add \mathbf for bold text
             .scale(0.6)
             .next_to(axes.c2p(x, 0), DOWN, buff=0.2)
             for x in x_points
         ])
+
+        # TODO: 3 points to be highlighted if x0 = -2.5, 0, -0.5
+        # Highlight specific point: x0 = -2.5
+        x0 = -2.5
+
+        # Create a dot and label for x0
+        x0_dot = Dot(
+            axes.c2p(x0, 0),
+            color=RED,
+            radius=0.08
+        )
+        x0_label = MathTex(
+            r"\mathbf{" + f"{x0:.2f}" + "}",
+            color=RED
+        ).scale(0.6).next_to(axes.c2p(x0, 0), DOWN, buff=0.6)
+        x0_arrow = Arrow(
+            end=x0_dot.get_center(),
+            start=x0_label.get_top(),
+            color=RED,
+            buff=0.1,
+            max_tip_length_to_length_ratio=0.15
+        )
 
         #labels
         convergence_label = MathTex(
@@ -163,3 +185,11 @@ class KonvergenzkriteriumS2(Scene):
         self.play(Write(convergence_label), run_time=2)
         self.play(Write(divergence_label), run_time=2)
         self.wait(2)
+
+        # Highlight x0 point
+        self.play(Create(x0_dot), run_time=1)
+        self.play(Create(x0_arrow), run_time=1)
+        self.play(Write(x0_label), run_time=1)
+        self.wait(2)
+
+        
