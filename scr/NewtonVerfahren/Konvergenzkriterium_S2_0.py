@@ -156,14 +156,15 @@ class KonvergenzkriteriumS2Zero(Scene):
         )
 
         #labels
+        titel = MathTex(
+            r"\text{Konvergenzindikator }", 
+            r"\eta(x)", r"=", r"\frac{f(x) \cdot f''(x)}{(f'(x))^2}"
+            ).scale(0.8).to_edge(LEFT + UP * 2)
+
         convergence_label = MathTex(
             r"\eta(x) < 1:", r"\text{ Newton Verfahren}", r"\\\text{ konvergiert lokal}",
             color=GREEN
-        ).scale(0.6).to_edge(LEFT + UP * 2)
-        divergence_label = MathTex(
-            r"\eta(x) \geq 1:", r"\text{ Newton Verfahren}", r"\\\text{ divergiert}",
-            color=RED
-        ).scale(0.6).next_to(convergence_label, DOWN, aligned_edge=LEFT)
+        ).scale(0.6).next_to(titel, DOWN, buff=0.5)
 
 
         # Add all elements without animation
@@ -178,8 +179,8 @@ class KonvergenzkriteriumS2Zero(Scene):
             x_axis_red_highlights,
             x_dots,
             x_labels,
+            titel,
             convergence_label,
-            divergence_label
         )
 
         # Highlight x0 point

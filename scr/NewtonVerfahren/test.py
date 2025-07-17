@@ -1,4 +1,6 @@
 from manim import *
+from reactive_manim import *
+
 
 class EquationTransformTest(Scene):
     def construct(self):
