@@ -41,11 +41,11 @@ class NullstellenRekursionZero(Scene):
 
          # Table Data (same as in your image)
         table_data = [
-            ["0", "0.000000", "2.000000"],
-            ["1", "1.000000", "1.000000"],
-            ["2", "0.000000", "2.000000"],
-            ["3", "1.000000", "1.000000"],
-            ["4", "0.000000", "2.000000"],
+            ["0", "0.0000", "2.0000"],
+            ["1", "1.0000", "1.0000"],
+            ["2", "0.0000", "2.0000"],
+            ["3", "1.0000", "1.0000"],
+            ["4", "0.0000", "2.0000"],
         ]
 
         # Create Table
@@ -73,9 +73,18 @@ class NullstellenRekursionZero(Scene):
         for label in table.get_col_labels():
             label.set_opacity(1)
         title = MathTex(
-            r"\text{Newton Iteration }(x_0 = 0)",
+            r"\text{\textbf{$\mathbf{x_0} = 0$}}, \boldsymbol{\eta(x_0) < 1}",  # Added extra bold for x_0
             color=WHITE
         ).scale(0.8).next_to(table, UP, buff=0.5).align_to(table, LEFT)
+
+        fazit_1 = MathTex(
+            r"\text{$\eta(x_0) < 1$}", r"\text{ ist notwendig,}",
+            color=WHITE
+        ).scale(0.7).next_to(table, DOWN, buff=0.5).align_to(title, LEFT)
+        fazit_2 = MathTex(
+            r"\text{aber nicht hinreichend.}",
+            color=WHITE
+        ).scale(0.7).next_to(fazit_1, DOWN, buff=0.1).align_to(title, LEFT)
 
         def create_point_elements(x_val, fx_val, index):
             # Create point on function
@@ -88,12 +97,12 @@ class NullstellenRekursionZero(Scene):
             x_axis_point = Dot(
                 axes.c2p(x_val, 0),
                 color=YELLOW,
-                radius=0.05
+                radius=0.07
             )
             label = MathTex(
                 f"x_{index}",
                 color=GREEN
-            ).scale(0.5).next_to(x_axis_point, UP, buff=0.2)
+            ).scale(0.5).next_to(x_axis_point, DOWN, buff=0.2)
             
             # Create dashed vertical line
             vertical_line = DashedLine(
@@ -123,6 +132,7 @@ class NullstellenRekursionZero(Scene):
         )  
         self.play(x0_index.animate.set_opacity(1), run_time=1)
         self.play(x0_cell.animate.set_opacity(1), run_time=1)
+        self.play(FadeIn(x0_label), run_time=1)
         # one blink for x0_point
         self.play(FadeIn(x0_point), run_time=0.3)
         self.play(FadeOut(x0_point), run_time=0.3)
@@ -136,6 +146,7 @@ class NullstellenRekursionZero(Scene):
         self.play(Create(x0_vertical_line), run_time=1)
         self.play(Create(point_on_graph_x0), run_time=1)
         self.wait(2)
+        self.remove(x0_point, point_on_graph_x0, x0_vertical_line, x0_label)  
         # 2. Scene, row
         x1_val = float(table_data[1][1])  
         fx1_val = float(table_data[1][2])  
@@ -147,6 +158,7 @@ class NullstellenRekursionZero(Scene):
         )
         self.play(x1_index.animate.set_opacity(1), run_time=1)
         self.play(x1_cell.animate.set_opacity(1), run_time=1)
+        self.play(FadeIn(x1_label), run_time=1)
         self.play(FadeIn(x1_point), run_time=0.3)
         self.play(FadeOut(x1_point), run_time=0.3)
         self.play(FadeIn(x1_point), run_time=0.3)
@@ -158,6 +170,7 @@ class NullstellenRekursionZero(Scene):
         self.play(Create(x1_vertical_line), run_time=1)
         self.play(Create(point_on_graph_x1), run_time=1)
         self.wait(2)
+        self.remove(x1_point, point_on_graph_x1, x1_vertical_line, x1_label)  
         # 3. Scene,row
         x2_val = float(table_data[2][1])  
         fx2_val = float(table_data[2][2])  
@@ -169,8 +182,8 @@ class NullstellenRekursionZero(Scene):
         )
         self.play(x2_index.animate.set_opacity(1), run_time=1)
         self.play(x2_cell.animate.set_opacity(1), run_time=1)
-        # Blinking animation for x2_axis
-        self.remove(x0_point, point_on_graph_x0, x0_vertical_line)
+        self.play(FadeIn(x2_label), run_time=1)
+        # Blinking animation for x2_point
         self.play(FadeIn(x2_point), run_time=0.3)
         self.play(FadeOut(x2_point), run_time=0.3)
         self.play(FadeIn(x2_point), run_time=0.3)
@@ -182,6 +195,7 @@ class NullstellenRekursionZero(Scene):
         self.play(Create(x2_vertical_line), run_time=1)
         self.play(Create(point_on_graph_x2), run_time=1)
         self.wait(2)
+        self.remove(x2_point, point_on_graph_x2, x2_vertical_line, x2_label)  # Remove previous elements
         # 4. Scene,row
         x3_val = float(table_data[3][1])  
         fx3_val = float(table_data[3][2])  
@@ -194,7 +208,8 @@ class NullstellenRekursionZero(Scene):
         # Animate the elements
         self.play(x3_index.animate.set_opacity(1), run_time=1)
         self.play(x3_cell.animate.set_opacity(1), run_time=1)
-        self.remove(x1_point, point_on_graph_x1, x1_vertical_line)
+        self.play(FadeIn(x3_label), run_time=1)
+        # Blinking animation for x3_point
         self.play(FadeIn(x3_point), run_time=0.3)
         self.play(FadeOut(x3_point), run_time=0.3)
         self.play(FadeIn(x3_point), run_time=0.3)
@@ -208,6 +223,7 @@ class NullstellenRekursionZero(Scene):
         self.play(Create(x3_vertical_line), run_time=1)
         self.play(Create(point_on_graph_3), run_time=1)
         self.wait(2)
+        self.remove(x3_point, point_on_graph_3, x3_vertical_line, x3_label)  
         # 5. Scene, row
         x4_val = float(table_data[4][1])  
         fx4_val = float(table_data[4][2])  
@@ -217,11 +233,18 @@ class NullstellenRekursionZero(Scene):
         point_on_graph_4, x4_point, x4_label, x4_vertical_line = create_point_elements(
             x4_val, fx4_val, 4
         )
-
+        cells_to_highlight = VGroup(x3_cell, fx3_val_cell,x4_cell, fx4_val_cell)
+        highlight_rectangle = SurroundingRectangle(
+            cells_to_highlight,
+            color=GREEN,
+            buff=0.2,
+            stroke_width=5
+        )
         # Animate the elements
         self.play(x4_index.animate.set_opacity(1), run_time=1)
         self.play(x4_cell.animate.set_opacity(1), run_time=1)
-        self.remove(x2_point, point_on_graph_x2, x2_vertical_line)  # Remove previous elements
+        self.play(FadeIn(x4_label), run_time=1)
+        # Blinking animation for x4_point
         self.play(FadeIn(x4_point), run_time=0.3)
         self.play(FadeOut(x4_point), run_time=0.3)
         self.play(FadeIn(x4_point), run_time=0.3)
@@ -235,4 +258,16 @@ class NullstellenRekursionZero(Scene):
         self.play(Create(x4_vertical_line), run_time=1)
         self.play(Create(point_on_graph_4), run_time=1)
         self.wait(2)
-
+        self.remove(x4_point, point_on_graph_4, x4_vertical_line, x4_label)
+        # root
+        x_root_val = -1.7693
+        x_root = MathTex(
+                r"\mathbf{\boldsymbol{X}}",
+                color=RED
+            ).scale(0.6).move_to(axes.c2p(x_root_val, 0))
+        # Animate the root marker and label
+        self.play(Create(x_root), run_time=2)
+        self.play(Create(highlight_rectangle), run_time=2)
+        self.play(Write(fazit_1), run_time=1)
+        self.play(Write(fazit_2), run_time=1)
+        self.wait(2)
