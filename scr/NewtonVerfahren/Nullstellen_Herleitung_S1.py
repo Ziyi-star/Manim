@@ -1,5 +1,6 @@
 from manim import *
-from matplotlib import axes
+from reactive_manim import *
+
 
 class NullstellenHerleitung(Scene):
     def construct(self):
@@ -109,43 +110,26 @@ class NullstellenHerleitung(Scene):
 
         # Texts
         title = Tex("Newton Verfahren:", font_size=36).to_edge(LEFT * 1.5 + UP*1.5)
+
+        x_n = MathTex("x_n").set_color(YELLOW)
+        x_n_plus_1 = MathTex("x_{n+1}").set_color(GREEN)
         # Create equations
         eq1 = MathTex(
-            "T(x)", "=", "f(x_n)", "+", "f'(x_n)", "(x-x_n)",
+            "T(x)", "=", "f(x_n)", "+", "f'(x_n)", "(x-", "x_n", ")",
             color=WHITE
         ).scale(0.6).next_to(title, DOWN, buff=0.5)
 
+        # Set x_n to yellow
+        eq1[6].set_color(YELLOW)  # Set the standalone x_n to yellow
+
         eq2 = MathTex(
-            "T(x_{n+1})", "=", "0",
+            "T(", "x_{n+1}", ")", "=", "0",
             color=WHITE
-        ).scale(0.6).next_to(eq1, DOWN,buff=0.5).align_to(eq1, LEFT)
+        ).scale(0.6).next_to(eq1, DOWN, buff=0.5).align_to(eq1, LEFT)
 
-        eq3 = MathTex(
-            "=>", "f(x_n)", "+", "f'(x_n)", "(x_{n+1}-x_n)","=", "0",
-            color=WHITE
-        ).scale(0.6).next_to(eq2, DOWN, buff=0.5).align_to(eq1, LEFT)
+        # Set x_{n+1} to green
+        eq2[1].set_color(GREEN)
 
-        eq4 = MathTex(
-            "=>", "x_{n+1}", "-", "x_n", "=",  "-", "\\frac{f(x_n)}{f'(x_n)}",
-            color=WHITE
-        ).scale(0.6).next_to(eq3, DOWN,buff=0.5).align_to(eq1, LEFT)
-
-        # Create equation with two parts to allow surrounding only the formula
-        eq6_part1 = MathTex(
-            "=>", 
-            color=WHITE
-        ).scale(0.6)
-
-        eq6_part2 = MathTex(
-            "x_{n+1}", "=", "x_n", "-", "\\frac{f(x_n)}{f'(x_n)}",
-            color=WHITE
-        ).scale(0.6)
-
-        # Group and position the parts
-        eq6 = VGroup(eq6_part1, eq6_part2).arrange(RIGHT).next_to(eq4, DOWN, buff=0.5).align_to(eq1, LEFT)
-
-        # Create rectangle around only the formula part
-        rectangle_last = SurroundingRectangle(eq6_part2, color=WHITE, buff=0.2)
 
         # Add text and graph to the scene
         self.add(grid, title, axes)
@@ -185,10 +169,38 @@ class NullstellenHerleitung(Scene):
         self.wait(1.5)
         self.play(Write(eq2), run_time=3)
         self.wait(1.5)
-        self.play(Write(eq3), run_time=3)
-        self.wait(1.5)
-        self.play(Write(eq4), run_time=3)
-        self.wait(1.5)
-        self.add(rectangle_last)
-        self.play(Write(eq6), run_time=3)
+        eq3 = MathTex(
+            ["f(x_n)", "+", [ "f'(x_n)", "(", [x_n_plus_1, "-", x_n] , ")" ]],
+            "=", 
+            "0"
+        ).scale(0.6).next_to(eq2, DOWN, buff=0.5).align_to(eq1, LEFT)
+        self.play(Write(eq3), run_time=2)
+
+        f_xn = eq3[0][0]
+        eq3[0] = eq3[0][2]
+        eq3[2] = MathTex( "-", f_xn)
+
+        anim = TransformInStages.progress(eq3, lag_ratio=0.4)
+        anim.intercept(f_xn).set_animation(lambda source, target: Transform(source, target, path_arc=PI/2))
+        self.play(anim)
+        self.wait(1)
+
+        f_xn_prime = eq3[0][0]
+        eq3[0] = eq3[0][2]
+        eq3[2] = MathTex( "-", Fraction(eq3[2][1], f_xn_prime))
+
+        self.play(TransformInStages.progress(eq3, lag_ratio=0.4))
+        self.wait(1)
+
+        eq3[0] = eq3[0][0]
+        eq3[2] = MathTex(eq3[2], "+", x_n)
+
+        anim = TransformInStages.progress(eq3, lag_ratio=0.4)
+        anim.intercept(x_n).set_animation(lambda source, target: Transform(source, target, path_arc=PI/2))
+        self.play(anim)    
+        self.wait(2)
+
+        # Create rectangle around only the formula part
+        rectangle_last = SurroundingRectangle(eq3[2], color=WHITE, buff=0.1)
+        self.play(Create(rectangle_last), run_time=2)
         self.wait(2)
