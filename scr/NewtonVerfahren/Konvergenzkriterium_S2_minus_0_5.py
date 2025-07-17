@@ -54,7 +54,7 @@ class KonvergenzkriteriumS2MinusZeroFive(Scene):
             color=BLUE,
             use_smoothing=False,
         )
-        label_eta_graph = axes.get_graph_label(eta_graph, label='\\eta(x)', x_val=3, direction=UP)
+        label_eta_graph = axes.get_graph_label(eta_graph, label='\\eta(x)', x_val=1.2, direction=RIGHT)
 
         # Define shaded region: η(x) < 1
         def eta_clipped(x):
@@ -156,14 +156,16 @@ class KonvergenzkriteriumS2MinusZeroFive(Scene):
         )
 
         #labels
+        titel_1 = MathTex(
+            r"\text{Konvergenzindikator:}", 
+            ).scale(0.8).to_edge(LEFT + UP * 2)
+        titel_2 = MathTex(
+            r"\eta(x)", r"=", r"\left|\frac{f(x) \cdot f''(x)}{(f'(x))^2}\right|"
+        ).scale(0.8).next_to(titel_1, DOWN, buff=0.5)
         convergence_label = MathTex(
-            r"\eta(x) < 1:", r"\text{ Newton Verfahren}", r"\\\text{ konvergiert lokal}",
+            r"\\\text{Konvergenzbedingung: }",r"\eta(x) < 1", 
             color=GREEN
-        ).scale(0.6).to_edge(LEFT + UP * 2)
-        divergence_label = MathTex(
-            r"\eta(x) \geq 1:", r"\text{ Newton Verfahren}", r"\\\text{ divergiert}",
-            color=RED
-        ).scale(0.6).next_to(convergence_label, DOWN, aligned_edge=LEFT)
+        ).scale(0.6).next_to(titel_2, DOWN, buff=0.5)
 
 
         # Add all elements without animation
@@ -178,8 +180,9 @@ class KonvergenzkriteriumS2MinusZeroFive(Scene):
             x_axis_red_highlights,
             x_dots,
             x_labels,
+            titel_1,
+            titel_2,
             convergence_label,
-            divergence_label
         )
 
         # Highlight x0 point

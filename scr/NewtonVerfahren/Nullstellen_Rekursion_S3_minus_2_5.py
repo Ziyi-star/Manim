@@ -73,9 +73,18 @@ class NullstellenRekursionMinusTwoFive(Scene):
         for label in table.get_col_labels():
             label.set_opacity(1)
         title = MathTex(
-            r"\text{Newton Iteration }(x_0 = -2.5)",
+            r"\text{\textbf{$\mathbf{x_0} = -2.5$}}, \boldsymbol{\eta(x_0) < 1}",  # Added extra bold for x_0
             color=WHITE
         ).scale(0.8).next_to(table, UP, buff=0.5).align_to(table, LEFT)
+
+        fazit_1 = MathTex(
+            r"\text{Newton Verfahren konvergiert}",
+            color=WHITE
+        ).scale(0.7).next_to(table, DOWN, buff=0.5).align_to(title, LEFT)
+        fazit_2 = MathTex(
+            r"\text{nach 4 Iterationen.}",
+            color=WHITE
+        ).scale(0.7).next_to(fazit_1, DOWN, buff=0.1).align_to(title, LEFT)
 
         def create_point_elements(x_val, fx_val, index):
             # Create point on function
@@ -207,10 +216,18 @@ class NullstellenRekursionMinusTwoFive(Scene):
         self.play(Create(x3_vertical_line), run_time=1)
         self.play(Create(point_on_graph_3), run_time=1)
         self.wait(2)
-        # 5. Scene, row 5
+        #5. Scene, row 5
         x4_index = table.get_entries()[15]
         x4_cell = table.get_entries()[16]
         fx4_val_cell = table.get_entries()[17]
+        # After setting fx4_val_cell and before the opacity animations
+        cells_to_highlight = VGroup(x4_cell, fx4_val_cell)
+        highlight_rectangle = SurroundingRectangle(
+            cells_to_highlight,
+            color=GREEN,
+            buff=0.2,
+            stroke_width=5
+        )
         self.play(x4_index.animate.set_opacity(1), run_time=1)
         self.play(x4_cell.animate.set_opacity(1), run_time=1)
         self.play(fx4_val_cell.animate.set_opacity(1), run_time=1)
@@ -220,8 +237,11 @@ class NullstellenRekursionMinusTwoFive(Scene):
                 r"\mathbf{\boldsymbol{X}}",
                 color=RED
             ).scale(0.6).move_to(axes.c2p(x_root_val, 0))
-        # x_root_label = MathTex(r"\text{root}", color=RED).scale(0.6).next_to(x_root, UP, buff=0.2)
         # Animate the root marker and label
         self.play(Create(x_root), run_time=2)
+        self.play(Create(highlight_rectangle), run_time=1)
+        # Add the final conclusion
+        self.play(FadeIn(fazit_1), run_time=1)
+        self.play(FadeIn(fazit_2), run_time=1)
         self.wait(2)
 

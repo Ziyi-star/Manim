@@ -54,7 +54,7 @@ class KonvergenzkriteriumS2Zero(Scene):
             color=BLUE,
             use_smoothing=False,
         )
-        label_eta_graph = axes.get_graph_label(eta_graph, label='\\eta(x)', x_val=3, direction=UP)
+        label_eta_graph = axes.get_graph_label(eta_graph, label='\\eta(x)', x_val=1.2, direction=RIGHT)
 
         # Define shaded region: η(x) < 1
         def eta_clipped(x):
@@ -140,31 +140,33 @@ class KonvergenzkriteriumS2Zero(Scene):
         # Create a dot and label for x0
         x0_dot = Dot(
             axes.c2p(x0, 0),
-            color=RED,
+            color=GREEN,
             radius=0.08
         )
         x0_label = MathTex(
             r"\mathbf{" + f"{x0:.2f}" + "}",
-            color=RED
+            color=GREEN
         ).scale(0.6).next_to(axes.c2p(x0, 0), DOWN, buff=0.6)
         x0_arrow = Arrow(
             end=x0_dot.get_center(),
             start=x0_label.get_top(),
-            color=RED,
+            color=GREEN,
             buff=0.1,
             max_tip_length_to_length_ratio=0.15
         )
 
-        #labels
-        titel = MathTex(
-            r"\text{Konvergenzindikator }", 
-            r"\eta(x)", r"=", r"\frac{f(x) \cdot f''(x)}{(f'(x))^2}"
+        # Labels
+        titel_1 = MathTex(
+            r"\text{Konvergenzindikator:}", 
             ).scale(0.8).to_edge(LEFT + UP * 2)
+        titel_2 = MathTex(
+            r"\eta(x)", r"=", r"\left|\frac{f(x) \cdot f''(x)}{(f'(x))^2}\right|"
+        ).scale(0.8).next_to(titel_1, DOWN, buff=0.5)
 
         convergence_label = MathTex(
-            r"\eta(x) < 1:", r"\text{ Newton Verfahren}", r"\\\text{ konvergiert lokal}",
+            r"\\\text{Konvergenzbedingung: }",r"\eta(x) < 1", 
             color=GREEN
-        ).scale(0.6).next_to(titel, DOWN, buff=0.5)
+        ).scale(0.6).next_to(titel_2, DOWN, buff=0.5)
 
 
         # Add all elements without animation
@@ -179,7 +181,8 @@ class KonvergenzkriteriumS2Zero(Scene):
             x_axis_red_highlights,
             x_dots,
             x_labels,
-            titel,
+            titel_1,
+            titel_2,
             convergence_label,
         )
 
