@@ -111,16 +111,21 @@ class NullstellenHerleitung(Scene):
         # Texts
         title = Tex("Newton Verfahren:", font_size=36).to_edge(LEFT * 1.5 + UP*1.5)
 
-        x_n = MathTex("x_n").set_color(YELLOW)
-        x_n_plus_1 = MathTex("x_{n+1}").set_color(GREEN)
         # Create equations
         eq1 = MathTex(
             "T(x)", "=", "f(x_n)", "+", "f'(x_n)", "(x-", "x_n", ")",
             color=WHITE
         ).scale(0.6).next_to(title, DOWN, buff=0.5)
 
-        # Set x_n to yellow
-        eq1[6].set_color(YELLOW)  # Set the standalone x_n to yellow
+        eq1 = MathTex(
+            "T(x)", "=", "f", "(", "x_n", ")", "+", "f'", "(", "x_n", ")", "(x-", "x_n", ")",
+            color=WHITE
+        ).scale(0.6).next_to(title, DOWN, buff=0.5)
+
+        # Set all instances of x_n to yellow
+        eq1[4].set_color(YELLOW)   # x_n in f(x_n)
+        eq1[9].set_color(YELLOW)   # x_n in f'(x_n)
+        eq1[12].set_color(YELLOW)  # x_n in (x-x_n)
 
         eq2 = MathTex(
             "T(", "x_{n+1}", ")", "=", "0",
@@ -169,28 +174,35 @@ class NullstellenHerleitung(Scene):
         self.wait(1.5)
         self.play(Write(eq2), run_time=3)
         self.wait(1.5)
+
+        x_n = MathTex("x_n").set_color(YELLOW)
+        f_x_n = MathTex("f(", x_n, ")")
+        f_x_n_prime = MathTex("f'(", x_n, ")")
+        x_n_plus_1 = MathTex("x_{n+1}").set_color(GREEN)
         eq3 = MathTex(
-            ["f(x_n)", "+", [ "f'(x_n)", "(", [x_n_plus_1, "-", x_n] , ")" ]],
+            [f_x_n, "+", [f_x_n_prime, "(", [x_n_plus_1, "-", x_n] , ")" ]],
             "=", 
             "0"
         ).scale(0.6).next_to(eq2, DOWN, buff=0.5).align_to(eq1, LEFT)
         self.play(Write(eq3), run_time=2)
+        self.wait(2)
 
-        f_xn = eq3[0][0]
+
+
         eq3[0] = eq3[0][2]
-        eq3[2] = MathTex( "-", f_xn)
+        eq3[2] = MathTex( "-", f_x_n)
 
         anim = TransformInStages.progress(eq3, lag_ratio=0.4)
-        anim.intercept(f_xn).set_animation(lambda source, target: Transform(source, target, path_arc=PI/2))
+        anim.intercept(f_x_n).set_animation(lambda source, target: Transform(source, target, path_arc=PI/2))
         self.play(anim)
-        self.wait(1)
+        self.wait(2)
 
-        f_xn_prime = eq3[0][0]
+
         eq3[0] = eq3[0][2]
-        eq3[2] = MathTex( "-", Fraction(eq3[2][1], f_xn_prime))
+        eq3[2] = MathTex( "-", Fraction(eq3[2][1], f_x_n_prime))
 
         self.play(TransformInStages.progress(eq3, lag_ratio=0.4))
-        self.wait(1)
+        self.wait(2)
 
         eq3[0] = eq3[0][0]
         eq3[2] = MathTex(eq3[2], "+", x_n)
