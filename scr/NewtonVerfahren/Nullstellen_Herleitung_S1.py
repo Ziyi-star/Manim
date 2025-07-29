@@ -213,6 +213,6 @@ class NullstellenHerleitung(Scene):
         self.wait(2)
 
         # Create rectangle around only the formula part
-        rectangle_last = SurroundingRectangle(eq3[2], color=WHITE, buff=0.1)
+        rectangle_last = SurroundingRectangle(eq3, color=WHITE, buff=0.1)
         self.play(Create(rectangle_last), run_time=2)
         self.wait(2)
