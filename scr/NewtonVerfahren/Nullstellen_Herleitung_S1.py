@@ -110,17 +110,13 @@ class NullstellenHerleitung(Scene):
 
         # Texts
         title = Tex("Newton Verfahren:", font_size=36).to_edge(LEFT * 1.5 + UP*1.5)
+        subtitle = Tex("Iterationsvorschrift:", font_size=28).next_to(title, DOWN, buff=0.5)
 
         # Create equations
         eq1 = MathTex(
-            "T(x)", "=", "f(x_n)", "+", "f'(x_n)", "(x-", "x_n", ")",
-            color=WHITE
-        ).scale(0.6).next_to(title, DOWN, buff=0.5)
-
-        eq1 = MathTex(
             "T(x)", "=", "f", "(", "x_n", ")", "+", "f'", "(", "x_n", ")", "(x-", "x_n", ")",
             color=WHITE
-        ).scale(0.6).next_to(title, DOWN, buff=0.5)
+        ).scale(0.6).next_to(subtitle, DOWN, buff=0.5)
 
         # Set all instances of x_n to yellow
         eq1[4].set_color(YELLOW)   # x_n in f(x_n)
@@ -135,7 +131,7 @@ class NullstellenHerleitung(Scene):
         # Set x_{n+1} to green
         eq2[1].set_color(GREEN)
 
-
+        # Animations
         # Add text and graph to the scene
         self.add(grid, title, axes)
         self.play(Create(graph), run_time=2)
@@ -170,6 +166,7 @@ class NullstellenHerleitung(Scene):
         self.wait(1.5)
 
         # Add equations with longer animations
+        self.add(subtitle)
         self.play(Write(eq1), run_time=3)
         self.wait(1.5)
         self.play(Write(eq2), run_time=3)
