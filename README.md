@@ -60,7 +60,7 @@ All custom animation scenes are located in the `src/` directory.
 ## 🎞️ Watch on YouTube
 
 📺 Explore our animations here:  
-👉 [Ziyi-star0503 YouTube Channel](https://www.youtube.com/@Ziyi-star0503/videos)
+👉 [Ziyi-star YouTube Channel](https://www.youtube.com/@Ziyi-star/videos)
 
 ---
 
