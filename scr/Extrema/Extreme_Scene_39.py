@@ -4,7 +4,6 @@ class ExtremaSceneThirtynine(Scene):
     def construct(self):
         self.camera.background_color = WHITE
          # ------- SCENE 39 ------- #
-
         AufgabenstellungTextScene39_1 = MathTex(
             r"\text{Gegeben sei die Funktion } f:\mathbb{R}  \rightarrow \mathbb{R} \text{ mit } f(x) = \frac{1}{3}x^3-x+2.",
             color=BLACK)
