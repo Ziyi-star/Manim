@@ -2,7 +2,7 @@ from manim import *
 import math
 
 
-class TeilfolgenOne(Scene):
+class TeilfolgenS11(Scene):
     def construct(self):
         # Weißer Hintergrund für bessere Sichtbarkeit
         self.camera.background_color = WHITE
@@ -66,15 +66,14 @@ class TeilfolgenOne(Scene):
         self.play(FadeIn(folge2Tex))
 
         # Labels für die ausgewählten Teilfolgenpunkte erstellen
-        # n_1 entspricht n=2: a_2 = 1 + 1/2 = 1.5
-        n2label = MathTex(r"n_1 = 1.5", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[1], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
+        n2label = MathTex(r"n_1 = 2", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[1], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
         # n_2 entspricht n=4: a_4 = 1 + 1/4 = 1.25
-        n4label = MathTex(r"n_2 = 1.25", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[3], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
+        n4label = MathTex(r"n_2 = 4", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[3], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
         # n_3 entspricht n=6: a_6 = 1 + 1/6 ≈ 1.167
-        n6label = MathTex(r"n_3 = 1.167", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[5], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
+        n6label = MathTex(r"n_3 = 6", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[5], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
         # n_4 entspricht n=8: a_8 = 1 + 1/8 = 1.125
-        n8label = MathTex(r"n_4 = 1.125", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[7], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
-
+        n8label = MathTex(r"n_4 = 8", color=RED_E).scale(0.7).next_to(ax.get_x_axis().labels[7], direction=DOWN,aligned_edge=ORIGIN, buff=0.2)
+    
         # Punkt bei n=2 hervorheben (vergrößern und rot färben) und Label anzeigen
         self.play(DotGroup1[1].animate.scale(2).set_color(RED_E))
         self.play(FadeIn(n2label))
@@ -103,6 +102,50 @@ class TeilfolgenOne(Scene):
             run_time=1.5
         )
 
-        self.wait(2)  # Kurze Pause am Ende
+        self.wait(2) 
+
+        ax2 = Axes(
+                x_range=[0, 9],
+                y_range=[0, 2.5, 0.5],
+                y_axis_config={"numbers_to_include": [0,0.5,1,1.5,2]},
+                tips=True,
+                axis_config={
+                        'color' : BLACK}
+            ).shift(UP*0.5)
+        xAxis = ax2.get_x_axis()
+        ax2.get_x_axis().add_labels(dict_values={i : MathTex(r"k="+str(i), color=BLACK) for i in range(1,9)})
+        ax2.get_y_axis().numbers.set_color(BLACK)
+
+        self.play(Transform(ax,ax2))
+
+        DotGroup2 = VGroup()
+
+        for i in range(1,5):
+            d = Dot(ax2.c2p(i,1+1/(2*i)),color=RED_E).scale(2)
+            DotGroup2.add(d)
+
+        self.play(Transform(DotGroup1[1],DotGroup2[0]),Transform(DotGroup1[3],DotGroup2[1]),Transform(DotGroup1[5],DotGroup2[2]),Transform(DotGroup1[7],DotGroup2[3]))
+        self.play(n2label.animate.scale(0.8).next_to(ax2.get_x_axis().labels[0], direction=DOWN,aligned_edge=ORIGIN, buff=0.2),
+            n4label.animate.scale(0.8).next_to(ax2.get_x_axis().labels[1], direction=DOWN,aligned_edge=ORIGIN, buff=0.2),
+            n6label.animate.scale(0.8).next_to(ax2.get_x_axis().labels[2], direction=DOWN,aligned_edge=ORIGIN, buff=0.2),
+            n8label.animate.scale(0.8).next_to(ax2.get_x_axis().labels[3], direction=DOWN,aligned_edge=ORIGIN, buff=0.2))
+
+        folge3Tex = MathTex(r"(a_{2k})_{", r"k\in\mathbb{N}", r"}", color=BLACK).next_to(folge2Tex,direction=DOWN,aligned_edge=LEFT)
+        self.play(FadeIn(folge3Tex))
+        self.wait(1)
+        self.play(Indicate(folge3Tex[1], color=RED, scale_factor=1.3))
+
+        
+        others = VGroup(
+            boxed_folge1, folge2Tex,folge3Tex,
+            n2label, n4label, n6label, n8label,
+            DotGroup1[1], DotGroup1[3], DotGroup1[5], DotGroup1[7],
+            DotGroup2, ax
+        )
+
+        # Alles außer dem Achsenkreuz ausblenden
+        self.play(FadeOut(others))
+        self.wait(2)
+
 
 
