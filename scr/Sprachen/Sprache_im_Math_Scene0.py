@@ -4,34 +4,31 @@ from manim import *
 class Sprache_S0(Scene): 
 
     def construct(self):
-
-        def notes_box(notes, buff=0.25, corner_radius=0.2):
-                    # Schatten (leicht nach rechts-unten versetzt)
-                    shadow = SurroundingRectangle(
-                        notes,
-                        buff=buff,
-                        corner_radius=corner_radius,
-                        stroke_width=0,
-                        fill_color=BLACK,
-                        fill_opacity=0.18,
-                    ).shift(RIGHT * 0.08 + DOWN * 0.08)
-
-                    # Vordergrund-Box
-                    box = SurroundingRectangle(
-                        notes,
-                        buff=buff,
-                        corner_radius=corner_radius,
-                        stroke_color=BLACK,
-                        stroke_width=2,
-                        fill_color=WHITE,
-                        fill_opacity=1,
-                    )
-
-                    return Group(shadow, box, notes)
-
         self.camera.background_color = "#0090d4"
 
-        zielposition = np.array([5.5, 2.75, 0])
+        def notes_box(notes, buff=0.25, corner_radius=0.2):
+            # Schatten (leicht nach rechts-unten versetzt)
+            shadow = SurroundingRectangle(
+                notes,
+                buff=buff,
+                corner_radius=corner_radius,
+                stroke_width=0,
+                fill_color=BLACK,
+                fill_opacity=0.18,
+            ).shift(RIGHT * 0.08 + DOWN * 0.08)
+
+            # Vordergrund-Box
+            box = SurroundingRectangle(
+                notes,
+                buff=buff,
+                corner_radius=corner_radius,
+                stroke_color=BLACK,
+                stroke_width=2,
+                fill_color=WHITE,
+                fill_opacity=1,
+            )
+
+            return Group(shadow, box, notes)
 
         BG_PATH = "media/images/tafelbild.png"
         bg = ImageMobject(BG_PATH).set_z_index(-10).scale(0.4364)
