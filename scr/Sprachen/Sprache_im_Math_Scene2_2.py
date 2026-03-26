@@ -5,6 +5,17 @@ class Sprache_S2_2(Scene):
     def construct(self):
         self.camera.background_color = WHITE
 
+        # Icons
+        # Define the position (same as in original file)
+        zielposition = np.array([5.5, 2.75, 0])
+        
+        # Create k1
+        ICON1_PATH = "media/images/Icon 1.png"
+        k1 = ImageMobject(ICON1_PATH)
+        k1.set_height(2.5).move_to(zielposition).scale(0.8)
+        
+        self.add(k1)
+
         # Image folder (relative to scr/Sprachen when running manim there)
         IMG_DIR = "media/images/Sprache_im_Math_Scene2_2"
         BOOK_ICON = f"{IMG_DIR}/book_icon.png"

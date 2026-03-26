@@ -5,6 +5,17 @@ class Sprache_S4_1(Scene):
     def construct(self):
         self.camera.background_color = WHITE
 
+        # Icons
+        # Define the position (same as in original file)
+        zielposition = np.array([5.5, 2.75, 0])
+        
+        # Create k3
+        ICON1_PATH = "media/images/Icon 3.png"
+        k3 = ImageMobject(ICON1_PATH)
+        k3.set_height(2.5).move_to(zielposition).scale(0.8)
+        
+        self.add(k3)
+
         # load images
         IMG_DIR = "media/images/Sprache_im_Math_Scene4"
         CHARTS = f"{IMG_DIR}/charts.png"

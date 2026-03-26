@@ -7,6 +7,17 @@ class Sprache_S2_1(Scene):
         # Configuration
         self.camera.background_color = WHITE
 
+        # Icons
+        # Define the position (same as in original file)
+        zielposition = np.array([5.5, 2.75, 0])
+        
+        # Create k1
+        ICON1_PATH = "media/images/Icon 1.png"
+        k1 = ImageMobject(ICON1_PATH)
+        k1.set_height(2.5).move_to(zielposition).scale(0.8)
+        
+        self.add(k1)
+
         # Farben (nah am Screenshot)
         c_alltag = ManimColor("#8c0f3d")
         c_bildung = ManimColor("#5a215c")
