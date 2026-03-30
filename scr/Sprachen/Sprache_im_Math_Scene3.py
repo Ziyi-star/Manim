@@ -12,7 +12,7 @@ class Sprache_S3(Scene):
         # Create k2
         ICON1_PATH = "media/images/Icon 2.png"
         k2 = ImageMobject(ICON1_PATH)
-        k2.set_height(2.5).move_to(zielposition).scale(0.8)
+        k2.set_height(2.5).move_to(zielposition).scale(0.87)
         
         self.add(k2)
 

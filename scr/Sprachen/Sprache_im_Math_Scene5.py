@@ -12,7 +12,7 @@ class Sprache_S5(Scene):
         # Create k4
         ICON1_PATH = "media/images/Icon 4.png"
         k4 = ImageMobject(ICON1_PATH)
-        k4.set_height(2.5).move_to(zielposition).scale(0.8)
+        k4.set_height(2.5).move_to(zielposition).scale(0.87)
         
         self.add(k4)
 
