@@ -4,6 +4,7 @@ from manim import *
 class Sprache_S2_2(Scene):
     def construct(self):
         self.camera.background_color = WHITE
+        Text.set_default(font="Roboto Condensed")
 
         # Icons
         # Define the position (same as in original file)
@@ -60,20 +61,11 @@ class Sprache_S2_2(Scene):
         # Clouds
         cloud_left = (
             ImageMobject(CLOUD_LEFT)
-            .move_to(LEFT * 4 + UP * 2)
-        )
-        left_cloud_txt = (
-            Text("Sprachliche\nHilfsmittel?", color=WHITE, font_size=20)
-            .move_to(cloud_left.get_center()+ LEFT* 0.7 + UP*0.2)
+            .move_to(LEFT * 4 + UP * 0.0)
         )
         cloud_right = (
             ImageMobject(CLOUD_RIGHT)
             .move_to(RIGHT * 0.8 + DOWN * 2)
-        )
-        right_cloud_txt = (
-            Text("Fachtypische\nSprachhandlungen?", color=WHITE, font_size=20)
-            .move_to(cloud_right.get_center() + RIGHT*0.1 + UP * 0.2)  # inside cloud near top
-
         )
 
         # Text
@@ -125,8 +117,8 @@ class Sprache_S2_2(Scene):
 
         self.play(FadeIn(right_mid), run_time =1)
 
-        self.play(FadeIn(cloud_right), FadeIn(right_cloud_txt), run_time=1)
+        self.play(FadeIn(cloud_right), run_time=1)
 
-        self.play(FadeIn(cloud_left), FadeIn(left_cloud_txt), run_time=1)
+        self.play(FadeIn(cloud_left), run_time=1)
 
         self.wait(2)

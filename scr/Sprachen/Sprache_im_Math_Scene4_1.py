@@ -5,6 +5,8 @@ class Sprache_S4_1(Scene):
     def construct(self):
         self.camera.background_color = WHITE
 
+        Text.set_default(font="Roboto Condensed")
+
         # Icons
         # Define the position (same as in original file)
         zielposition = np.array([5.5, 2.75, 0])
@@ -52,9 +54,9 @@ class Sprache_S4_1(Scene):
         self.wait(1)
         self.play(FadeIn(circus), FadeIn(charts), run_time=1)
         self.wait(1)
-        self.play(Write(label_enaktiv), run_time=1)
         self.play(Write(label_symbolisch), run_time=1)
         self.play(Write(label_ikonisch), run_time=1)
+        self.play(Write(label_enaktiv), run_time=1)
         self.wait(2)
 
 
